@@ -44,6 +44,7 @@ function moveCamera() {
 document.body.onscroll = moveCamera
 
 function animate() {
+  console.log('animate() called');
   requestAnimationFrame(animate);
 
   torus.rotation.x += 0.005;
