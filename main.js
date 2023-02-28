@@ -15,7 +15,15 @@ renderer.setSize(window.innerWidth,window.innerHeight);
 camera.position.setZ(30);
 
 const geometry = new THREE.TorusGeometry(10,3,16,100);
-const material = new THREE.MeshPhongMaterial({color:"red",wireframe:true}) //change material
+
+//new material
+var material = new THREE.MeshPhongMaterial( {
+  color: 0xff0000,
+  polygonOffset: true,
+  polygonOffsetFactor: 1, // positive value pushes polygon further away
+  polygonOffsetUnits: 1
+} );
+
 const torus = new THREE.Mesh(geometry, material);
 
 const torus2 = new THREE.Mesh(geometry, material);
