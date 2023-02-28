@@ -16,13 +16,13 @@ camera.position.setZ(30);
 
 const geometry = new THREE.TorusGeometry(10,3,16,100);
 
-//new material
-var material = new THREE.MeshPhongMaterial( {
-  color: 0xff0000,
-  polygonOffset: true,
-  polygonOffsetFactor: 1, // positive value pushes polygon further away
-  polygonOffsetUnits: 1
-} );
+//const material = new THREE.MeshBasicMaterial({color:0xFF6347, wireframe:true});
+
+var material = new THREE.MeshBasicMaterial({
+  color: 0x0095DD,
+  wireframe: true,
+  wireframeLinewidth: 2
+});
 
 const torus = new THREE.Mesh(geometry, material);
 
