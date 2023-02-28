@@ -19,7 +19,7 @@ main {
 header {
   background: var(--dark-bg);
   grid-column: 2/ span 5;
-  font-size: 20rem;
+  font-size: 15rem;
   padding: 2rem;
   margin-bottom: var(--spacing);
 }
