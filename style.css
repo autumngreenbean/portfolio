@@ -49,5 +49,9 @@ blockquote p {
 }
 
 .left {
-  grid-column: 4 / 12;
+  grid-column: 2 / 12;
+}
+
+.right {
+  grid-column: 5/12;
 }
