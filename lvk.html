@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8" />
+    <title>Autumn Green</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+         body {
+          overflow-x:hidden;
+        }
+  
+        ::-webkit-scrollbar {
+        display: none;
+    }
+          @font-face {
+              font-family: 'NeueHaas';
+              src: url('NeueHaasGroteskText-Regular.woff') format('opentype');
+          }
+  
+          @font-face {
+              font-family: 'NeueHaas-Medium';
+              src: url('NeueHaasGroteskText-Medium.woff') format('opentype');
+          }
+  
+          h1 {
+              font-size: 200px;
+              font-family: Helvetica, sans-serif;
+          }
+  
+          h2 {
+              color: red;
+              font-size: 25px;
+              text-decoration: none;
+              font-family: 'NeueHaas';
+              font-weight: normal;
+              margin: 0;
+          }
+  
+          p {
+              font-size: 20px;
+              font-family: 'NeueHaas-Medium';
+          }
+  
+          a {
+              color: red;
+              text-decoration: none;
+              font-family: 'NeueHaas';
+          }
+  
+          a:hover {
+              color: rgb(97, 78, 243);
+          }
+  
+          .container {
+              display: flex;
+              justify-content: space-between;
+          }
+  
+          .section {
+              flex: 1;
+              font-size: 24px;
+              box-sizing: border-box; /* Include padding in width calculation */
+              
+          }
+          #menu {
+            margin:0;
+            top:0;
+            position: fixed;
+          }
+  
+          #no-bullet {
+              list-style-type: none;
+              margin-left: 0;
+              color: red;
+              font-family: 'NeueHaas';
+  
+          }
+  
+          #current-page {
+            color: gray;
+          }
+  
+          #content {
+            margin-left: 1vw;
+            color: red;
+            margin-right:1vw;
+          }
+        
+          .section#content p {
+            font-size:12px;
+          }
+  
+          ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              margin-top: -10px;
+          }
+  
+          li {
+              margin-bottom: -5px;
+              margin-left: 0; /* Removed 'vw' unit */
+              color: red;
+          }
+
+           /* image grid */
+        .row {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0 0px;
+        justify-content: right;
+        }
+
+        /* Create four equal columns that sits next to each other */
+        .column {
+        flex: 25%;
+        max-width: 25%;
+        padding: 0 0px;
+        }
+
+        .column img {
+        margin-top: 0px;
+        vertical-align: middle;
+        }
+
+        /* Responsive layout - makes a two column-layout instead of four columns */
+        @media (max-width: 800px) {
+        .column {
+            flex: 50%;
+            max-width: 50%;
+        }
+        }
+
+        /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+        @media (max-width: 600px) {
+        .column {
+            flex: 100%;
+            max-width: 100%;
+        }
+        }
+        
+      
+    </style>
+</head>
+<body>
+    <canvas id="bg"></canvas>
+
+    <main>
+        <div class="container">
+
+            <div id="content" class="section" style="text-align: right; top:0; position:absolute; "> 
+
+                <video src="images/lvk-2.mp4" width="80%" autoplay muted loop style="margin:0; padding: 0;"></video>
+                <video src="images/lvk3.mp4" width="80%" autoplay muted loop style="margin-top:0;"></video>
+    
+                <div style="text-align:left; margin-left:20vw; margin-top:0;">
+                    <div class="row">
+                        <div class="column" style="max-width: 40%;">
+                    <video src="images/lvk.mp4" width="100%" autoplay muted loop></video>
+                </div>
+                <div id="column"><p> &nbsp October 2022, Laverne Krause Gallery, Eugene OR <br>
+                    &nbsp &nbspLive-Captured Feedback Loops made with VHS camcorder <br>
+                    &nbsp &nbsp <strong><a href="https://www.youtube.com/watch?v=Vi5hxnebtVk&ab_channel=autumnjing" target="_blank" style="text-decoration: underline; color:blue;">external link</a></strong>
+                </p>
+               </div>
+                </div>
+                </div>
+    
+    
+    
+                </div>
+            <div class="section" id = "menu">
+                <h2><a href="index.html">AUTUMN <br>JING</a></h2><br>
+                <ul>
+                    <li id="no-bullet">&#x1F862; Works -</li>
+                    <li id="no-bullet">Video Projects</li>
+                    <li><a href="../feedback.html">- Feedback Loops</a><br></li>
+                    <li><a href="../3d.html">- 3D</a></li>
+                    <li><a href="../films.html">- Films</a></li>
+                    <li id="no-bullet">Exhibition</li>
+                    <li><a id="current-page" href="lvk.html">- LVK</a></li>
+                    <li><a href="city.html">- City</a></li>
+                    <li><a href="opera.html">- Opera</a></li>
+                    <li id="no-bullet">Game Development</li>
+                    <li><a href="gamedev.html">- Projects</a></li>
+                    <li id="no-bullet">Design</li>
+                    <li><a href="design.html">- Designs</a></li>
+                </ul><br>
+                <span style="color:red">
+                    &#129125; <a href="https://github.com/autumngreenbean" target="_blank">Github</a><br>
+                    &#129125; <a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">Youtube</a><br>
+                    &#129125; <a href="https://www.instagram.com/autumngreenbean/" target="_blank">Instagram</a><br>
+                    &#129125; <a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">Linkedin</a><br>
+                    &#129125; <a href="https://www.instagram.com/generatedparticles" target="_blank">Ai Archive</a><br>
+                </span>
+            </div>
+
+
+  </div>
+  
+
+</main>
+        <script type="module" src="./main.js"></script>
+
+  </body>
+</html>

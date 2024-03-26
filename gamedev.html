@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Game Development</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <style>
+        body {
+          overflow-x:hidden;
+        }
+
+        ::-webkit-scrollbar {
+        display: none;
+    }
+          @font-face {
+              font-family: 'NeueHaas';
+              src: url('NeueHaasGroteskText-Regular.woff') format('opentype');
+          }
+  
+          @font-face {
+              font-family: 'NeueHaas-Medium';
+              src: url('NeueHaasGroteskText-Medium.woff') format('opentype');
+          }
+  
+          h1 {
+              font-size: 200px;
+              font-family: Helvetica, sans-serif;
+          }
+  
+          h2 {
+              color: red;
+              font-size: 25px;
+              text-decoration: none;
+              font-family: 'NeueHaas';
+              font-weight: normal;
+              margin: 0;
+          }
+  
+          p {
+              font-size: 20px;
+              font-family: 'NeueHaas-Medium';
+          }
+  
+          a {
+              color: red;
+              text-decoration: none;
+              font-family: 'NeueHaas';
+          }
+  
+          a:hover {
+              color: rgb(97, 78, 243);
+          }
+  
+          .container {
+              display: flex;
+              justify-content: space-between;
+          }
+  
+          .section {
+              flex: 1;
+              font-size: 24px;
+              box-sizing: border-box; /* Include padding in width calculation */
+              
+          }
+          #menu {
+            margin:0;
+            top:0;
+            position: fixed;
+          }
+  
+          #no-bullet {
+              list-style-type: none;
+              margin-left: 0;
+              color: red;
+              font-family: 'NeueHaas';
+  
+          }
+  
+          #current-page {
+            color: gray;
+          }
+
+          #content {
+            margin-left: 20vw;
+            color: red;
+            margin-right:1vw;
+          }
+        
+          .section#content p {
+            font-size:12px;
+          }
+  
+          ul {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+              margin-top: -10px;
+          }
+  
+          li {
+              margin-bottom: -5px;
+              margin-left: 0; /* Removed 'vw' unit */
+              color: red;
+          }
+        
+      </style>
+</head>
+<body>
+
+    <canvas id = "bg"></canvas>
+
+    <main>
+        <div class="container">
+            <div class="section" id = "menu">
+                <h2><a href="index.html">AUTUMN <br>JING</a></h2><br>
+                <ul>
+                    <li id="no-bullet">&#x1F862; Works -</li>
+                    <li id="no-bullet">Video Projects</li>
+                    <li><a href="feedback.html">- Feedback Loops</a><br></li>
+                    <li><a href="3d.html">- 3D</a></li>
+                    <li><a href="films.html">- Films</a></li>
+                    <li id="no-bullet">Exhibition</li>
+                    <li><a href="lvk.html">- LVK</a></li>
+                    <li><a href="city.html">- City</a></li>
+                    <li><a href="opera.html">- Opera</a></li>
+                    <li id="no-bullet">Game Development</li>
+                    <li><a id="current-page" href="">- Projects</a></li>
+                    <li id="no-bullet">Design</li>
+                    <li><a href="design.html">- Designs</a></li>
+                </ul><br>
+                <span style="color:red">
+                    &#129125; <a href="https://github.com/autumngreenbean" target="_blank">Github</a><br>
+                    &#129125; <a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">Youtube</a><br>
+                    &#129125; <a href="https://www.instagram.com/autumngreenbean/" target="_blank">Instagram</a><br>
+                    &#129125; <a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">Linkedin</a><br>
+                    &#129125; <a href="https://www.instagram.com/generatedparticles" target="_blank">Ai Archive</a><br>
+                </span>
+            </div>
+
+            <div id= "content" class="section" style="text-align: right; top:0; position:absolute; "> 
+                <p>I created the Game Development Club at the University of Oregon. <br></p>
+           <p>- lead modelling and ridding workshops in Blender <br>
+        - facilitated introductory Unity workshops <br>
+    - organized groups for participating in game competitions 
+    <br>
+- orchestrated GitHub repository management, <br>
+&nbsp; &nbsp;  + implemented task assignment and organization via GitHub Issues + Projects for streamlined collaboration and workflow optimization</p> <br>
+    <p>below are concepts for our bug + pirate-themed roguelike</p>
+
+    
+                    <img src="gamedev/clublongterm/ant-concept.png" alt="" width="600px" height="800px">
+                    <!-- <img src="gamedev/clublongterm/queen-concept.png" alt="" width="38%" height="38%"> -->
+                    <img src="gamedev/clublongterm/beetle-concept.png" alt="" width="600px" height="800px">
+                    <img src="gamedev/clublongterm/3dconcept-preview.png" alt="" width="900px" height="800px">
+                    <br>
+                    <img src="gamedev/koi-concept.png" alt="">
+                    <p> <i>concepts by Colin McNamee</i></p>
+
+                    <img src="gamedev/raft-concept.png" alt="">
+                    <p><i>raft concept by Payton #zerosugar045</i></p>
+                   
+                    
+                    <img src="gamedev/clublongterm/branch-concept.jpg" alt="" width="45%" height="13%">
+                    <img src="gamedev/clublongterm/weapons-concept.jpg" alt="" width="45%" height="13%">
+                    <br>
+                    <p>    <i>concepts by Olivia Butler</i>
+                    </p>
+                    <img src="gamedev/clublongterm/branch-concept-3d.png" alt="">
+                    <p><i>3d adaptation by Colin McNamee</i></p>
+                
+                    <br>
+
+                
+                    <h2>hackathons/game jams</h2>
+                    <p>Our club participated in a handful of time-restricted game-making competitions. </p>
+                <br>
+                <p><strong>Lich - Jame Gam #28: "Death is Inevitable"</strong><br><br>
+                This game jam was themed around <strong>Death is Inevitable</strong>. A team of few colleagues and I started the development of a card-based game based on this prompt.</p>
+           
+                <img src="gamedev/lich-dialogue.png" alt="" width="47%" height="47%">
+                <img src="gamedev/lich-startgame.png" alt="" width="47%" height="47%">
+                <br>
+                <p><strong>GMTK Game Jam 2022: "Roll of the Dice"</strong> <br><br>
+                    This game jam was themed around chance. Here I worked with one other colleague by making conceptual assets and game designing.</p>
+                <img src="gamedev/dice.jpeg" width="47%">
+                <img src="gamedev/dice2.jpeg" width="47%">
+
+                <br>
+
+                <p><strong>Practices</strong> <br>Alien sculpted in Nomad Sculpt, rigged and animated in Adobe Maximo</p>
+                <video src="gamedev/alien.mp4" width="50%" autoplay loop></video>
+        
+                <p>learning the horrors of texture-painting/mapping. modelled in Nomad Sculpt, textured in Procreate</p>
+                <img src="gamedev/alien2.png" width="55%" alt=""> <img src="gamedev/alien2-texturemap.jpg" width="40%">
+
+                <p>random adaptive tile generation in Unity by Devin Henderling</p>
+                <video src="gamedev/tilegen.mp4" width="50%" autoplay loop></video>
+             
+                
+
+   </div>
+  </div>
+  
+    
+
+        <!-- <div class="section" style="text-align: right; margin-left:20vw;"> 
+           
+  </div> -->
+
+
+</main>
+<script type="module" src="./main.js"></script>
+
+</body>
+
+</html>
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Game Development</title>
+    <style>
+        html * {
+            background-color: black;
+            color: white;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-gap: 0; /* No gap between the grid items */
+        }
+
+        .grid-item {
+            display: flex;
+            justify-content: center; /* Center the image horizontally */
+            align-items: center; /* Center the image vertically */
+            overflow: hidden; /* Hide any part of the image that goes beyond the container */
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Maintain aspect ratio and cover the entire container */
+        }
+    </style>
+</head>
+<body>
+    <h1>Game Development Overview</h1>
+    <a href="../index.html">Return to homepage</a>
+    <br><br>
+I would like to take the role of a technical artist in a game development team. In the meanwhile, I have been developing the skills to do so by working on several projects with a variety of development teams.
+<br><br>
+<br>
+<h1>Game Development Club</h1>
+<br>
+I created the game development club at the University of Oregon with a group of colleagues.
+<br>
+I served the role as the art director, supporting participating artists by providing workshops and technical support with club affiliated projects. 
+<br> Our discord has accumulated nearly 150 active members.
+<br><br>
+
+
+-----Under construction past this point!-----
+
+<br><br><br>
+<strong>Game Competition(s)</strong>
+<br>
+The club participated in various game competitions. Here are a couple of the more developed works.
+<br><br>
+&nbsp &nbsp <strong>Jame Gam #28 "Death is Inevitable"</strong> > File repository found <a href="https://github.com/pudgypoultry/Lich">here!</a>
+<br><br>
+
+&nbsp &nbsp <strong>32-bit Game Jam "Dice"</strong> > File repository found <a href="https://github.com/autumngreenbean/32-bit-Game-Jam" target="_blank">here!</a>
+<br>
+<strong></strong>
+<br>
+<h1>Personal Projects</h1>
+<br>
+<h2>Concepts</h2>
+<br>
+<h2>Applications</h2>
+<br>
+</body>
+</html> -->

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Design</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <style>
+        body {
+         overflow-x:hidden;
+       }
+ 
+       ::-webkit-scrollbar {
+       display: none;
+   }
+         @font-face {
+             font-family: 'NeueHaas';
+             src: url('NeueHaasGroteskText-Regular.woff') format('opentype');
+         }
+ 
+         @font-face {
+             font-family: 'NeueHaas-Medium';
+             src: url('NeueHaasGroteskText-Medium.woff') format('opentype');
+         }
+ 
+         h1 {
+             font-size: 200px;
+             font-family: Helvetica, sans-serif;
+         }
+ 
+         h2 {
+             color: red;
+             font-size: 25px;
+             text-decoration: none;
+             font-family: 'NeueHaas';
+             font-weight: normal;
+             margin: 0;
+         }
+ 
+         p {
+             font-size: 20px;
+             font-family: 'NeueHaas-Medium';
+         }
+ 
+         a {
+             color: red;
+             text-decoration: none;
+             font-family: 'NeueHaas';
+         }
+ 
+         a:hover {
+             color: rgb(97, 78, 243);
+         }
+ 
+         .container {
+             display: flex;
+             justify-content: space-between;
+         }
+ 
+         .section {
+             flex: 1;
+             font-size: 24px;
+             box-sizing: border-box; /* Include padding in width calculation */
+             
+         }
+         #menu {
+           margin:0;
+           top:0;
+           position: fixed;
+         }
+ 
+         #no-bullet {
+             list-style-type: none;
+             margin-left: 0;
+             color: red;
+             font-family: 'NeueHaas';
+ 
+         }
+ 
+         #current-page {
+           color: gray;
+         }
+ 
+         #content {
+           margin-left: 5vw;
+           color: red;
+           margin-right:1vw;
+         }
+       
+         .section#content p {
+           font-size:12px;
+         }
+ 
+         ul {
+             list-style: none;
+             padding: 0;
+             margin: 0;
+             margin-top: -10px;
+         }
+ 
+         li {
+             margin-bottom: -5px;
+             margin-left: 0; /* Removed 'vw' unit */
+             color: red;
+         }
+
+          /* image grid */
+       .row {
+       display: flex;
+       flex-wrap: wrap;
+       padding: 0 0px;
+       justify-content: right;
+       }
+
+       /* Create four equal columns that sits next to each other */
+       .column {
+       flex: 25%;
+       max-width: 25%;
+       padding: 0 0px;
+       }
+
+       .column img {
+       margin-top: 1px;
+       vertical-align: middle;
+       }
+
+       /* Responsive layout - makes a two column-layout instead of four columns */
+       @media (max-width: 800px) {
+       .column {
+           flex: 50%;
+           max-width: 50%;
+       }
+       }
+
+       /* Responsive layout - makes the two columns stack on top of each other instead of next to each other */
+       @media (max-width: 600px) {
+       .column {
+           flex: 100%;
+           max-width: 100%;
+       }
+       }
+       
+     
+   </style>
+</head>
+<body>
+
+        <canvas id = "bg"></canvas>
+      <main>
+
+
+    <div class="container">
+        <div class="section" id = "menu">
+            <h2><a href="index.html">AUTUMN <br>JING</a></h2><br>
+            <ul>
+                <li id="no-bullet">&#x1F862; Works -</li>
+                <li id="no-bullet">Video Projects</li>
+                <li><a href="feedback.html">- Feedback Loops</a><br></li>
+                <li><a href="3d.html">- 3D</a></li>
+                <li><a href="films.html">- Films</a></li>
+                <li id="no-bullet">Exhibition</li>
+                <li><a href="lvk.html">- LVK</a></li>
+                <li><a href="city.html">- City</a></li>
+                <li><a href="opera.html">- Opera</a></li>
+                <li id="no-bullet">Game Development</li>
+                <li><a href="gamedev.html">- Projects</a></li>
+                <li id="no-bullet">Design</li>
+                <li><a id="current-page" href="design.html">- Designs</a></li>
+            </ul><br>
+            <span style="color:red">
+                &#129125; <a href="https://github.com/autumngreenbean" target="_blank">Github</a><br>
+                &#129125; <a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">Youtube</a><br>
+                &#129125; <a href="https://www.instagram.com/autumngreenbean/" target="_blank">Instagram</a><br>
+                &#129125; <a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">Linkedin</a><br>
+                &#129125; <a href="https://www.instagram.com/generatedparticles" target="_blank">Ai Archive</a><br>
+            </span>
+        </div>
+
+
+        <div id="content" class="section" style="text-align: right; top:0; position:absolute; "> 
+            
+            <div class="row"> 
+                <div class="column">
+                  <img src="images/live1.jpg" style="width:100%">
+
+                 
+                </div>
+                
+                <div class="column">
+                  <img src="images/live2.jpg" style="width:100%">
+                  
+                </div> 
+
+                <div class="column">
+                    <img src="images/live3.jpg" style="width:100%" alt="">
+                    <p>2021, VHS<br>
+                    Hosted livestream performance with a group of friends in Eugene OR<br>
+                    </p>
+                </div>
+              </div>
+
+              <div class="row"> 
+                <div class="column">
+                    <p style="margin-right:10px;">Promotional video + poster<br>
+                        <!-- <a href="https://www.artworkarchive.com/profile/culturalservices/artwork/feedback-loops?artist=autumn-jing-green" target="_blank" style="text-decoration: underline; color:blue;">external link</a> -->
+                    </p>                    
+
+                 
+                </div>
+                
+                <div class="column">
+                    <video src="images/voila-livestream.mp4" autoplay loop muted width="100%"></video>   
+        
+                </div> 
+
+                <div class="column">
+                    <img src="images/livestream-poster.jpg" style="width:100%">
+
+                </div>
+              </div>
+
+              <br><br><br>
+
+              <div class="row"> 
+                <div class="column">
+                  <img src="images/shirt1.jpg" style="width:100%">
+
+                 
+                </div>
+                
+                <div class="column">
+                  <img src="images/shirt2.jpg" style="width:100%">
+                  
+                </div> 
+
+                <div class="column" style="text-align: left;">
+                    <p style="margin-left: 10px;">2023, Stable Diffusion + Illustrator<br>
+                    T-shirt Design for band Novacane<br>
+                    </p>
+                </div>
+              </div>
+<br><br>
+
+              <div class="row"> 
+                <div class="column">
+                    
+                  <img src="images/abc.png" style="width:100%">
+                  <img src="https://live.staticflickr.com/65535/53094070786_f93b89ea11_o.png" style="width:150%" alt="">
+
+                  <img src="https://live.staticflickr.com/65535/53094553918_8f83863f3f_o.png" style="width:100%" alt="">
+
+                  <img src="https://live.staticflickr.com/65535/53093762627_4abfaf9df5_o.png" width="200%" alt="">
+
+                </div>
+                
+                <div class="column">
+
+                  <img src="https://live.staticflickr.com/65535/53094070636_291f349ba5_o.png" style="width:130%">
+                  <p>Clay typeface</p>
+
+                  <img src="https://live.staticflickr.com/65535/53094070776_158fcabda1_o.png" style="width:200%" alt=""><br>
+
+                </div> 
+
+                <div class="column" style="text-align: left;">
+                    
+                    <p style="margin-left: 10px;">
+                    </p>
+                </div>
+              </div>
+<br><br>
+              <p style="text-align: left; margin-left:20vw"><strong>studio practices</strong></p>
+              <div class="row"> 
+                <div class="column">
+                  <img src="https://live.staticflickr.com/65535/52718217106_b413356007_o.png" style="width:100%">
+                  <img src="https://live.staticflickr.com/65535/53093600977_dbc312249c_o.png" style="width:100%">
+
+                 
+                </div>
+                
+                <div class="column">
+                  <img src="https://live.staticflickr.com/65535/52718606880_33d11e8abb_o.png" style="width:100%">
+                  <img src="https://live.staticflickr.com/65535/52718217106_b413356007_o.png" width="100%" alt="">
+                  <img src="images/Collage1.png" width="100%" alt="">
+
+
+                </div> 
+
+                <div class="column" style="text-align: left;">
+                    <img src="https://live.staticflickr.com/65535/53094726470_be0b9e49c8_o.png" style="width:100%" alt="">
+                    <img src="https://live.staticflickr.com/65535/53093732967_7f4191d681_o.png" width="100%" alt="">
+                    
+                </div>
+              </div>
+              <br>
+              <img src="https://live.staticflickr.com/65535/53094343184_a383888b93_o.png" style="width:75%" alt="">
+
+        </div>
+   
+</div>
+
+
+
+</main>
+<script type="module" src="./main.js"></script>
+
+</body>
+
+</html>
+
+<!-- 
+<div id="content" class="section" style="text-align: right; margin-left:20vw;"> 
+          
+   
+         <p>
+            Here are a few works and practices in graphic design. Most of these were created using the Adobe suite.</p>
+            
+            <h2>musical performances</h2>
+            <p><strong>voila deux mille 2021</strong></p>
+            <p>A few friends and I created a creative collective in Eugene, OR. I made several different videos and assets for social promotion while involved.</p>
+            <img src="design/vhs-doop.jpg" alt="" width="800px" height="800px">
+            <video width="800px" height="800px" autoplay loop controls muted>
+                <source src="design/doop.mp4" type="video/mp4"> 
+                Uh oh!
+            </video>
+            <p>promotion for a local group's song release. I also made a music video for this project, found <a href="https://www.youtube.com/watch?v=NGJAUSRCaiM&ab_channel=Voil%C3%A1%21DeuxMille" target="_blank">here</a>.</p><br><br>
+            <img src="design/livestream-poster.jpg" alt="" width="800px" height="1000px">
+            <video width="1000px" height="1000px" autoplay loop controls muted>
+                <source src="design/voila-livestream.mp4" type="video/mp4"> 
+                Uh oh!
+            </video>
+            <p>Here we created, promoted, and facilitated a livestream performance. During the event I captured footage and stills on my VHS camera.</p>
+            <img src="design/live1.jpg" alt="" width="30%" height="30%">
+            <img src="design/live2.jpg" alt="" width="30%" height="30%">
+            <img src="design/live3.jpg" alt="" width="30%" height="30%">
+            
+            <br><br><br>
+            
+            <h2>novacane, the band</h2>
+            <p>I have worked with Novacane on several projects to create custom designs for them.</p>
+            <br>
+            
+            <p><strong>posters</strong></p>
+            <img src="https://live.staticflickr.com/65535/52717660677_1b19a9723b_h.jpg" alt="" width="20%" height="20%">
+            <img src="https://live.staticflickr.com/65535/52717660652_0cf07e9019_h.jpg" alt="" width="20%" height="20%">
+            <br><br>
+            
+            <img src="https://live.staticflickr.com/65535/53093763432_ec773331ff_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094504869_0702cd8221_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094726470_be0b9e49c8_o.png" alt="" width="30%" height="30%">
+            
+            <p><strong>t-shirt designs</strong></p>
+            <img src="https://live.staticflickr.com/65535/53094279041_f9774c6cd4_h.jpg" alt="" width="23%" height="23%">
+            <img src="design/shirt1.jpg" alt="" width="20%" height="20%">
+            <img src="design/shirt2.jpg" alt="" width="20%" height="20%">
+            <br><br>
+            <img src="https://live.staticflickr.com/65535/53094453174_7fb1b4e501_o.png" alt="" width="23%" height="23%">
+            <p>This is an alternative T-shirt design. Both designs were made with stable diffusion.</p> <br>
+            
+            <br><br>
+            
+            <h2>branding</h2>
+            <p>the following are several artistic proposals I made for the brand design of a hip-hop concert event, featuring Amine. <br><br>
+                Given the prompt "downpour", I created the following mockups.</p>
+            <br>
+            <img src="design/downpour1.png" alt="" width="20%" height="20%">
+            <img src="design/downpour2.png" alt="" width="20%" height="20%">
+             <img src="design/downpour3.png" alt="" width="20%" height="20%"> 
+            <img src="design/downpour4.png" alt="" width="20%" height="20%">
+            <img src="design/downpour-abstract.png" alt="" width="20%" height="20%">
+            <br>
+            <img src="https://live.staticflickr.com/65535/53094343169_531f6250cb_o.png" width="20%" height="20%">
+            <br><br><br>
+            
+            <h2>misc.</h2>
+            <p>these designs were prompted by in-studio practice(s).</p>
+            
+            <br><br>
+            <img src="https://live.staticflickr.com/65535/53094335781_3c45ac6c60_o.png" alt="" width="20%" height="20%"><br>
+            <img src="https://live.staticflickr.com/65535/53094565000_052330a924_o.png" alt="" width="20%" height="20%">
+            <img src="https://live.staticflickr.com/65535/53094818303_92857268c2_o.png" alt="" width="40%" height="40%">
+            
+            <br><br>
+            <img src="https://live.staticflickr.com/65535/52718606880_4a520899f4_h.jpg" alt="">
+            
+            <p><strong>data visualization</strong></p>
+            <img src="https://live.staticflickr.com/65535/52718217106_b413356007_o.png" alt="">
+            <br>
+            <img src="https://live.staticflickr.com/65535/53093600977_dbc312249c_o.png" alt="" width="20%" height="20%">
+            
+            
+            <br> 
+            <p>
+                <br><br>
+                
+            
+                <strong>Typography</strong>
+                For this design, the problem involved creating a typeface from a real-life repersentational material. I created a 3D-modelled typeface, simulated and rendered as a clay material in Blender.
+            </p>
+            <br>
+            <img src="https://live.staticflickr.com/65535/53093762627_4abfaf9df5_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094553828_ee6298ae63_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094070636_291f349ba5_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094070806_a8936fd6e6_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094070626_46bef61f04_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094466315_b2c4b827c4_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094553918_8f83863f3f_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094070786_f93b89ea11_o.png" alt="" width="30%" height="30%">
+            <img src="https://live.staticflickr.com/65535/53094070776_158fcabda1_o.png" alt="" width="30%" height="30%">
+            <br><br>
+            <p><strong>further typography practices</strong></p>
+            <img src="https://live.staticflickr.com/65535/53093732967_7f4191d681_o.png"  width="60%" height="60%" alt="">
+            <img src="https://live.staticflickr.com/65535/53094343174_25e4978fe3_o.png" alt="" width="60%" height="60%">
+    </div> -->
