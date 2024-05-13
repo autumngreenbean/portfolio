@@ -1,4 +1,649 @@
-<!DOCTYPE html>
+<style>
+    body {
+        background-color: black;
+        color:white;
+        /* overflow-y: hidden; */
+    }
+    #current-page {
+            color:red
+        }
+    h1 {
+        text-align:right;
+        font-size:30px;
+        padding: 20px;
+        font-weight: normal;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+  
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width:100%;
+    }
+  
+        body {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+  
+        table {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+  
+        th {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        
+    td, th {
+        border: 0px;
+        text-align: right;
+        padding: 5px;
+    }
+  
+    
+  
+    .left-aligned th {
+        text-align: left;
+    }
+    .left-aligned td {
+        text-align: left;
+    }
+  
+    .left-aligned:nth-child(even) td:first-child {
+  width:2%;
+  padding:1px;   
+  /* background-color: purple; */
+  text-align: left;
+  padding-right:5px;
+  }
+  .left-aligned:nth-child(even) td:nth-child(2) {
+    text-align: left;
+  width:10%;
+  padding:1px;   
+  /* background-color: red; */
+  padding-left:5px;
+  }
+  
+  
+  
+    tr:nth-child(even) td:first-child {
+  width:20%;
+  padding:0;        
+  }
+  
+  
+    * {
+        box-sizing: border-box;
+    }
+  
+    .column {
+        float: left;
+        padding: 13px;
+    }
+  
+    /* Set the width of the left column */
+    .left-column {
+        width: 40%; /* Adjust this value as needed */
+        text-align: right;
+        align-content: right;
+        align-items:right;
+        background-color: black;
+    }
+  
+    /* Set the width of the right column */
+    .right-column {
+        width: 60%; /* Adjust this value as needed */
+        height:70%;
+        /* background-color: red; */
+    }
+    a {
+        color:white;
+        text-decoration: none;
+    }
+  
+    a:hover {
+        color:red;
+    }
+    /* Responsive layout - makes the columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 600px) {
+        .column {
+            width: 100%;
+        }
+  
+        
+    }
+  </style>
+  <h1><a href="index.html">autumn jing green</a></h1>
+  <br>
+  <body>
+    
+  <div class="row">
+    <div class="column left-column">
+  <h2>recent works</h2>        
+  <table>
+    <tr>
+    <th>year</th>
+        <th>title</th>
+        <th>location</th>
+    </tr>
+    
+    <tr>
+        <td>2023</td>
+        <td><a href="city.html">Cultural Currents Artist's Week</a></td>
+        <td>Eugene, Oregon</td>
+    </tr>
+    <tr>
+        <td>2022, 2023</td>
+        <td><a href="opera.html">Eugene Opera</a></td>
+        <td>Eugene, Oregon</td>
+    </tr>
+    
+    <tr>
+        <td>2022, 2023</td>
+        <td><a href="gamedev.html" id="current-page">Game Development</a></td>
+        <td>University of Oregon</td>
+    </tr>
+    <tr>
+        <td>2022</td>
+        <td><a href="pixelsort.html">Pixel-Sorting Project</a></td>
+        <td>University of Oregon</td>
+    </tr>
+    <tr>
+        <td>2020</td>
+        <td><a href="feedback.html">Analog VHS Feedback Loops</a></td>
+        <td>Laverne Krause Gallery</td>
+    </tr>
+</table>
+        <br><br>
+      
+        
+        <h2 style="text-align: left;">media archive(s)</h2>        
+        <table class="left-aligned">
+            <tr>
+                <th>media</th>
+                <th style="text-align: left;">location</th>
+            </tr>
+            <tr>
+              <td>code</td>
+              <td><a href="https://github.com/autumngreenbean" target="_blank">github</a></td>
+              
+          </tr>
+            <tr>
+                <td>video</td>
+                <td><a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">youtube</a></td>
+                
+            </tr>
+            <tr>
+               
+                <td>design</td>
+                <td><a href="https://flic.kr/s/aHBqjAPVb9" target="_blank">flickr</a></td>
+          
+            </tr>
+            <tr>
+                <td>business</td>
+                <td><a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">linkedin</a></td>
+          
+            </tr>
+          
+            <tr>
+                <td>photo/video</td>
+                <td><a href="https://www.instagram.com/autumngreenbean/" target="_blank">instagram</a></td>
+               
+            </tr>
+            <tr>
+                <td>ai generations</td>
+                <td><a href="https://www.instagram.com/generatedparticles" target="_blank">instagram</a></td>
+            </tr>
+            
+          </table>
+    </div>
+  
+    <div class="column right-column">
+        <p>the <span style="color: red;">#</span> <strong>Game Development Club</strong> is an organization created by a group of three colleagues and myself at the University of Oregon.</p>
+       
+        <p>as the founding Art Director and primary coordinator, my responsibilities here included:</p>
+        <p>*leading 3d-model and rigging workshops with <strong style="color:aqua">Blender</strong>, <br>
+     *facilitating introductions to <strong style="color:aqua">Unity</strong> via workshops, <br>
+ *organizing groups for live game competitions, 
+ <br>
+*orchastrating <strong style="color:aqua">Github</strong> repository management, <br>
+&nbsp; &nbsp;  + implementing task assignment/organization via <strong>GitHub Projects + Issues</strong></p> <br>
+ <p> below are concepts for a bug + pirate-themed roguelike</p>
+
+                 <img src="gamedev/clublongterm/beetle-concept.png" alt="" width="50%" height="100%">
+                 <img src="gamedev/clublongterm/ant-concept.png" alt="" width="49%" height="100%">
+
+
+                 <img src="gamedev/clublongterm/queen-concept.png" alt="" width="100%" height="100%"> 
+                 <img src="gamedev/clublongterm/3dconcept-preview.png" alt="" width="100%" height="100%">
+                 <br>
+                 <img src="gamedev/koi-concept.png" alt="">
+                 <p><i>concepts by Colin McNamee</i></p>
+
+                 <img src="gamedev/raft-concept.png" alt="" width="100%" height="100%">
+                 <p> <i>raft concept by Payton #zerosugar045</i></p>
+                
+                 
+                 <img src="gamedev/clublongterm/branch-concept.jpg" alt="" width="49%" height="100%">
+                 <img src="gamedev/clublongterm/weapons-concept.jpg" alt="" width="49%" height="100%">
+                 <br>
+                 <p> <i>concepts by Olivia Butler</i>
+                 </p>
+                 <img src="gamedev/clublongterm/branch-concept-3d.png" alt="">
+                 <p><i>3d adaptation by Colin McNamee</i></p>
+             
+                 <br>
+
+             
+                 <h2>hackathons/game jams</h2>
+                 <p>Our club participated in a handful of time-restricted game-making competitions. </p>
+             <br>
+             <p><span style="color: red;">#</span> <strong>Lich - Jame Gam #28: "Death is Inevitable"</strong><br><br>
+             This game jam was themed around <strong style="color: antiquewhite;">Death is Inevitable</strong>. A team of few colleagues and I started the development of a card-based game based on this prompt.</p>
+        
+             <img src="gamedev/lich-dialogue.png" alt="" width="47%" height="47%">
+             <img src="gamedev/lich-startgame.png" alt="" width="47%" height="47%">
+             <br>
+             <p><span style="color: red;">#</span> <strong>GMTK Game Jam 2022: "Roll of the Dice"</strong> <br><br>
+                 This game jam was themed around <strong style="color:antiquewhite">Chance</strong>. Here I worked with one other colleague by making conceptual assets and game designing.</p>
+             <img src="gamedev/dice.jpeg" width="47%">
+             <img src="gamedev/dice2.jpeg" width="47%">
+
+             <br>
+
+             <p><span style="color: red;">#</span> <strong>Practices</strong> <br>Alien sculpted in Nomad Sculpt, rigged and animated in Adobe Maximo</p>
+             <video src="gamedev/alien.mp4" width="100%" autoplay loop></video>
+     
+             <p>learning the horrors of texture-painting/mapping. modelled in <strong>Nomad Sculpt</strong>, textured in <strong>Procreate</strong></p>
+             <img src="gamedev/alien2.png" width="55%" alt=""> <img src="gamedev/alien2-texturemap.jpg" width="40%">
+
+    
+              
+   </div>
+  </div>
+    
+  
+  
+  </body> 
+  
+  <!--
+  
+   <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <link rel="stylesheet" type="text/css" href="style.css">
+  
+      <meta charset="UTF-8" />
+      <title>Autumn Green</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      
+      <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+  
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.132.2/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.132.2/examples/jsm/"
+      }
+    }
+  </script>
+  <style>
+    body {
+      overflow-x:hidden;
+    }
+  
+    ::-webkit-scrollbar {
+    display: none;
+  }
+      @font-face {
+          font-family: 'NeueHaas';
+          src: url('NeueHaasGroteskText-Regular.woff') format('opentype');
+      }
+  
+      @font-face {
+          font-family: 'NeueHaas-Medium';
+          src: url('NeueHaasGroteskText-Medium.woff') format('opentype');
+      }
+  
+      h1 {
+          font-size: 200px;
+          font-family: Helvetica, sans-serif;
+      }
+  
+      h2 {
+          color: red;
+          font-size: 25px;
+          text-decoration: none;
+          font-family: 'NeueHaas';
+          font-weight: normal;
+          margin: 0;
+      }
+  
+      p {
+          font-size: 20px;
+          font-family: 'NeueHaas-Medium';
+      }
+  
+      a {
+          color: red;
+          text-decoration: none;
+          font-family: 'NeueHaas';
+      }
+  
+      a:hover {
+          color: rgb(97, 78, 243);
+      }
+  
+      .container {
+          display: flex;
+          justify-content: space-between;
+      }
+  
+      .section {
+          flex: 1;
+          font-size: 24px;
+          box-sizing: border-box; /* Include padding in width calculation */
+          
+      }
+      #menu {
+        margin:0;
+        top:0;
+        position: fixed;
+      }
+  
+      #no-bullet {
+          list-style-type: none;
+          margin-left: 0;
+          color: red;
+          font-family: 'NeueHaas';
+      }
+  
+      #current-page {
+        color: gray;
+      }
+  
+      #content {
+        margin-left: 20vw;
+        color: red;
+        margin-right:1vw;
+      }
+    
+      .section#content p {
+        font-size:12px;
+      }
+  
+      ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          margin-top: -10px;
+      }
+  
+      li {
+          margin-bottom: -5px;
+          margin-left: 0; /* Removed 'vw' unit */
+          color: red;
+      }
+    
+    body {
+      overflow-x:hidden;
+    }
+  
+    ::-webkit-scrollbar {
+    display: none;
+  }
+      @font-face {
+          font-family: 'NeueHaas';
+          src: url('NeueHaasGroteskText-Regular.woff') format('opentype');
+      }
+  
+      @font-face {
+          font-family: 'NeueHaas-Medium';
+          src: url('NeueHaasGroteskText-Medium.woff') format('opentype');
+      }
+  
+      h1 {
+          font-size: 200px;
+          font-family: Helvetica, sans-serif;
+      }
+  
+      h2 {
+          color: red;
+          font-size: 25px;
+          text-decoration: none;
+          font-family: 'NeueHaas';
+          font-weight: normal;
+          margin: 0;
+      }
+  
+      p {
+          font-size: 20px;
+          font-family: 'NeueHaas-Medium';
+      }
+  
+      a {
+          color: red;
+          text-decoration: none;
+          font-family: 'NeueHaas';
+      }
+  
+      a:hover {
+          color: rgb(97, 78, 243);
+      }
+  
+      .container {
+          display: flex;
+          justify-content: space-between;
+      }
+  
+      .section {
+          flex: 1;
+          font-size: 24px;
+          box-sizing: border-box; /* Include padding in width calculation */
+          
+      }
+      #menu {
+        margin:0;
+        top:0;
+        position: fixed;
+      }
+  
+      #no-bullet {
+          list-style-type: none;
+          margin-left: 0;
+          color: red;
+          font-family: 'NeueHaas';
+      }
+  
+      #current-page {
+        color: gray;
+      }
+  
+      #content {
+        margin-left: 20vw;
+        color: red;
+        margin-right:1vw;
+      }
+    
+      .section#content p {
+        font-size:12px;
+      }
+  
+      ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          margin-top: -10px;
+      }
+  
+      li {
+          margin-bottom: -5px;
+          margin-left: 0; /* Removed 'vw' unit */
+          color: red;
+      }
+    
+  </style>
+  
+  
+      </head>
+    <body>
+      <canvas id = "bg"></canvas>
+  
+      <main>
+        <div class="section" style="" id="content">
+          <div style="margin-top:0px; right:0; top:0;">
+             <video width="80%" autoplay muted loop style="top:0; right:0; margin:0; text-align: right; position:fixed;">
+              
+             <source src="cover.mp4" type="video/mp4" style="height:100vh;">
+            </video> -->
+            
+          <!-- </div>
+      </div>
+  
+      
+        <div class="container">
+            <div class="section" id = "menu">
+                <h2><a id="current-page" href="index2.html">AUTUMN <br>JING</a></h2><br>
+                <ul>
+                    <li id="no-bullet">&#x1F862; Works -</li>
+                    <li id="no-bullet">Video Projects</li>
+                    <li><a href="feedback.html">- Feedback Loops</a><br></li>
+                    <li><a href="">- 3D</a></li>
+                    <li><a href="">- Films</a></li>
+                    <li id="no-bullet">Exhibition</li>
+                    <li><a href="lvk.html">- LVK</a></li>
+                    <li><a href="city.html">- City</a></li>
+                    <li><a href="opera.html">- Opera</a></li>
+                    <li id="no-bullet">Game Development</li>
+                    <li><a href="gamedev.html">- Projects</a></li>
+                    <li id="no-bullet">Design</li>
+                    <li><a href="">- Designs</a></li>
+                </ul><br>
+                <span style="color:red">
+                    &#129125; <a href="https://github.com/autumngreenbean" target="_blank">Github</a><br>
+                    &#129125; <a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">Youtube</a><br>
+                    &#129125; <a href="https://www.instagram.com/autumngreenbean/" target="_blank">Instagram</a><br>
+                    &#129125; <a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">Linkedin</a><br>
+                    &#129125; <a href="https://www.instagram.com/generatedparticles" target="_blank">Ai Archive</a><br>
+                </span>
+            </div>
+  
+         
+  
+  </div>
+  
+  
+  
+  </main>
+          <script type="module" src="./main.js"></script>
+  
+    </body>
+  </html>
+   -->
+  
+  
+  
+  
+  <!-- <iframe width="600px" height="500px" src="https://www.youtube.com/embed/JVodD-LP1Rc?si=DQklBW23SyI6Yw_b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/l5A32FlWYWI?si=URWPoHhk669e53BT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/WVwYntKZVvM?si=5UoGQl5NYkpHkeAE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/l5A32FlWYWI?si=URWPoHhk669e53BT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/l5A32FlWYWI?si=URWPoHhk669e53BT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+   -->
+  
+  
+    <!-- <div>
+   
+      
+   
+    <div class="container" style="margin-left: 1vw;">
+  
+      
+      </div>
+     <div class="section" style = "position:fixed; top:0;">
+      <h2 style="top:0;left:0;position:absolute">AUTUMN <br>JING
+      <br><br>
+      <ul>
+        <li id="no-bullet">&#x1F862; Works -</li>
+        <li id="no-bullet">Video</li>
+        <li><a id="current-page" href="feedback.html">- Feedback</a><br></li>
+        <li><a href="">- 3D</a></li>
+        <li><a href="">- Films</a></li>
+        <li id="no-bullet">Exhibition</li>
+        <li><a href="">- LVK</a></li>
+        <li><a href="">- City</a></li>
+        <li><a href="">- Opera</a></li>
+        <li id="no-bullet">Game Development</li>
+        <li><a href="">- Projects</a></li>
+        <li id="no-bullet">Design</li>
+        <li><a href="">- Designs</a></li>
+      </ul><br>
+      <span>
+      &#129125; <a href="https://github.com/autumngreenbean" target="_blank">Github</a><br>
+      &#129125; <a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">Youtube</a><br>
+      &#129125; <a href="https://www.instagram.com/autumngreenbean/" target="_blank">Instagram</a><br>
+      &#129125; <a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">Linkedin</a><br>
+      &#129125; <a href="https://www.instagram.com/generatedparticles" target="_blank">Ai Archive</a><br>
+    </span>
+    </h2>
+    </div> 
+    </div> 
+   -->
+  
+  
+  
+  
+  
+  
+  <!-- <iframe width="600px" height="500px" src="https://www.youtube.com/embed/JVodD-LP1Rc?si=DQklBW23SyI6Yw_b" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/l5A32FlWYWI?si=URWPoHhk669e53BT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/WVwYntKZVvM?si=5UoGQl5NYkpHkeAE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/l5A32FlWYWI?si=URWPoHhk669e53BT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <iframe width="600px" height="500px" src="https://www.youtube.com/embed/l5A32FlWYWI?si=URWPoHhk669e53BT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+   -->
+  
+  
+    <!-- <div>
+   
+      
+   
+    <div class="container" style="margin-left: 1vw;">
+  
+      
+      </div>
+     <div class="section" style = "position:fixed; top:0;">
+      <h2 style="top:0;left:0;position:absolute">AUTUMN <br>JING
+      <br><br>
+      <ul>
+        <li id="no-bullet">&#x1F862; Works -</li>
+        <li id="no-bullet">Video</li>
+        <li><a id="current-page" href="feedback.html">- Feedback</a><br></li>
+        <li><a href="">- 3D</a></li>
+        <li><a href="">- Films</a></li>
+        <li id="no-bullet">Exhibition</li>
+        <li><a href="">- LVK</a></li>
+        <li><a href="">- City</a></li>
+        <li><a href="">- Opera</a></li>
+        <li id="no-bullet">Game Development</li>
+        <li><a href="">- Projects</a></li>
+        <li id="no-bullet">Design</li>
+        <li><a href="">- Designs</a></li>
+      </ul><br>
+      <span>
+      &#129125; <a href="https://github.com/autumngreenbean" target="_blank">Github</a><br>
+      &#129125; <a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">Youtube</a><br>
+      &#129125; <a href="https://www.instagram.com/autumngreenbean/" target="_blank">Instagram</a><br>
+      &#129125; <a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">Linkedin</a><br>
+      &#129125; <a href="https://www.instagram.com/generatedparticles" target="_blank">Ai Archive</a><br>
+    </span>
+    </h2>
+    </div> 
+    </div> 
+   -->
+  
+  
+
+
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>Game Development</title>
@@ -149,8 +794,8 @@
 
     
                     <img src="gamedev/clublongterm/ant-concept.png" alt="" width="600px" height="800px">
-                    <!-- <img src="gamedev/clublongterm/queen-concept.png" alt="" width="38%" height="38%"> -->
-                    <img src="gamedev/clublongterm/beetle-concept.png" alt="" width="600px" height="800px">
+                    <img src="gamedev/clublongterm/queen-concept.png" alt="" width="38%" height="38%"> -->
+                    <!-- <img src="gamedev/clublongterm/beetle-concept.png" alt="" width="600px" height="800px">
                     <img src="gamedev/clublongterm/3dconcept-preview.png" alt="" width="900px" height="800px">
                     <br>
                     <img src="gamedev/koi-concept.png" alt="">
@@ -203,17 +848,17 @@
   
     
 
-        <!-- <div class="section" style="text-align: right; margin-left:20vw;"> 
+        <div class="section" style="text-align: right; margin-left:20vw;"> 
            
   </div> -->
 
-
+<!-- 
 </main>
 <script type="module" src="./main.js"></script>
 
 </body>
 
-</html>
+</html>  -->
 <!-- <!DOCTYPE html>
 <html>
 <head>

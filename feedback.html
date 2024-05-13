@@ -1,185 +1,210 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="UTF-8" />
-    <title>Autumn Green</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-    <style>
+<style>
+  body {
+      background-color: black;
+      color:white;
+      /* overflow-y: hidden; */
+  }
+  #current-page {
+          color:red
+      }
+  h1 {
+      text-align:right;
+      font-size:30px;
+      padding: 20px;
+      font-weight: normal;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+
+  table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width:100%;
+  }
+
       body {
-        overflow-x:hidden;
+          font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       }
 
-      ::-webkit-scrollbar {
-      display: none;
+      table {
+          font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      }
+
+      th {
+          font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      }
+      
+  td, th {
+      border: 0px;
+      text-align: right;
+      padding: 5px;
   }
-        @font-face {
-            font-family: 'NeueHaas';
-            src: url('NeueHaasGroteskText-Regular.woff') format('opentype');
-        }
 
-        @font-face {
-            font-family: 'NeueHaas-Medium';
-            src: url('NeueHaasGroteskText-Medium.woff') format('opentype');
-        }
-
-        h1 {
-            font-size: 200px;
-            font-family: Helvetica, sans-serif;
-        }
-
-        h2 {
-            color: red;
-            font-size: 25px;
-            text-decoration: none;
-            font-family: 'NeueHaas';
-            font-weight: normal;
-            margin: 0;
-        }
-
-        p {
-            font-size: 20px;
-            font-family: 'NeueHaas-Medium';
-        }
-
-        a {
-            color: red;
-            text-decoration: none;
-            font-family: 'NeueHaas';
-        }
-
-        a:hover {
-            color: rgb(97, 78, 243);
-        }
-
-        .container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .section {
-            flex: 1;
-            font-size: 24px;
-            box-sizing: border-box; /* Include padding in width calculation */
-            
-        }
-        #menu {
-          margin:0;
-          top:0;
-          position: fixed;
-        }
-
-        #no-bullet {
-            list-style-type: none;
-            margin-left: 0;
-            color: red;
-            font-family: 'NeueHaas';
-        }
-
-        #current-page {
-          color: gray;
-        }
-
-        #content {
-          margin-left: 20vw;
-          color: red;
-          margin-right:1vw;
-        }
-      
-        .section#content p {
-          font-size:12px;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            margin-top: -10px;
-        }
-
-        li {
-            margin-bottom: -5px;
-            margin-left: 0; /* Removed 'vw' unit */
-            color: red;
-        }
-      
-    </style>
-</head>
-<body>
-    <canvas id="bg"></canvas>
-
-    <main>
-        <div class="container" style="">
-            <div class="section" id = "menu">
-                <h2><a href="index.html">AUTUMN <br>JING</a></h2><br>
-                <ul>
-                    <li id="no-bullet">&#x1F862; Works -</li>
-                    <li id="no-bullet">Video Projects</li>
-                    <li><a id="current-page" href="feedback.html">- Feedback Loops</a><br></li>
-                    <li><a href="3d.html">- 3D</a></li>
-                    <li><a href="films.html">- Films</a></li>
-                    <li id="no-bullet">Exhibition</li>
-                    <li><a href="lvk.html">- LVK</a></li>
-                    <li><a href="city.html">- City</a></li>
-                    <li><a href="opera.html">- Opera</a></li>
-                    <li id="no-bullet">Game Development</li>
-                    <li><a href="gamedev.html">- Projects</a></li>
-                    <li id="no-bullet">Design</li>
-                    <li><a href="design.html">- Designs</a></li>
-                </ul><br>
-                <span style="color:red">
-                    &#129125; <a href="https://github.com/autumngreenbean" target="_blank">Github</a><br>
-                    &#129125; <a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">Youtube</a><br>
-                    &#129125; <a href="https://www.instagram.com/autumngreenbean/" target="_blank">Instagram</a><br>
-                    &#129125; <a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">Linkedin</a><br>
-                    &#129125; <a href="https://www.instagram.com/generatedparticles" target="_blank">Ai Archive</a><br>
-                </span>
-            </div>
-
-            
-        <div id= "content" class="section" style="text-align: right; top:0; position:absolute; "> 
-            <div id="video-container" >            
-                <div id="vimeo-player" ></div>
-        </div>
-
-          
-
-          <iframe width="600px" height="500px" src="https://www.youtube.com/embed/xi4ET5y7ks8?si=bdJ5Yf6tRM8IXXOx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          <iframe width="600px" height="500px" src="https://www.youtube.com/embed/FZ2HolsJD6E?si=6XaeBzNo00cRKP-A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          <p>Feedback loops made with VHS and projector. View full collection @                     
-            <a href="https://www.youtube.com/@autumnjing/videos" target="_blank" style="text-decoration: underline; color:blue;">external link</a>
-        </p>
-
-   </div>
-  </div>
   
 
-</main>
-        <script type="module" src="./main.js"></script>
-        <script src="https://player.vimeo.com/api/player.js"></script>
-        <script>
-          // Initialize the Vimeo player
-          var options = {
-            id: 927668654,
-            autoplay: true,
-            loop: true,
-            muted: true,
-            controls: false,
-            width: 1000,
-            height: 550,
-            margin: 0
-          };
-          var player = new Vimeo.Player('vimeo-player', options);
+  .left-aligned th {
+      text-align: left;
+  }
+  .left-aligned td {
+      text-align: left;
+  }
+
+  .left-aligned:nth-child(even) td:first-child {
+width:2%;
+padding:1px;   
+/* background-color: purple; */
+text-align: left;
+padding-right:5px;
+}
+.left-aligned:nth-child(even) td:nth-child(2) {
+  text-align: left;
+width:10%;
+padding:1px;   
+/* background-color: red; */
+padding-left:5px;
+}
+
+
+
+  tr:nth-child(even) td:first-child {
+width:20%;
+padding:0;        
+}
+
+
+  * {
+      box-sizing: border-box;
+  }
+
+  .column {
+      float: left;
+      padding: 13px;
+  }
+
+  /* Set the width of the left column */
+  .left-column {
+      width: 40%; /* Adjust this value as needed */
+      text-align: right;
+      align-content: right;
+      align-items:right;
+      background-color: black;
+  }
+
+  /* Set the width of the right column */
+  .right-column {
+      width: 60%; /* Adjust this value as needed */
+      height:70%;
+      /* background-color: red; */
+  }
+  a {
+      color:white;
+      text-decoration: none;
+  }
+
+  a:hover {
+      color:red;
+  }
+  /* Responsive layout - makes the columns stack on top of each other instead of next to each other */
+  @media screen and (max-width: 600px) {
+      .column {
+          width: 100%;
+      }
+
+      
+  }
+</style>
+<h1><a href="index.html">autumn jing green</a></h1>
+<br>
+<body>
+  
+<div class="row">
+  <div class="column left-column">
+<h2>recent works</h2>        
+<table>
+    <tr>
+    <th>year</th>
+        <th>title</th>
+        <th>location</th>
+    </tr>
+    
+    <tr>
+        <td>2023</td>
+        <td><a href="city.html">Cultural Currents Artist's Week</a></td>
+        <td>Eugene, Oregon</td>
+    </tr>
+    <tr>
+        <td>2022, 2023</td>
+        <td><a href="opera.html">Eugene Opera</a></td>
+        <td>Eugene, Oregon</td>
+    </tr>
+    
+    <tr>
+        <td>2022, 2023</td>
+        <td><a href="gamedev.html">Game Development</a></td>
+        <td>University of Oregon</td>
+    </tr>
+    <tr>
+        <td>2022</td>
+        <td><a href="pixelsort.html">Pixel-Sorting Project</a></td>
+        <td>University of Oregon</td>
+    </tr>
+    <tr>
+        <td>2020</td>
+        <td><a href="feedback.html" id="current-page">Analog VHS Feedback Loops</a></td>
+        <td>Laverne Krause Gallery</td>
+    </tr>
+</table>
+      <br>
+     
+      <br>
+      <h2 style="text-align: left;">media archive(s)</h2>        
+      <table class="left-aligned">
+        <tr>
+            <th>media</th>
+            <th style="text-align: left;">location</th>
+        </tr>
+        <tr>
+          <td>code</td>
+          <td><a href="https://github.com/autumngreenbean" target="_blank">github</a></td>
+          
+      </tr>
+        <tr>
+            <td>video</td>
+            <td><a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">youtube</a></td>
+            
+        </tr>
+        <tr>
+           
+            <td>design</td>
+            <td><a href="https://flic.kr/s/aHBqjAPVb9" target="_blank">flickr</a></td>
+      
+        </tr>
+        <tr>
+            <td>business</td>
+            <td><a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">linkedin</a></td>
+      
+        </tr>
+      
+        <tr>
+            <td>photo/video</td>
+            <td><a href="https://www.instagram.com/autumngreenbean/" target="_blank">instagram</a></td>
+           
+        </tr>
+        <tr>
+            <td>ai generations</td>
+            <td><a href="https://www.instagram.com/generatedparticles" target="_blank">instagram</a></td>
+        </tr>
         
-          // Get the raw video URL
-          player.getVideoUrl().then(function(url) {
-            console.log('Raw video URL:', url);
-            // Now you can use this URL in a <video> tag or wherever you need
-          }).catch(function(error) {
-            console.error('Error fetching raw video URL:', error);
-          });
-        </script>
-  </body>
-</html>
+      </table>
+  </div>
+
+  <div class="column right-column" style="text-align:right;">
+    <iframe width="100%" height="100%" src="https://www.youtube.com/embed/xi4ET5y7ks8?si=bdJ5Yf6tRM8IXXOx" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <p style="text-align: left;">Most of my recent practices have involved utilizing a <strong>feedback loop</strong>, a video synthesis technique. <br> <br>
+        This involves routing multiple sources of signal channels, which essentially creates a system representing two mirrors facing toward one another. This feedback loop was made using a <strong style="color:yellowgreen">VHS camera</strong> and a projector. </p>
+ 
+</div>
+
+</div>
+  
+</body>
 

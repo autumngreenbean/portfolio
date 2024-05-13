@@ -1,0 +1,212 @@
+<style>
+    body {
+        background-color: black;
+        color:white;
+        /* overflow-y: hidden; */
+    }
+    #current-page {
+            color:red
+        }
+    h1 {
+        text-align:right;
+        font-size:30px;
+        padding: 20px;
+        font-weight: normal;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
+  
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width:100%;
+    }
+  
+        body {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+  
+        table {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+  
+        th {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        
+    td, th {
+        border: 0px;
+        text-align: right;
+        padding: 5px;
+    }
+  
+    
+  
+    .left-aligned th {
+        text-align: left;
+    }
+    .left-aligned td {
+        text-align: left;
+    }
+  
+    .left-aligned:nth-child(even) td:first-child {
+  width:2%;
+  padding:1px;   
+  /* background-color: purple; */
+  text-align: left;
+  padding-right:5px;
+  }
+  .left-aligned:nth-child(even) td:nth-child(2) {
+    text-align: left;
+  width:10%;
+  padding:1px;   
+  /* background-color: red; */
+  padding-left:5px;
+  }
+  
+  
+  
+    tr:nth-child(even) td:first-child {
+  width:20%;
+  padding:0;        
+  }
+  
+  
+    * {
+        box-sizing: border-box;
+    }
+  
+    .column {
+        float: left;
+        padding: 13px;
+    }
+  
+    /* Set the width of the left column */
+    .left-column {
+        width: 40%; /* Adjust this value as needed */
+        text-align: right;
+        align-content: right;
+        align-items:right;
+        background-color: black;
+    }
+  
+    /* Set the width of the right column */
+    .right-column {
+        width: 60%; /* Adjust this value as needed */
+        height:70%;
+        /* background-color: red; */
+    }
+    a {
+        color:white;
+        text-decoration: none;
+    }
+  
+    a:hover {
+        color:red;
+    }
+    /* Responsive layout - makes the columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 600px) {
+        .column {
+            width: 100%;
+        }
+  
+        
+    }
+  </style>
+  <h1><a href="index.html">autumn jing green</a></h1>
+  <br>
+  <body>
+    
+  <div class="row">
+    <div class="column left-column">
+  <h2>recent works</h2>        
+  <table>
+    <tr>
+    <th>year</th>
+        <th>title</th>
+        <th>location</th>
+    </tr>
+    
+    <tr>
+        <td>2023</td>
+        <td><a href="city.html">Cultural Currents Artist's Week</a></td>
+        <td>Eugene, Oregon</td>
+    </tr>
+    <tr>
+        <td>2022, 2023</td>
+        <td><a href="opera.html">Eugene Opera</a></td>
+        <td>Eugene, Oregon</td>
+    </tr>
+    
+    <tr>
+        <td>2022, 2023</td>
+        <td><a href="gamedev.html">Game Development</a></td>
+        <td>University of Oregon</td>
+    </tr>
+    <tr>
+        <td>2022</td>
+        <td><a href="pixelsort.html" id="current-page">Pixel-Sorting Project</a></td>
+        <td>University of Oregon</td>
+    </tr>
+    <tr>
+        <td>2020</td>
+        <td><a href="feedback.html">Analog VHS Feedback Loops</a></td>
+        <td>Laverne Krause Gallery</td>
+    </tr>
+</table>
+        <br><br>
+      
+        
+        <h2 style="text-align: left;">media archive(s)</h2>        
+        <table class="left-aligned">
+            <tr>
+                <th>media</th>
+                <th style="text-align: left;">location</th>
+            </tr>
+            <tr>
+              <td>code</td>
+              <td><a href="https://github.com/autumngreenbean" target="_blank">github</a></td>
+              
+          </tr>
+            <tr>
+                <td>video</td>
+                <td><a href="https://www.youtube.com/channel/UCKQB8ZpS8dAYSrZ8R_hf25w" target="_blank">youtube</a></td>
+                
+            </tr>
+            <tr>
+               
+                <td>design</td>
+                <td><a href="https://flic.kr/s/aHBqjAPVb9" target="_blank">flickr</a></td>
+          
+            </tr>
+            <tr>
+                <td>business</td>
+                <td><a href="https://www.linkedin.com/in/autumngreenbean/" target="_blank">linkedin</a></td>
+          
+            </tr>
+          
+            <tr>
+                <td>photo/video</td>
+                <td><a href="https://www.instagram.com/autumngreenbean/" target="_blank">instagram</a></td>
+               
+            </tr>
+            <tr>
+                <td>ai generations</td>
+                <td><a href="https://www.instagram.com/generatedparticles" target="_blank">instagram</a></td>
+            </tr>
+            
+          </table>
+    </div>
+  
+    <div class="column right-column">
+        <p><span style="color: red;">#</span><strong> pixel-sort project</strong></p>
+        <p> This project was made via java programming. to manufacture the featured effect, I expanded on a pixel-sorting code algorithim created by <strong style="color:antiquewhite">Kim Asendorf</strong>.</p>
+        <p>I updated the program to efficiently convert videos into large image sequences, process them, and encode them into .mp4 format using <strong style="color:antiquewhite">ffmpeg</strong>, rather than the original function of processing a single image.</p>
+        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/gv7uSG9uNpI?si=Xm5v1mLbVEvNcLCX" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    </div>
+  </div>
+  
+    
+  
+  
+  </body>
