@@ -1,122 +1,5 @@
-<style>
-    body {
-        background-color: black;
-        color:white;
-        /* overflow-y: hidden; */
-    }
-    #current-page {
-            color:red
-        }
-    h1 {
-        text-align:right;
-        font-size:30px;
-        padding: 20px;
-        font-weight: normal;
-        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    }
-  
-    table {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width:100%;
-    }
-  
-        body {
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        }
-  
-        table {
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        }
-  
-        th {
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-        }
-        
-    td, th {
-        border: 0px;
-        text-align: right;
-        padding: 5px;
-    }
-  
-    
-  
-    .left-aligned th {
-        text-align: left;
-    }
-    .left-aligned td {
-        text-align: left;
-    }
-  
-    .left-aligned:nth-child(even) td:first-child {
-  width:2%;
-  padding:1px;   
-  /* background-color: purple; */
-  text-align: left;
-  padding-right:5px;
-  }
-  .left-aligned:nth-child(even) td:nth-child(2) {
-    text-align: left;
-  width:20%;
-  padding:1px;   
-  /* background-color: red; */
-  padding-left:5px;
-  }
-  
-  
-  
-    tr:nth-child(even) td:first-child {
-  width:20%;
-  padding:0;        
-  }
-  
-  
-    * {
-        box-sizing: border-box;
-    }
-  
-    .column {
-        float: left;
-        padding: 13px;
-    }
-  
-    /* Set the width of the left column */
-    .left-column {
-        width: 40%; /* Adjust this value as needed */
-        text-align: right;
-        align-content: right;
-        align-items:right;
-        background-color: black;
-    }
-  
-    /* Set the width of the right column */
-    .right-column {
-        width: 60%; /* Adjust this value as needed */
-        height:70%;
-        /* background-color: red; */
-    }
-    a {
-        color:white;
-        text-decoration: none;
-    }
-  
-    a:hover {
-        color:red;
-    }
-    /* Responsive layout - makes the columns stack on top of each other instead of next to each other */
-    @media screen and (max-width: 600px) {
-        .column {
-            width: 100%;
-        }
-        .media {
-            width:100%;
-            height:auto;
-        }
-  
-        
-        
-    }
-  </style>
+<link rel="stylesheet" href="styles.css">
+
   <h1><a href="index.html">autumn jing green</a></h1>
   <br>
   <body>
@@ -130,21 +13,25 @@
         <th>title</th>
         <th>location</th>
     </tr>
-    
+    <tr>
+      <td>2024</td>
+      <td><a href="feedback.html">VHS Feedback Loops</a></td>
+      <td>Portland, Oregon</td>
+  </tr>
     <tr>
         <td>2023</td>
         <td><a href="city.html">Cultural Currents Artist's Week</a></td>
         <td>Eugene, Oregon</td>
     </tr>
+
     <tr>
         <td>2022, 2023</td>
         <td><a href="opera.html">Eugene Opera</a></td>
         <td>Eugene, Oregon</td>
     </tr>
-    
     <tr>
         <td>2022, 2023</td>
-        <td><a href="gamedev.html" id="current-page">Game Development</a></td>
+        <td><a href="gamedev.html">Game Development</a></td>
         <td>University of Oregon</td>
     </tr>
     <tr>
@@ -154,7 +41,7 @@
     </tr>
     <tr>
         <td>2020</td>
-        <td><a href="feedback.html">Analog VHS Feedback Loops</a></td>
+        <td><a href="lvk.html">Time-based Exhibition</a></td>
         <td>Laverne Krause Gallery</td>
     </tr>
 </table>
