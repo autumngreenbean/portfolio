@@ -1,18 +1,24 @@
 
+
 body {
-    background-color: black;
-    color:white;
+    color:black;
     /* overflow-y: hidden; */
 }
 #current-page {
-        color:red
-    }
+        color:blue;
+        font-weight: bolder;
+        font-style: oblique;   
+ }
 h1 {
     text-align:right;
     font-size:30px;
     padding: 20px;
     font-weight: normal;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+h2 {
+    font-family: custom2;
+    font-size: 40px;
 }
 
 table {
@@ -35,7 +41,7 @@ table {
     
 td, th {
     border: 0px;
-    text-align: right;
+    text-align: left;
     padding-bottom: 5px;
   }
 
@@ -78,6 +84,8 @@ padding:0;
 .column {
     float: left;
     padding: 13px;
+    ;
+
 }
 
 /* Set the width of the left column */
@@ -86,17 +94,31 @@ padding:0;
     text-align: right;
     align-content: right;
     align-items:right;
-    background-color: black;
+    position: relative;
+    z-index: 3;
+
+    /* position: fixed; */
+}
+.left-column-content{
+    position: fixed;
 }
 
 /* Set the width of the right column */
 .right-column {
+    position: relative;
     width: 60%; /* Adjust this value as needed */
     height:70%;
-    /* background-color: red; */
+    align-items: left;
+    z-index: 3;
+    backdrop-filter: blur(10px); /* Adjust the blur radius as needed */
+    color: whitesmoke;
+    height: 70vh;
+    overflow: auto;
+    animation: slidefromRight 3s;
 }
+
 a {
-    color:white;
+    color:black;
     text-decoration: none;
 }
 
@@ -111,3 +133,119 @@ a:hover {
 
     
 }
+
+
+#menu {
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+    /* background: rgba(255, 255, 255, 0.8); */
+    backdrop-filter: blur(10px); /* Adjust the blur radius as needed */
+    color: whitesmoke;
+    padding: 5%;
+    animation: slidefromLeft 3s;
+}
+
+
+
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+}
+
+
+@keyframes slidefromLeft {
+    from {
+        transform: translateX(-100%); /* Start off-screen */      }
+      to {
+        transform: translateX(0); /* Natural position */
+      }
+          }
+          #menu {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2; 
+    /* background: rgba(255, 5, 5, 0.8);  */
+  }
+  
+@keyframes slidefromRight {
+    from {
+        transform: translateX(200%); /* Start off-screen */     
+     }
+      to {
+        transform: translateX(0); /* Natural position */
+      }
+          }
+          #menu {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2; 
+    /* background: rgba(255, 5, 5, 0.8);  */
+  }
+
+  @keyframes slidefromBottom {
+    from {
+        transform: translateY(5000%); /* Start off-screen */     
+     }
+      to {
+        transform: translateY(0); /* Natural position */
+      }
+
+
+          }
+          #menu {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2; 
+    /* background: rgba(255, 5, 5, 0.8);  */
+  }
+
+  @font-face{
+    font-family: 'custom';
+    src: url(Pixel\ Chaos.ttf);
+  }
+  @font-face {
+    font-family: 'custom2';
+    src: url(Cursive.ttf);
+  }
+    .banner {
+          color: white;
+          padding: 10px;
+          text-align: left; 
+          position: fixed; 
+          bottom: 0; 
+          width: 100%; 
+          backdrop-filter: blur(10px); 
+          color: whitesmoke;
+          background-size: contain;
+          /* background-blend-mode: screen;  */
+          z-index: 4; 
+
+        }
+        .bannertext { 
+        animation: slidefromLeft 2s;
+          font-family: custom;
+          /* text-shadow: 10px 10px 20px #000000a4;  */
+          font-size: 100px;
+          color:#ffffff;
+       
+
+             
+        }
+
+        .bannerdesc {
+          color: black;
+          font-size: 10px;
+          animation:  slidefromBottom 2s;
+        }
+
+    
