@@ -1,18 +1,9 @@
-<head>
-    <link rel="stylesheet" href="styles.css">
-    <script src="main.js" type="module" defer></script>
-  </head>
+        <style>
+            p {
+              text-shadow: 1px 1px 2px black;
+            }
+        </style>
 
-  <h1><a href="index.html">autumn jing green</a></h1>
-  <br>
-  <body>
-    
-  <div class="row">
-    <div class="column left-column">
-          <div id="menu"></div>
-    </div>
-  
-    <div class="column right-column">
         <p>the <span style="color: red;">#</span> <strong>Game Development Club</strong> is an organization created by a group of three colleagues and myself at the University of Oregon.</p>
        
         <p>as the founding Art Director and primary coordinator, my responsibilities here included:</p>
@@ -70,20 +61,6 @@
      
              <p>learning the horrors of texture-painting/mapping. modelled in <strong>Nomad Sculpt</strong>, textured in <strong>Procreate</strong></p>
              <img src="gamedev/alien2.png" width="100%" alt=""> <img src="gamedev/alien2-texturemap.jpg" width="100%">        
-   </div>
-  </div>
-  <div id="banner"></div>
-  </body> 
+
+
   
-  <script>
-    fetch('menu.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('menu').innerHTML = data;
-      });
-      fetch('banner.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('banner').innerHTML = data;
-    });
-  </script>

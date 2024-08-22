@@ -1,80 +1,8 @@
-<head>
-    <link rel="stylesheet" href="styles.css">  
-    <script src="main.js" type="module" defer></script>
-    <!-- <script src="animationhandler.js" type="module" defer></script> -->
-</head>
-
-<style>
-    body {
-        background-color: grey;
-      
-    }
-    .banner {
-          color: white;
-          padding: 10px;
-          text-align: left; 
-          position: fixed; 
-          bottom: 0; 
-          width: 100%; 
-          backdrop-filter: blur(10px); 
-          color: whitesmoke;
-          background-size: contain;
-          /* background-blend-mode: screen;  */
-          z-index: 3; 
-
-        }
-        .bannertext { 
-        animation: slidefromLeft 2s;
-          font-family: custom;
-          /* text-shadow: 10px 10px 20px #000000a4;  */
-          font-size: 100px;
-          font-family: custom;
-          color:#ffffff;    
-        }
-        .bannerdesc {
-          color: black;
-          font-size: 10px;
-          animation:  slidefromBottom 2s;
-        }
-</style>
-<h1 id="current-page" style="color:#ffffff00">blobloblbo</h1>
-<br><br><br><br>
-  <body>
-    
-  <div class="row">
-    <div class="column left-column">
-        <div id="menu"></div>
-    </div>
-  
-    <div class="column right-column" style="text-align:right;">
-        <iframe width="100%" height="100%" src="https://www.youtube.com/embed/WVwYntKZVvM?si=M8b2f7UemObwUj2k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      <p style="text-align: left;">Most of my recent practices have involved utilizing a <strong>feedback loop</strong>, a video synthesis technique. <br> <br>
-          This involves routing multiple sources of signal channels, which essentially creates a system representing two mirrors facing toward one another. This feedback loop was made using a <strong style="color:yellowgreen">VHS camera</strong> and a projector. </p>
-          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/GwCtkkxhtNg?si=YFHs5x-JrG4Hd7Pf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/5q4aGk7B0Bk?si=yYAhh0_BaIeUgxen" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/6vd94lWKcDI?si=VbxZBoMoIjEzQqAq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-          <p style="text-align: left;">This is a <strong style="color:yellowgreen">digital feedback loop</strong>, which is contained within a computer's processing system rather than relying on a camera and projection hardware-based system. </p>   
-  </div>
-  </div>
-
-  <div id="banner"></div>
-
-  </body>
-
-  <script>
-    fetch('menu.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('menu').innerHTML = data;
-      });
-      fetch('banner.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('banner').innerHTML = data;
-    });
-  </script>
-  
-  
-  
-  
+<iframe width="100%" height="1000vh;" src="https://www.youtube.com/embed/WVwYntKZVvM?si=M8b2f7UemObwUj2k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<p style="text-align: left; text-shadow: 1px 1px 3px black;">Most of my recent practices have involved utilizing a <strong>feedback loop</strong>, a video synthesis technique. <br> <br>
+This involves routing multiple sources of signal channels, which essentially creates a system representing two mirrors facing toward one another. This feedback loop was made using a <strong style="color:yellowgreen">VHS camera</strong> and a projector. </p>
+<iframe width="100%" height="1000vh" src="https://www.youtube.com/embed/GwCtkkxhtNg?si=YFHs5x-JrG4Hd7Pf" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="100%" height="1000vh" src="https://www.youtube.com/embed/5q4aGk7B0Bk?si=yYAhh0_BaIeUgxen" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<iframe width="100%" height="1000vh" src="https://www.youtube.com/embed/6vd94lWKcDI?si=VbxZBoMoIjEzQqAq" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+<p style="text-align: left;">This is a <strong style="color:yellowgreen">digital feedback loop</strong>, which is contained within a computer's processing system rather than relying on a camera and projection hardware-based system. </p>   
+ 

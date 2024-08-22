@@ -1,40 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <link rel="stylesheet" href="styles.css">
-  <script src="main.js" type="module" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="main.js" type="module" defer></script>
+    <!-- <script src="animationhandler.js" type="module" defer></script> -->
 </head>
-<h1 id="current-page" style="color: rgba(240, 248, 255, 0);">blobloblbo</h1>
-<br><br><br><br>
 <body>
-  
-<div class="row">
-  <div class="column left-column">
+    <br><br><br><br>
+
+    <div class="row">
+        <div class="column left-column">
+            <div id="left-column-content"></div>
+        </div>
+
+        <div class="column right-column" style="text-align:right;">
+            <div id="content"></div>
+        </div>
+    </div>
+
     <div id="banner"></div>
-  </div>
-
-  <div class="column right-column" style="animation: slidefromRight 3s;">
-    <div id="menu"></div>
-  </div>
-</div>
-
-<div id="banner"></div>
-
-</body>
 
 
+    <script>
+      let bannerLoaded = false;
+function loadLeftColumn(page) {
+    fetch(page)
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('left-column-content').innerHTML = data;
+        })
+        .catch(error => console.error('Error loading content:', error));
+}
 
+function loadContent(page) {
+  const contentDiv = document.getElementById('content');
 
-<script>
-  fetch('menu.html')
+if (!contentDiv) {
+    console.error('Content div not found!');
+    return;
+}
+
+contentDiv.classList.add('fade-out');
+
+fetch(page)
     .then(response => response.text())
     .then(data => {
-      document.getElementById('menu').innerHTML = data;
-    });
+        setTimeout(() => {
+            contentDiv.innerHTML = data;
+            contentDiv.classList.remove('fade-out');
+            contentDiv.offsetHeight; // Trigger reflow
+            contentDiv.classList.remove('slide-in'); 
+            void contentDiv.offsetWidth; 
+            contentDiv.classList.add('slide-in'); 
+        }, 500); 
+    })
+    .catch(error => console.error('Error loading content:', error));
+
+    fetch('menu.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('left-column-content').innerHTML = data;
+            document.querySelectorAll('#content h2').forEach(h2 => {
+                h2.style.textAlign = 'right';
+            });
+            document.querySelectorAll('#content td').forEach (td => {
+                td.style.textAlign = 'right';
+            });
+            document.querySelectorAll('#content tr').forEach (tr => {
+                tr.style.textAlign = 'right';
+            });
+            document.querySelectorAll('#content p').forEach (p => {
+                p.style.textAlign = 'right';
+            });
+            
+        })
+
+        if (!bannerLoaded) {
+        fetch('banner.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('banner').innerHTML = data;
+                bannerLoaded = true; // Set flag to true after loading
+            })
+            .catch(error => console.error('Error loading banner:', error));
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch and display the initial content for menu and banner
+    fetch('menu.html')
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById('content').innerHTML = data;
+            console.log('Menu loaded and content set up');
+
+            // Temporarily apply left alignment to h2 elements
+            document.querySelectorAll('#content h2').forEach(h2 => {
+                h2.style.textAlign = 'left';
+            });
+            document.querySelectorAll('#content td').forEach (td => {
+                td.style.textAlign = 'left';
+            });
+            document.querySelectorAll('#content tr').forEach (tr => {
+                tr.style.textAlign = 'left';
+            });
+            document.querySelectorAll('#content p').forEach (p => {
+                p.style.textAlign = 'left';
+            });
+          
+        })
+        .catch(error => console.error('Error loading menu:', error));
+
     fetch('banner.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('banner').innerHTML = data;
-    });
-</script>
+        .then(response => response.text())
+        .then(data => {
+            loadLeftColumn('banner.html');
+            console.log('Banner loaded successfully');
+        })
+        .catch(error => console.error('Error loading banner:', error));
+});
 
-
+    </script>
+</body>
+</html>
 
