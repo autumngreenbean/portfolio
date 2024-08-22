@@ -134,6 +134,7 @@ isRight-=1;
   }
   if (event.key === 'ArrowRight') {
     isRight+=1;
+    console.log('im moving right');
       }
 });
 
