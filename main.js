@@ -132,6 +132,9 @@ document.addEventListener('keyup', function(event) {
   if (event.key === 'ArrowLeft') {
 isRight-=1;
   }
+  if (event.key === 'ArrowRight') {
+    isRight+=1;
+      }
 });
 
 function updateShapes() {
