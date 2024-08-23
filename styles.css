@@ -4,6 +4,9 @@ html, body {
     /* color:black; */
     overflow-x: hidden;
 }
+p {
+    margin-top:-5px; text-shadow: 1px 1px 3px black;
+}
 #current-page {
         color:blue;
         font-weight: bolder;
@@ -85,6 +88,9 @@ width:20%;
 padding:0;        
 }
 
+::-webkit-scrollbar {
+    display: none;
+      }
 
 * {
     box-sizing: border-box;
@@ -97,16 +103,14 @@ padding:0;
 
 }
 
-/* Set the width of the left column */
 .left-column {
-    width: 20%; /* Adjust this value as needed */
+    width: 20%; 
     text-align: right;
     align-content: right;
     align-items:right;
     position: relative;
     z-index: 3;
-    backdrop-filter: blur(10px); /* Adjust the blur radius as needed */
-    padding-right:10px;
+    backdrop-filter: blur(10px); 
     margin-right:200px;
     /* position: fixed; */
 }
@@ -116,13 +120,12 @@ padding:0;
     text-align:right;
 }
 
-/* Set the width of the right column */
 .right-column {
     position: relative;
-    width: 70%; /* Adjust this value as needed */
+    width: 70%;
     align-items: left;
     z-index: 3;
-    backdrop-filter: blur(10px); /* Adjust the blur radius as needed */
+    backdrop-filter: blur(10px);
     color: whitesmoke;
     height: 80vh;
     overflow-x:hidden;
@@ -137,7 +140,7 @@ a {
 a:hover {
     color:red;
 }
-/* Responsive layout - makes the columns stack on top of each other instead of next to each other */
+
 @media screen and (max-width: 600px) {
     .column {
         width: 100%;
@@ -154,7 +157,7 @@ a:hover {
     width: 100%;
     z-index: 3;
     /* background: rgba(255, 255, 255, 0.8); */
-    backdrop-filter: blur(10px); /* Adjust the blur radius as needed */
+    backdrop-filter: blur(10px); 
     color: whitesmoke;
     padding: 5%;
     animation: slidefromLeft 3s;
@@ -174,9 +177,9 @@ canvas {
 
 @keyframes slidefromLeft {
     from {
-        transform: translateX(-100%); /* Start off-screen */      }
+        transform: translateX(-100%);   }
       to {
-        transform: translateX(0); /* Natural position */
+        transform: translateX(0); 
       }
           }
           #menu {
@@ -189,10 +192,10 @@ canvas {
   
 @keyframes slidefromRight {
     from {
-        transform: translateX(100%); /* Start off-screen */     
+        transform: translateX(100%);   
      }
       to {
-        transform: translateX(0); /* Natural position */
+        transform: translateX(0); 
       }
           }
           #menu {
@@ -209,10 +212,10 @@ canvas {
 
   @keyframes slidefromBottom {
     from {
-        transform: translateY(100%); /* Start off-screen */     
+        transform: translateY(100%);   
      }
       to {
-        transform: translateY(0); /* Natural position */
+        transform: translateY(0);
       }
 
 
@@ -220,10 +223,10 @@ canvas {
 
           @keyframes slidefromBottom {
             from {
-                transform: translateY(-100%); /* Start off-screen */     
+                transform: translateY(-100%);    
              }
               to {
-                transform: translateY(0); /* Natural position */
+                transform: translateY(0); 
               }
             }
           
@@ -235,7 +238,6 @@ canvas {
     /* background: rgba(255, 5, 5, 0.8);  */
   }
 
-  /* Define the keyframes for the fade-out animation */
 @keyframes fadeOut {
     from {
         opacity: 1;
@@ -245,18 +247,17 @@ canvas {
     }
 }
 
-/* Class to apply the fade-out effect */
 .fade-out {
     animation: fadeOut 0.5s ease-out;
 }
 
   @font-face{
     font-family: 'custom';
-    src: url(Pixel\ Chaos.ttf);
+    src: url(fonts/Pixel\ Chaos.ttf);
   }
   @font-face {
     font-family: 'custom2';
-    src: url(Cursive.ttf);
+    src: url(fonts/Cursive.ttf);
   }
     .banner {
           color: white;
@@ -346,3 +347,5 @@ canvas {
         .controls-text {
             padding:20px;
         }
+
+        
