@@ -122,7 +122,7 @@ padding:0;
 
 .right-column {
     position: relative;
-    width: 70%;
+    width: 60%;
     align-items: left;
     z-index: 3;
     backdrop-filter: blur(10px);
@@ -348,4 +348,39 @@ canvas {
             padding:20px;
         }
 
-        
+        @media (max-width: 768px) {
+            h2 {
+                color:lightblue;
+            }
+            .right-column {
+                backdrop-filter: blur;
+                max-height: 50vh; 
+                overflow-y: auto;   
+            }
+            #menu {
+                backdrop-filter: none;
+            }
+            .bannertext {
+                 font-size: 70px;
+            }   
+            .banner {
+               
+            }
+            .left-column {
+                backdrop-filter: none;
+                
+            }
+            .left-column-content {
+                
+            }
+
+            .keyboard-shortcuts h2 {
+                color:orange;
+                font-size: 0px;
+            }
+            .keyboard-shortcuts p {
+                color:orange;
+                font-size:0px;
+            }
+
+        }

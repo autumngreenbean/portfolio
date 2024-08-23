@@ -25,6 +25,19 @@
 
     <script>
       let bannerLoaded = false;
+      let isMobile = false;
+      let hiddenMenu = false;
+
+      const hideButton = document.createElement('button');
+      hideButton.id = 'hide-button';
+      hideButton.innerHTML = '&#128065;';
+      hideButton.style.backgroundColor = '#333';
+      hideButton.style.color = '#fff';
+      hideButton.style.border = 'dotted';
+      hideButton.style.padding = '10px';
+      hideButton.style.cursor = 'grab';
+
+
 function loadLeftColumn(page) {
     fetch(page)
         .then(response => response.text())
@@ -61,6 +74,18 @@ fetch(page)
     fetch('menu.html')
         .then(response => response.text())
         .then(data => {
+            if (isMobile) {
+                document.getElementById('left-column-content').appendChild(hideButton);
+                hiddenMenu=true;
+                
+                hideButton.addEventListener('click', function() {
+                    const menu = document.getElementById('left-column-content');
+                    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+                    hiddenMenu = false;
+              });
+
+
+            } else {
             document.getElementById('left-column-content').innerHTML = data;
             document.querySelectorAll('#content h2').forEach(h2 => {
                 h2.style.textAlign = 'right';
@@ -74,7 +99,7 @@ fetch(page)
             document.querySelectorAll('#content p').forEach (p => {
                 p.style.textAlign = 'right';
             });
-            
+        }
         })
 
         if (!bannerLoaded) {
@@ -82,7 +107,7 @@ fetch(page)
             .then(response => response.text())
             .then(data => {
                 document.getElementById('banner').innerHTML = data;
-                bannerLoaded = true; // Set flag to true after loading
+                bannerLoaded = true; 
             })
             .catch(error => console.error('Error loading banner:', error));
     }
@@ -94,9 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.text())
         .then(data => {
             document.getElementById('content').innerHTML = data;
-            console.log('Menu loaded and content set up');
 
-            // Temporarily apply left alignment to h2 elements
             document.querySelectorAll('#content h2').forEach(h2 => {
                 h2.style.textAlign = 'left';
             });
@@ -121,6 +144,19 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error loading banner:', error));
 });
+function checkIfMobile() {
+  if (window.innerWidth <= 768) {
+    isMobile = true;
+  } else {
+    isMobile = false;
+  }
+}
+
+// Run the function on page load
+checkIfMobile();
+
+// Run the function on window resize
+window.addEventListener("resize", checkIfMobile);
 
     </script>
 </body>
