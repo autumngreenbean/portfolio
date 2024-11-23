@@ -9,7 +9,7 @@
             color: red;
             text-align: center;
             outline-style: outset;
-            width:30%;
+            width:100%;
             height: 100%;
             margin: 0 auto;
         }
@@ -24,8 +24,8 @@
             padding: 20px;
             border: 2px solid #333;
             display: inline-block;
-            width: 150px;
-            height: 150px;
+            width: 400px;
+            height: 400px;
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -35,9 +35,9 @@
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(2, 150px); /* 2x2 grid */
-            grid-template-rows: repeat(2, 150px);
-            gap: 10px;
+            grid-template-columns: repeat(2, 350px); /* 2x2 grid */
+            grid-template-rows: repeat(2, 300px);
+            gap: 15px;
             justify-content: center;
         }
 
@@ -51,8 +51,8 @@
         }
 
         .grid-item img {
-            width: 50px;
-            height: 50px;
+            width: 100px;
+            height: 100px;
         }
     </style>
 </head>
@@ -63,7 +63,10 @@
     <div class="center-box" id="center-box">
         <!-- Central Item will be placed here -->
     </div>
-
+<br>
+<div style="color:white; justify-content: center; margin: 0 auto; text-align: center;;">
+    what does <span id = "item">this item</span> match with?</div>
+<br>
     <div class="grid-container" id="grid-container">
         <!-- 4x4 grid items will be placed here -->
         <div class="grid-item"><img src="image1.png" alt="Image 1"></div>
@@ -207,6 +210,8 @@ function setupQuiz() {
   const randomPair = items[Math.floor(Math.random() * items.length)];
   const [firstItem, secondItem] = randomPair;
 
+  document.getElementById('item').textContent = firstItem.split('Sprite-')[1].split('.png')[0];
+
   // Display the first item in the center box
   const centerBox = document.getElementById('center-box');
   centerBox.innerHTML = `<img src="${firstItem}" alt="Item" />`;
@@ -232,24 +237,38 @@ function setupQuiz() {
   gridContainer.innerHTML = ''; // Clear any previous grid
 
   // Add 4 grid items, including the second item
-  for (let i = 0; i < 4; i++) {
+ // Modify this section where you create the grid items
+for (let i = 0; i < 4; i++) {
     const gridItem = document.createElement('div');
     gridItem.classList.add('grid-item');
     gridItem.innerHTML = `<img src="${gridItems[i]}" alt="Item" />`;
-    gridItem.addEventListener('click', () => checkMatch(gridItems[i], secondItem));
+    gridItem.addEventListener('click', () => checkMatch(gridItems[i], secondItem, firstItem));  // Pass correctItem and firstItem here
     gridContainer.appendChild(gridItem);
+}
+}
+
+// Modify the checkMatch function to accept selectedItem, correctItem, and firstItem
+function checkMatch(selectedItem, correctItem, firstItem) {
+  // Parse the selectedItem, correctItem, and firstItem by extracting the part after 'Sprite-' and before '.png'
+  const parsedSelectedItem = decodeURIComponent(selectedItem.split('Sprite-')[1]?.split('.png')[0]);
+  const parsedCorrectItem = decodeURIComponent(correctItem.split('Sprite-')[1]?.split('.png')[0]);
+  const parsedFirstItem = decodeURIComponent(firstItem.split('Sprite-')[1]?.split('.png')[0]);
+
+  // Ensure parsed values are valid before comparison
+  if (parsedSelectedItem && parsedCorrectItem && parsedFirstItem) {
+    if (parsedSelectedItem === parsedCorrectItem) {
+      alert(`${parsedFirstItem} matches ${parsedCorrectItem}`);
+      setupQuiz(); // Reload the quiz with a new random pair
+    } else {
+      alert("Oops! Try again.");
+    }
+  } else {
+    console.error("Invalid item format: selectedItem:", selectedItem, "correctItem:", correctItem, "firstItem:", firstItem);
   }
 }
 
-// Check if the selected item matches the second item
-function checkMatch(selectedItem, correctItem) {
-  if (selectedItem === correctItem) {
-    alert("Correct! You found the match.");
-    setupQuiz(); // Reload the quiz with a new random pair
-  } else {
-    alert("Oops! Try again.");
-  }
-}
+
+
 
 // Initialize the quiz on page load
 setupQuiz();
