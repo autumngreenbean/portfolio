@@ -1,0 +1,257 @@
+<head>
+    <style>
+     * {
+            background-color: black;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap');
+
+        .interface {
+            color: red;
+            text-align: center;
+            outline-style: outset;
+            width:30%;
+            height: 100%;
+            margin: 0 auto;
+        }
+
+        #mode {
+            color:blue;
+            font-size: 25px;
+        }
+
+        .center-box {
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 2px solid #333;
+            display: inline-block;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 150px); /* 2x2 grid */
+            grid-template-rows: repeat(2, 150px);
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .grid-item {
+            border: 2px solid #333;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .grid-item img {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+
+<html>
+<body>
+
+    <div class="center-box" id="center-box">
+        <!-- Central Item will be placed here -->
+    </div>
+
+    <div class="grid-container" id="grid-container">
+        <!-- 4x4 grid items will be placed here -->
+        <div class="grid-item"><img src="image1.png" alt="Image 1"></div>
+        <div class="grid-item"><img src="image2.png" alt="Image 2"></div>
+        <div class="grid-item"><img src="image3.png" alt="Image 3"></div>
+        <div class="grid-item"><img src="image4.png" alt="Image 4"></div>
+    </div>
+
+</body>
+
+</html>
+
+<script>
+
+
+const whip = "https://static.wikia.nocookie.net/vampire-survivors/images/b/b7/Sprite-Whip.png";
+const hollowHeart = "https://static.wikia.nocookie.net/vampire-survivors/images/4/45/Sprite-Hollow_Heart.png";
+const bloodyTear = "https://static.wikia.nocookie.net/vampire-survivors/images/b/b8/Sprite-Bloody_Tear.png";
+const magicWand = "https://static.wikia.nocookie.net/vampire-survivors/images/1/14/Sprite-Magic_Wand.png";
+const emptyTome = "https://static.wikia.nocookie.net/vampire-survivors/images/4/42/Sprite-Empty_Tome.png";
+const holyWand = "https://static.wikia.nocookie.net/vampire-survivors/images/4/41/Sprite-Holy_Wand.png";
+const knife = "https://static.wikia.nocookie.net/vampire-survivors/images/1/12/Sprite-Knife.png";
+const bracer = "https://static.wikia.nocookie.net/vampire-survivors/images/f/f2/Sprite-Bracer.png";
+const thousandEdge = "https://static.wikia.nocookie.net/vampire-survivors/images/e/e7/Sprite-Thousand_Edge.png";
+const axe = "https://static.wikia.nocookie.net/vampire-survivors/images/0/03/Sprite-Axe.png";
+const candelabrador = "https://static.wikia.nocookie.net/vampire-survivors/images/8/83/Sprite-Candelabrador.png";
+const deathSpiral = "https://static.wikia.nocookie.net/vampire-survivors/images/0/0f/Sprite-Death_Spiral.png";
+const cross = "https://static.wikia.nocookie.net/vampire-survivors/images/d/db/Sprite-Cross.png";
+const clover = "https://static.wikia.nocookie.net/vampire-survivors/images/a/ac/Sprite-Clover.png";
+const heavenSword = "https://static.wikia.nocookie.net/vampire-survivors/images/9/9f/Sprite-Heaven_Sword.png";
+const kingBible = "https://static.wikia.nocookie.net/vampire-survivors/images/4/4e/Sprite-King_Bible.png";
+const spellbinder = "https://static.wikia.nocookie.net/vampire-survivors/images/3/34/Sprite-Spellbinder.png";
+const unholyVespers = "https://static.wikia.nocookie.net/vampire-survivors/images/f/fd/Sprite-Unholy_Vespers.png";
+const fireWand = "https://static.wikia.nocookie.net/vampire-survivors/images/f/f1/Sprite-Fire_Wand.png";
+const spinach = "https://static.wikia.nocookie.net/vampire-survivors/images/9/96/Sprite-Spinach.png";
+const hellfire = "https://static.wikia.nocookie.net/vampire-survivors/images/d/d5/Sprite-Hellfire.png";
+const garlic = "https://static.wikia.nocookie.net/vampire-survivors/images/2/23/Sprite-Garlic.png";
+const pummarola = "https://static.wikia.nocookie.net/vampire-survivors/images/5/52/Sprite-Pummarola.png";
+const soulEater = "https://static.wikia.nocookie.net/vampire-survivors/images/8/88/Sprite-Soul_Eater.png";
+const santaWater = "https://static.wikia.nocookie.net/vampire-survivors/images/0/0c/Sprite-Santa_Water.png";
+const attractorb = "https://static.wikia.nocookie.net/vampire-survivors/images/0/0f/Sprite-Attractorb.png";
+
+const laBorra = "https://static.wikia.nocookie.net/vampire-survivors/images/3/33/Sprite-La_Borra.png";
+const runetracer = "https://static.wikia.nocookie.net/vampire-survivors/images/3/36/Sprite-Runetracer.png";
+const noFuture = "https://static.wikia.nocookie.net/vampire-survivors/images/e/e2/Sprite-NO_FUTURE.png/revision/latest/scale-to-width-down/32?cb=20220508171022";
+
+const thunderLoop = "https://static.wikia.nocookie.net/vampire-survivors/images/c/cf/Sprite-Thunder_Loop.png/revision/latest/scale-to-width-down/32?cb=20220308162703";
+const pentagram = "https://static.wikia.nocookie.net/vampire-survivors/images/6/69/Sprite-Pentagram.png";
+
+const crown = "https://static.wikia.nocookie.net/vampire-survivors/images/2/2e/Sprite-Crown.png";
+const gorgeousMoon = "https://static.wikia.nocookie.net/vampire-survivors/images/6/6f/Sprite-Gorgeous_Moon.png";
+const gattiAmari = "https://static.wikia.nocookie.net/vampire-survivors/images/1/11/Sprite-Gatti_Amari.png";
+const stoneMask = "https://static.wikia.nocookie.net/vampire-survivors/images/9/98/Sprite-Stone_Mask.png";
+const viciousHunger = "https://static.wikia.nocookie.net/vampire-survivors/images/1/15/Sprite-Vicious_Hunger.png";
+
+
+const songOfMana = "https://static.wikia.nocookie.net/vampire-survivors/images/7/79/Sprite-Song_of_Mana.png";
+const skullOManiac = "https://static.wikia.nocookie.net/vampire-survivors/images/7/7f/Sprite-Skull_O%27Maniac.png";
+const mannajja = "https://static.wikia.nocookie.net/vampire-survivors/images/e/ef/Sprite-Mannajja.png";
+
+
+const valkyrieTurner = "https://static.wikia.nocookie.net/vampire-survivors/images/e/eb/Sprite-Valkyrie_Turner.png";
+const flamesOfMuspell = "https://static.wikia.nocookie.net/vampire-survivors/images/3/39/Sprite-Flames_of_Misspell.png";
+
+const celestialVoulge = "https://static.wikia.nocookie.net/vampire-survivors/images/2/27/Sprite-Celestial_Voulge.png/revision/latest/scale-to-width-down/32?cb=20231020070938";
+
+const silverRing = "https://static.wikia.nocookie.net/vampire-survivors/images/0/08/Sprite-Silver_Ring.png";
+
+
+const infiniteCorridor = "https://static.wikia.nocookie.net/vampire-survivors/images/0/09/Sprite-Infinite_Corridor.png/revision/latest/scale-to-width-down/32?cb=20220524201644";
+const crimsonShroud = "https://static.wikia.nocookie.net/vampire-survivors/images/b/bc/Sprite-Crimson_Shroud.png/revision/latest/scale-to-width-down/32?cb=20220524201739";
+
+const photonstormSprite = "https://static.wikia.nocookie.net/vampire-survivors/images/d/dd/Sprite-Photonstorm.png/revision/latest/scale-to-width-down/32?cb=20240511003909";
+const mazoFamiliarSprite = "https://static.wikia.nocookie.net/vampire-survivors/images/7/7b/Sprite-Mazo_Familiar.png/revision/latest/scale-to-width-down/32?cb=20240511002943";
+const seraphicCrySprite = "https://static.wikia.nocookie.net/vampire-survivors/images/6/62/Sprite-Seraphic_Cry.png/revision/latest/scale-to-width-down/32?cb=20240430104220";
+const sorcerySprite = "https://static.wikia.nocookie.net/vampire-survivors/images/a/a0/Sprite-Sorcery.png/revision/latest/scale-to-width-down/32?cb=20240511002853";
+
+const santaJavelin = "https://static.wikia.nocookie.net/vampire-survivors/images/b/b9/Sprite-Santa_Javelin.png";
+const glassFandango = "https://static.wikia.nocookie.net/vampire-survivors/images/6/67/Sprite-Glass_Fandango.png";
+const phas3r = "https://static.wikia.nocookie.net/vampire-survivors/images/5/54/Sprite-Phas3r.png";
+
+const lightningRing = "https://static.wikia.nocookie.net/vampire-survivors/images/0/09/Sprite-Lightning_Ring.png";
+const duplicator = "https://static.wikia.nocookie.net/vampire-survivors/images/9/92/Sprite-Duplicator.png";
+const clockLancet = "https://static.wikia.nocookie.net/vampire-survivors/images/3/35/Sprite-Clock_Lancet.png";
+
+const metaglioLeft = "https://static.wikia.nocookie.net/vampire-survivors/images/8/83/Sprite-Metaglio_Left.png";
+const pakoBattiliar = "https://static.wikia.nocookie.net/vampire-survivors/images/7/75/Sprite-Pako_Battiliar.png";
+
+const shadowPinion = "https://static.wikia.nocookie.net/vampire-survivors/images/6/60/Sprite-Shadow_Pinion.png";
+const ashesOfMuspell = "https://static.wikia.nocookie.net/vampire-survivors/images/b/b1/Sprite-Ashes_of_Muspell.png";
+const torronosBox = "https://static.wikia.nocookie.net/vampire-survivors/images/2/26/Sprite-Torrona%27s_Box.png";
+
+const armor = "https://static.wikia.nocookie.net/vampire-survivors/images/c/c5/Sprite-Armor.png";
+const laurel = "https://static.wikia.nocookie.net/vampire-survivors/images/4/40/Sprite-Laurel.png";
+
+const metaglioRight = "https://static.wikia.nocookie.net/vampire-survivors/images/2/22/Sprite-Metaglio_Right.png";
+const wings = "https://static.wikia.nocookie.net/vampire-survivors/images/6/6d/Sprite-Wings.png";
+
+
+const items = [
+  [whip, hollowHeart], // Whip + Hollow Heart → Bloody Tear
+  [magicWand, emptyTome], // Magic Wand + Empty Tome → Holy Wand
+  [knife, bracer], // Knife + Bracer → Thousand Edge
+  [axe, candelabrador], // Axe + Candelabrador → Death Spiral
+  [cross, clover], // Cross + Clover → Heaven Sword
+  [kingBible, spellbinder], // King Bible + Spellbinder → Unholy Vespers
+  [fireWand, spinach], // Fire Wand + Spinach → Hellfire
+  [garlic, pummarola], // Garlic + Pummarola → Soul Eater
+  [santaWater, attractorb], // Santa Water + Attractorb → La Borra
+  [runetracer, armor], // Runetracer + Armor → NO FUTURE
+  [lightningRing, duplicator], // Lightning Ring + Duplicator → Thunder Loop
+  [pentagram, crown], // Pentagram + Crown → Gorgeous Moon
+  [gattiAmari, stoneMask], // Gatti Amari + Stone Mask → Vicious Hunger
+  [songOfMana, skullOManiac], // Song of Mana + Skull O'Maniac → Mannajja
+  [shadowPinion, wings], // Shadow Pinion + Wings → Valkyrie Turner
+  [flamesOfMuspell, torronosBox], // Flames of Misspell + Torrona's Box → Ashes of Muspell
+  [glassFandango, wings], // Glass Fandango + Wings → Celestial Voulge
+  [clockLancet, silverRing], // Clock Lancet + Silver Ring / Gold Ring → Infinite Corridor
+  [laurel, metaglioLeft, metaglioRight], // Laurel + Metaglio Left + Metaglio Right → Crimson Shroud
+  [phas3r, emptyTome], // Phas3r + Empty Tome → Photonstorm
+  [pakoBattiliar, hollowHeart], // Pako Battiliar + Hollow Heart → Mazo Familiar
+  [santaJavelin, clover], // Santa Javelin + Clover → Seraphic Cry
+];
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+function setupQuiz() {
+  // Pick a random item pair
+  const randomPair = items[Math.floor(Math.random() * items.length)];
+  const [firstItem, secondItem] = randomPair;
+
+  // Display the first item in the center box
+  const centerBox = document.getElementById('center-box');
+  centerBox.innerHTML = `<img src="${firstItem}" alt="Item" />`;
+
+  // Generate a list of all items for the grid, excluding the first item
+  let allItems = items.flat(); // Flatten the array to get all items
+  allItems = allItems.filter(item => item !== firstItem && item !== secondItem); // Remove both first and second items from grid options
+
+  // Add the second item to the grid
+  allItems.push(secondItem);
+
+  // Shuffle the remaining items for randomness
+  shuffle(allItems);
+
+  // Ensure we have only 4 grid items, and the second item is unique
+  const gridItems = [secondItem, ...allItems.slice(0, 3)]; // Ensure secondItem is unique
+
+  // Shuffle the grid items (now including the second item)
+  shuffle(gridItems);
+
+  // Populate the 2x2 grid with items
+  const gridContainer = document.getElementById('grid-container');
+  gridContainer.innerHTML = ''; // Clear any previous grid
+
+  // Add 4 grid items, including the second item
+  for (let i = 0; i < 4; i++) {
+    const gridItem = document.createElement('div');
+    gridItem.classList.add('grid-item');
+    gridItem.innerHTML = `<img src="${gridItems[i]}" alt="Item" />`;
+    gridItem.addEventListener('click', () => checkMatch(gridItems[i], secondItem));
+    gridContainer.appendChild(gridItem);
+  }
+}
+
+// Check if the selected item matches the second item
+function checkMatch(selectedItem, correctItem) {
+  if (selectedItem === correctItem) {
+    alert("Correct! You found the match.");
+    setupQuiz(); // Reload the quiz with a new random pair
+  } else {
+    alert("Oops! Try again.");
+  }
+}
+
+// Initialize the quiz on page load
+setupQuiz();
+
+</script>

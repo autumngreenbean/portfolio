@@ -89,7 +89,7 @@ renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 camera.position.setZ(30);
 
-scene.background = new THREE.Color(0xf9f1f1);
+scene.background = new THREE.Color(0x062e24);
 
 const geometries = [
   new THREE.TorusGeometry(10, 3, 8, 50),   // Low detail
