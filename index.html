@@ -3,161 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles copy.css">
     <script src="main.js" type="module" defer></script>
     <!-- <script src="animationhandler.js" type="module" defer></script> -->
 </head>
 <body>
 
-    <div class="row">
-        <div class="column left-column">
-            <div id="left-column-content"></div>
-        </div>
-
-        <div class="column right-column" style="text-align:right;">
-            <div id="content"></div>
-        </div>
-    </div>
-
-    <div id="banner"></div>
+   
+        <div class="box-bg">
+            <span style="font-size: 150px;">meow</span> <br>
+            hello world
+         </div>
 
 
-    <script>
-      let bannerLoaded = false;
-      let isMobile = false;
-      let hiddenMenu = false;
 
-      const hideButton = document.createElement('button');
-      hideButton.id = 'hide-button';
-      hideButton.innerHTML = '&#128065;';
-      hideButton.style.backgroundColor = '#333';
-      hideButton.style.color = '#fff';
-      hideButton.style.border = 'dotted';
-      hideButton.style.padding = '10px';
-      hideButton.style.cursor = 'grab';
-
-
-function loadLeftColumn(page) {
-    fetch(page)
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('left-column-content').innerHTML = data;
-        })
-        .catch(error => console.error('Error loading content:', error));
-}
-
-function loadContent(page) {
-  const contentDiv = document.getElementById('content');
-
-if (!contentDiv) {
-    console.error('Content div not found!');
-    return;
-}
-
-contentDiv.classList.add('fade-out');
-
-fetch(page)
-    .then(response => response.text())
-    .then(data => {
-        setTimeout(() => {
-            contentDiv.innerHTML = data;
-            contentDiv.classList.remove('fade-out');
-            contentDiv.offsetHeight; // Trigger reflow
-            contentDiv.classList.remove('slide-in'); 
-            void contentDiv.offsetWidth; 
-            contentDiv.classList.add('slide-in'); 
-        }, 500); 
-    })
-    .catch(error => console.error('Error loading content:', error));
-
-    fetch('menu.html')
-        .then(response => response.text())
-        .then(data => {
-            if (isMobile) {
-                document.getElementById('left-column-content').appendChild(hideButton);
-                hiddenMenu=true;
-                
-                hideButton.addEventListener('click', function() {
-                    const menu = document.getElementById('left-column-content');
-                    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
-                    hiddenMenu = false;
-              });
-
-
-            } else {
-            document.getElementById('left-column-content').innerHTML = data;
-            document.querySelectorAll('#content h2').forEach(h2 => {
-                h2.style.textAlign = 'right';
-            });
-            document.querySelectorAll('#content td').forEach (td => {
-                td.style.textAlign = 'right';
-            });
-            document.querySelectorAll('#content tr').forEach (tr => {
-                tr.style.textAlign = 'right';
-            });
-            document.querySelectorAll('#content p').forEach (p => {
-                p.style.textAlign = 'right';
-            });
-        }
-        })
-
-        if (!bannerLoaded) {
-        fetch('banner.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('banner').innerHTML = data;
-                bannerLoaded = true; 
-            })
-            .catch(error => console.error('Error loading banner:', error));
-    }
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Fetch and display the initial content for menu and banner
-    fetch('menu.html')
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById('content').innerHTML = data;
-
-            document.querySelectorAll('#content h2').forEach(h2 => {
-                h2.style.textAlign = 'left';
-            });
-            document.querySelectorAll('#content td').forEach (td => {
-                td.style.textAlign = 'left';
-            });
-            document.querySelectorAll('#content tr').forEach (tr => {
-                tr.style.textAlign = 'left';
-            });
-            document.querySelectorAll('#content p').forEach (p => {
-                p.style.textAlign = 'left';
-            });
-          
-        })
-        .catch(error => console.error('Error loading menu:', error));
-
-    fetch('banner.html')
-        .then(response => response.text())
-        .then(data => {
-            loadLeftColumn('banner.html');
-            console.log('Banner loaded successfully');
-        })
-        .catch(error => console.error('Error loading banner:', error));
-});
-function checkIfMobile() {
-  if (window.innerWidth <= 768) {
-    isMobile = true;
-  } else {
-    isMobile = false;
-  }
-}
-
-// Run the function on page load
-checkIfMobile();
-
-// Run the function on window resize
-window.addEventListener("resize", checkIfMobile);
-
-    </script>
 </body>
 </html>
 
