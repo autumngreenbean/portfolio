@@ -1,9 +1,10 @@
 
 
 // Function to handle the minimize button
-export function handleMinimize() {
-    const minimizeBtn = document.getElementById('minimize-btn');
-    const formContent = document.getElementById('form-content');
+// window.js - Updated minimize functionality
+export function handleMinimize(formContainer) {
+    const minimizeBtn = formContainer.querySelector('#minimize-btn');
+    const formContent = formContainer.querySelector('#form-content');
     let isMinimized = false;
 
     minimizeBtn.addEventListener('click', () => {

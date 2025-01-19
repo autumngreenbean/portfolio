@@ -113,8 +113,8 @@ canvas {
             background-color: #ffffff;
             border: 1px solid #000000;
             border-radius: 5px;
-            margin-left: 160px;
-            margin-top: -100px;
+            margin-left: 350px;
+            margin-top: 1000px;
             transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         .category {
@@ -213,58 +213,74 @@ canvas {
 
 </body>
 </html>
-
-
 <script type="module">
     import { makeDraggable } from './makeDraggable.js';
     import { handleMinimize } from './window.js';
     import { updateShapes } from './main.js';  // Import updateShapes
 
+    let zIndexCounter = 1000; // Start with a base z-index value
+
     function createForm(fileName) {
-    // Create a new form container dynamically
-    const formContainer = document.createElement('div');
-    formContainer.id = `form-container-${fileName}`; // Unique ID for each form container
+        // Check if a form with the same fileName already exists
+        let existingForm = document.getElementById(`form-container-${fileName}`);
+        if (existingForm) {
+            // If form already exists, just bring it to the front by updating its z-index
+            existingForm.style.zIndex = zIndexCounter++; // Increment z-index for each new active form
+            return;  // Exit the function, no need to create a new form
+        }
 
-    // Set styles directly to the form container (or use class names if preferred)
-    formContainer.style.position = 'absolute';
-    formContainer.style.fontWeight = 'bold';
-    formContainer.style.top = '50%';
-    formContainer.style.left = '50%';
-    formContainer.style.transform = 'translate(-50%, -50%)';
-    formContainer.style.width = '300px';
-    formContainer.style.backgroundColor = '#fff';
-    formContainer.style.borderRadius = '8px';
-    formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-    formContainer.style.overflow = 'hidden';
-    formContainer.style.zIndex = '9999';
+        // Create a new form container dynamically
+        const formContainer = document.createElement('div');
+        formContainer.id = `form-container-${fileName}`; // Unique ID for each form container
 
-    formContainer.innerHTML = `
-        <div id="form-header" style="background-color: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); color: rgb(0, 0, 0); padding: 10px; font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
-            <span id="form-title">${fileName}</span>
-            <button id="minimize-btn" style="background-color: transparent; color: rgb(0, 0, 0); cursor: pointer;">-</button>
-        </div>
-        <form id="form-content" style="padding: 20px; display: block;">
-            <!-- Dynamic content here -->
-        </form>
-    `;
+        // Set styles directly to the form container (or use class names if preferred)
+        formContainer.style.position = 'absolute';
+        formContainer.style.fontWeight = 'bold';
+        formContainer.style.top = '50%';
+        formContainer.style.left = '50%';
+        formContainer.style.transform = 'translate(-50%, -50%)';
+        formContainer.style.width = '300px';
+        formContainer.style.backgroundColor = '#fff';
+        formContainer.style.borderRadius = '8px';
+        formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+        formContainer.style.overflow = 'hidden';
+        formContainer.style.zIndex = zIndexCounter++; // New form gets the current z-index
 
-    // Append the new form container to the body
-    document.body.appendChild(formContainer);
-    updateShapes();
+        formContainer.innerHTML = `
+            <div id="form-header" style="background-color: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); color: rgb(0, 0, 0); padding: 10px; font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <span id="form-title">${fileName}</span>
+                <button id="minimize-btn" style="background-color: transparent; color: rgb(0, 0, 0); cursor: pointer;">-</button>
+            </div>
+            <form id="form-content" style="padding: 20px; display: block;">
+                <!-- Dynamic content here -->
+            </form>
+        `;
 
-    // Make the form container draggable
-    const formHeader = formContainer.querySelector('#form-header');
-    makeDraggable(formContainer, formHeader);
+        // Append the new form container to the body
+        document.body.appendChild(formContainer);
 
-    // Handle minimizing the form container
-    handleMinimize(formContainer);
-}
+        // Update shapes when a new form is created
+        updateShapes();  // Trigger shape update when the form is created
+
+        // Make the form container draggable
+        const formHeader = formContainer.querySelector('#form-header');
+        makeDraggable(formContainer, formHeader);
+
+        // Handle minimizing the form container
+        handleMinimize(formContainer);
+    }
 
     // Add event listeners to each file/tab
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', (event) => {
             const fileName = event.target.getAttribute('data-file');
             createForm(fileName); // Create and append the form for the clicked tab
+
+            // Bring the clicked form to the front by increasing its z-index
+            const form = document.getElementById(`form-container-${fileName}`);
+            if (form) {
+                form.style.zIndex = zIndexCounter++;  // Increment and set a higher z-index for the clicked form
+            }
         });
     });
 </script>
