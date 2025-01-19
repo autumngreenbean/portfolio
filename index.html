@@ -231,6 +231,7 @@ canvas {
         if (existingForm) {
             // If form already exists, just bring it to the front by updating its z-index
             existingForm.style.zIndex = zIndexCounter++; // Increment z-index for each new active form
+            updateShapes(); 
             return;  // Exit the function, no need to create a new form
         }
 
