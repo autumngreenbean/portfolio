@@ -3,39 +3,56 @@ export function makeDraggable(element, header, zIndexCounter) {
     let offsetY = 0;
     let isDragging = false;
 
-    // Set initial z-index on drag start
-    header.addEventListener('mousedown', (e) => {
+    // Function to start the drag
+    function startDrag(e) {
         isDragging = true;
-        offsetX = e.clientX - element.offsetLeft;
-        offsetY = e.clientY - element.offsetTop;
+        // Use either touch or mouse clientX/clientY values
+        const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchstart' ? e.touches[0].clientY : e.clientY;
 
-        // Update z-index to make sure it's on top while dragging
-        element.style.zIndex = zIndexCounter.current++; // Dynamically update z-index during dragging
+        offsetX = clientX - element.offsetLeft;
+        offsetY = clientY - element.offsetTop;
+
+        // Update z-index to bring the element to the front
+        element.style.zIndex = zIndexCounter.current++;
 
         // Disable text selection while dragging
         document.body.style.userSelect = 'none';
 
-        // Prevent default behavior (so elements underneath don't get affected)
+        // Prevent default behavior (e.g., preventing scrolling when dragging)
         e.preventDefault();
-    });
+    }
 
-    // Handle mousemove while dragging
-    document.addEventListener('mousemove', (e) => {
+    // Function to move the element
+    function moveElement(e) {
         if (!isDragging) return;
 
-        let newX = e.clientX - offsetX;
-        let newY = e.clientY - offsetY;
+        const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+        const clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+
+        let newX = clientX - offsetX;
+        let newY = clientY - offsetY;
 
         // Move the form to the new position
         element.style.left = `${newX}px`;
         element.style.top = `${newY}px`;
-    });
+    }
 
-    // Handle mouseup to stop dragging
-    document.addEventListener('mouseup', () => {
+    // Function to stop the drag
+    function stopDrag() {
         if (!isDragging) return;
 
         isDragging = false;
         document.body.style.userSelect = ''; // Re-enable text selection
-    });
+    }
+
+    // Add event listeners for mouse events
+    header.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', moveElement);
+    document.addEventListener('mouseup', stopDrag);
+
+    // Add event listeners for touch events (for mobile compatibility)
+    header.addEventListener('touchstart', startDrag);
+    document.addEventListener('touchmove', moveElement);
+    document.addEventListener('touchend', stopDrag);
 }

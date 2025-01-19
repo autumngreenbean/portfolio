@@ -300,7 +300,8 @@ canvas {
         formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
         formContainer.style.overflow = 'hidden';
         formContainer.style.zIndex = zIndexCounter.current++; // New form gets the current z-index
-        formContainer.style.backdropFilter = "blur(5px)"; // Apply frosted glass effect
+        document.body.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
+        formContainer.style.backgroundColor = isMobile ? 'rgba(255, 255, 255, 0.4)' : '';
 
         formContainer.innerHTML = `
             <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
