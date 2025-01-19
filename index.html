@@ -143,8 +143,8 @@ canvas {
 }
 
     #form-header {
-      background-color: rgba(255, 255, 255, 0.4);
-      backdrop-filter: blur(10px);
+      /* background-color: rgba(255, 255, 255, 0.4); */
+      /* backdrop-filter: blur(10px); */
       color: rgb(0, 0, 0);
       padding: 10px;
       font-size: 16px;
@@ -172,7 +172,7 @@ canvas {
 
     button {
       padding: 8px;
-      background-color: #ffffff;
+      /* background-color: #ffffff; */
       color: rgb(0, 0, 0);
       border: none;
       border-radius: 1px;
@@ -224,6 +224,8 @@ canvas {
     import { updateShapes } from './main.js';  // Import updateShapes
 
     let zIndexCounter = 1000; // Start with a base z-index value
+    let nextLeft = 100; // Initial left position for the first form
+    let nextTop = 100; // Initial top position for the first form
 
     function createForm(fileName) {
         // Check if a form with the same fileName already exists
@@ -231,7 +233,7 @@ canvas {
         if (existingForm) {
             // If form already exists, just bring it to the front by updating its z-index
             existingForm.style.zIndex = zIndexCounter++; // Increment z-index for each new active form
-            updateShapes(); 
+            updateShapes();
             return;  // Exit the function, no need to create a new form
         }
 
@@ -239,26 +241,26 @@ canvas {
         const formContainer = document.createElement('div');
         formContainer.id = `form-container-${fileName}`; // Unique ID for each form container
 
-        // Set styles directly to the form container (or use class names if preferred)
+        // Set styles directly to the form container
         formContainer.style.position = 'absolute';
         formContainer.style.fontWeight = 'bold';
-        formContainer.style.top = '50%';
-        formContainer.style.left = '50%';
-        formContainer.style.transform = 'translate(-50%, -50%)';
+        formContainer.style.top = `${nextTop}px`; // Position form at the current 'top' position
+        formContainer.style.left = `${nextLeft}px`; // Position form at the current 'left' position
+        formContainer.style.transform = 'translate(0, 0)';
         formContainer.style.width = '300px';
-        formContainer.style.backgroundColor = '#fff';
         formContainer.style.borderRadius = '8px';
         formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
         formContainer.style.overflow = 'hidden';
         formContainer.style.zIndex = zIndexCounter++; // New form gets the current z-index
+        formContainer.style.backdropFilter = "blur(5px)";
 
         formContainer.innerHTML = `
-            <div id="form-header" style="background-color: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); color: rgb(0, 0, 0); padding: 10px; font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <div id="form-header" style="">
                 <span id="form-title">${fileName}</span>
                 <button id="minimize-btn" style="background-color: transparent; color: rgb(0, 0, 0); cursor: pointer;">-</button>
             </div>
             <form id="form-content" style="padding: 20px; display: block;">
-                <!-- Dynamic content here -->
+                HI WORLD!!!!!!!!!!!!!!!!!!!!!!!!!!
             </form>
         `;
 
@@ -274,6 +276,10 @@ canvas {
 
         // Handle minimizing the form container
         handleMinimize(formContainer);
+
+        // Increment the position for the next form
+        nextLeft += 50;  // Move 50px to the right for the next form
+        nextTop += 50;   // Move 50px down for the next form
     }
 
     // Add event listeners to each file/tab
