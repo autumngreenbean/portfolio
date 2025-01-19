@@ -199,19 +199,19 @@ canvas {
             <div class="tab" data-file="Portland Institution of Contemporary Art">PROJECTS</div>
         </div>
         <div class="folder">
-            <div class="tab">utopia: PICA</div>
+            <div class="tab" data-file="UTOPIA-PORTLAND-INSTITUTION-OF-CONTEMPORARY-ART.txt">utopia: PICA</div>
         </div>
         <div class="folder">
-            <div class="tab">synthesis</div>
+            <div class="tab" data-file="SOUND-AND-VIDEO-SIGNAL.wav">synthesis</div>
         </div>
         <div class="folder">
-            <div class="tab">AUDIO</div>
+            <div class="tab" data-file="video-work.mpeg">FOOTAGE</div>
         </div>
         <div class="folder">
-            <div class="tab">PHOTO</div>
+            <div class="tab" data-file="imagery.png">IMAGES</div>
         </div>
         <div class="folder">
-            <div class="tab">LOG</div>
+            <div class="tab" data-file="DATA.log">LOG</div>
         </div>
     </div>
 
@@ -223,16 +223,28 @@ canvas {
     import { handleMinimize } from './window.js';
     import { updateShapes } from './main.js';  // Import updateShapes
 
-    let zIndexCounter = 1000; // Start with a base z-index value
-    let nextLeft = 100; // Initial left position for the first form
-    let nextTop = 100; // Initial top position for the first form
+    let zIndexCounter = { current: 1000 }; // Start with a base z-index value
 
+    const isMobile = window.innerWidth <= 768; // You can adjust this value as needed for your needs
+    let nextLeft, nextTop;
+    if (isMobile) {
+        // For mobile, use smaller increments or position
+        nextLeft = 50; // Initial left position for the first form
+        nextTop = 50; // Initial top position for the first form
+    } else {
+        // For desktop, use the current increment values
+        nextLeft = 100; // Initial left position for the first form
+        nextTop = 100; // Initial top position for the first form
+
+    }
+    
+    // Function to create form windows
     function createForm(fileName) {
         // Check if a form with the same fileName already exists
         let existingForm = document.getElementById(`form-container-${fileName}`);
         if (existingForm) {
             // If form already exists, just bring it to the front by updating its z-index
-            existingForm.style.zIndex = zIndexCounter++; // Increment z-index for each new active form
+            existingForm.style.zIndex = zIndexCounter.current++; // Increment z-index for each active form
             updateShapes();
             return;  // Exit the function, no need to create a new form
         }
@@ -241,6 +253,8 @@ canvas {
         const formContainer = document.createElement('div');
         formContainer.id = `form-container-${fileName}`; // Unique ID for each form container
 
+
+       
         // Set styles directly to the form container
         formContainer.style.position = 'absolute';
         formContainer.style.fontWeight = 'bold';
@@ -251,11 +265,11 @@ canvas {
         formContainer.style.borderRadius = '8px';
         formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
         formContainer.style.overflow = 'hidden';
-        formContainer.style.zIndex = zIndexCounter++; // New form gets the current z-index
-        formContainer.style.backdropFilter = "blur(5px)";
+        formContainer.style.zIndex = zIndexCounter.current++; // New form gets the current z-index
+        formContainer.style.backdropFilter = "blur(5px)"; // Apply frosted glass effect
 
         formContainer.innerHTML = `
-            <div id="form-header" style="">
+            <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
                 <span id="form-title">${fileName}</span>
                 <button id="minimize-btn" style="background-color: transparent; color: rgb(0, 0, 0); cursor: pointer;">-</button>
             </div>
@@ -272,27 +286,44 @@ canvas {
 
         // Make the form container draggable
         const formHeader = formContainer.querySelector('#form-header');
-        makeDraggable(formContainer, formHeader);
+        makeDraggable(formContainer, formHeader, zIndexCounter);  // Pass zIndexCounter to handle drag behavior
 
         // Handle minimizing the form container
         handleMinimize(formContainer);
 
-        // Increment the position for the next form
         nextLeft += 50;  // Move 50px to the right for the next form
         nextTop += 50;   // Move 50px down for the next form
+    
+    
     }
 
     // Add event listeners to each file/tab
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', (event) => {
+            tab.style.transition = 'color 0.2s ease-out'; // Add transition effect for smooth color change
+        tab.style.color = 'lightblue';  // Change the text color to light blue
+
+        // Reset color back to default after transition duration
+        setTimeout(() => {
+            tab.style.color = '';  // Reset to the default color (no inline style)
+        }, 300);  // Match the duration of the transition
             const fileName = event.target.getAttribute('data-file');
-            createForm(fileName); // Create and append the form for the clicked tab
+            
+            // Create the form when a tab is clicked
+            createForm(fileName);
 
             // Bring the clicked form to the front by increasing its z-index
             const form = document.getElementById(`form-container-${fileName}`);
             if (form) {
-                form.style.zIndex = zIndexCounter++;  // Increment and set a higher z-index for the clicked form
+                form.style.zIndex = zIndexCounter.current++;  // Increment and set a higher z-index for the clicked form
             }
+
+            // Ensure the z-index of all other open forms is set to be lower (background)
+            document.querySelectorAll('.form-container').forEach(otherForm => {
+                if (otherForm !== form) {
+                    otherForm.style.zIndex = zIndexCounter.current - 1;  // Lower z-index of other forms to push them to the background
+                }
+            });
         });
     });
 </script>
