@@ -122,19 +122,76 @@ canvas {
             border: 1px solid #ffffff;
         }
         }
+
+/* window */
+#form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: #f30000;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 9999; /* Ensure the form is above other content */
+}
+
+    #form-header {
+      background-color: rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(10px);
+      color: rgb(0, 0, 0);
+      padding: 10px;
+      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #minimize-btn {
+      background-color: transparent;
+      color: rgb(0, 0, 0);
+      cursor: pointer;
+    }
+
+    #form-content {
+      padding: 20px;
+      display: block;
+    }
+
+    label {
+      font-weight: bold;
+      margin-bottom: 0px;
+      display: inline-block;
+    }
+
+    button {
+      padding: 8px;
+      background-color: #ffffff;
+      color: rgb(0, 0, 0);
+      border: none;
+      border-radius: 1px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0000005d;
+    }
+
     </style>
 </head>
 <body>
 
     <div class="filebox">
         <div class="folder">
-            <div class="tab">ABOUT</div>
+            <div class="tab" data-file="ARTIST-BIOGRAPHY.txt">ABOUT</div>
         </div>
         <div class="folder">
-            <div class="tab">CV & LINKS</div>
+            <div class="tab" data-file="CURRICULUM-VITAE.txt">CV & LINKS</div>
         </div>
         <div class="folder category">
-            <div class="tab">PROJECTS</div>
+            <div class="tab" data-file="Portland Institution of Contemporary Art">PROJECTS</div>
         </div>
         <div class="folder">
             <div class="tab">utopia: PICA</div>
@@ -154,20 +211,60 @@ canvas {
     </div>
 
 
-        <!-- <div class="menu">
-            <a href="">home</a>
-            <a href="">exhibits</a>
-            <a href="">video</a>
-            <a href="">images</a>
-            <a href="">item 4</a>
-
-        </div>
-        <div class="box-bg">
-            <span style="font-size: 150px;">meow!!</span> <br>
-            hello world
-         </div> -->
-
-
 </body>
 </html>
 
+
+<script type="module">
+    import { makeDraggable } from './makeDraggable.js';
+    import { handleMinimize } from './window.js';
+    import { updateShapes } from './main.js';  // Import updateShapes
+
+    function createForm(fileName) {
+    // Create a new form container dynamically
+    const formContainer = document.createElement('div');
+    formContainer.id = `form-container-${fileName}`; // Unique ID for each form container
+
+    // Set styles directly to the form container (or use class names if preferred)
+    formContainer.style.position = 'absolute';
+    formContainer.style.fontWeight = 'bold';
+    formContainer.style.top = '50%';
+    formContainer.style.left = '50%';
+    formContainer.style.transform = 'translate(-50%, -50%)';
+    formContainer.style.width = '300px';
+    formContainer.style.backgroundColor = '#fff';
+    formContainer.style.borderRadius = '8px';
+    formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    formContainer.style.overflow = 'hidden';
+    formContainer.style.zIndex = '9999';
+
+    formContainer.innerHTML = `
+        <div id="form-header" style="background-color: rgba(255, 255, 255, 0.4); backdrop-filter: blur(10px); color: rgb(0, 0, 0); padding: 10px; font-size: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <span id="form-title">${fileName}</span>
+            <button id="minimize-btn" style="background-color: transparent; color: rgb(0, 0, 0); cursor: pointer;">-</button>
+        </div>
+        <form id="form-content" style="padding: 20px; display: block;">
+            <!-- Dynamic content here -->
+        </form>
+    `;
+
+    // Append the new form container to the body
+    document.body.appendChild(formContainer);
+    updateShapes();
+
+    // Make the form container draggable
+    const formHeader = formContainer.querySelector('#form-header');
+    makeDraggable(formContainer, formHeader);
+
+    // Handle minimizing the form container
+    handleMinimize(formContainer);
+}
+
+    // Add event listeners to each file/tab
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', (event) => {
+            const fileName = event.target.getAttribute('data-file');
+            createForm(fileName); // Create and append the form for the clicked tab
+        });
+    });
+</script>

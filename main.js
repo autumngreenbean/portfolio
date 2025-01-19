@@ -138,13 +138,16 @@ isRight-=1;
       }
 });
 
-function updateShapes() {
+export function updateShapes() {
   scene.remove(shape1);
   scene.remove(shape2);
 
   shape1.geometry.dispose();
   shape2.geometry.dispose();
-  
+
+  // event.preventDefault(); 
+  currentShapeIndex = (currentShapeIndex + 1) % shapeGeometries.length;
+
   shape1.geometry = new THREE.WireframeGeometry(shapeGeometries[currentShapeIndex]);
   shape2.geometry = new THREE.WireframeGeometry(shapeGeometries[currentShapeIndex]);
 
@@ -174,63 +177,63 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
 });
 
-document.addEventListener('keydown', (event) => {
-  if (event.key === 'Tab') {
-    event.preventDefault(); 
-    currentShapeIndex = (currentShapeIndex + 1) % shapeGeometries.length;
-    updateShapes();
-  }
+// document.addEventListener('keydown', (event) => {
+//   if (event.key === 'Tab') {
+//     event.preventDefault(); 
+//     currentShapeIndex = (currentShapeIndex + 1) % shapeGeometries.length;
+//     updateShapes();
+//   }
 
-  if (event.key === 'ArrowUp') {
-    shape1.material.color.set(Math.random() * 0xffffff);
-    shape2.material.color.set(Math.random() * 0xffffff);
-  }
+//   if (event.key === 'ArrowUp') {
+//     shape1.material.color.set(Math.random() * 0xffffff);
+//     shape2.material.color.set(Math.random() * 0xffffff);
+//   }
 
-  if (event.key === 'ArrowDown') {
-    let geometriesList;
-    switch (currentShapeIndex) {
-      case 0:
-        geometriesList = torusGeometries;
-        break;
-      case 1:
-        geometriesList = boxGeometries;
-        break;
-      case 2:
-        geometriesList = sphereGeometries;
-        break;
-      case 3:
-        geometriesList = coneGeometries;
-        break;
-      case 4:
-        geometriesList = cylinderGeometries;
-        break;
-      case 5:
-        geometriesList = dodecahedronGeometries;
-        break;
-      case 6:
-        geometriesList = icosahedronGeometries;
-        break;
-    }
+//   if (event.key === 'ArrowDown') {
+//     let geometriesList;
+//     switch (currentShapeIndex) {
+//       case 0:
+//         geometriesList = torusGeometries;
+//         break;
+//       case 1:
+//         geometriesList = boxGeometries;
+//         break;
+//       case 2:
+//         geometriesList = sphereGeometries;
+//         break;
+//       case 3:
+//         geometriesList = coneGeometries;
+//         break;
+//       case 4:
+//         geometriesList = cylinderGeometries;
+//         break;
+//       case 5:
+//         geometriesList = dodecahedronGeometries;
+//         break;
+//       case 6:
+//         geometriesList = icosahedronGeometries;
+//         break;
+//     }
 
-    currentGeometryIndex = (currentGeometryIndex + 1) % geometriesList.length;
+//     currentGeometryIndex = (currentGeometryIndex + 1) % geometriesList.length;
 
-    shape1.geometry.dispose();
-    shape2.geometry.dispose();
-    shape1.geometry = new THREE.WireframeGeometry(geometriesList[currentGeometryIndex]);
-    shape2.geometry = new THREE.WireframeGeometry(geometriesList[currentGeometryIndex]);
+//     shape1.geometry.dispose();
+//     shape2.geometry.dispose();
+//     shape1.geometry = new THREE.WireframeGeometry(geometriesList[currentGeometryIndex]);
+//     shape2.geometry = new THREE.WireframeGeometry(geometriesList[currentGeometryIndex]);
 
-    console.log(`Switched to geometry index: ${currentGeometryIndex}`);
-  }
+//     console.log(`Switched to geometry index: ${currentGeometryIndex}`);
+//   }
 
-  if (event.key === 's') {
-    event.preventDefault(); 
+//   if (event.key === 's') {
+//     event.preventDefault(); 
     
-    scaleIndex = (scaleIndex + 1) % scaleFactors.length;
-    const scaleFactor = scaleFactors[scaleIndex];
+//     scaleIndex = (scaleIndex + 1) % scaleFactors.length;
+//     const scaleFactor = scaleFactors[scaleIndex];
 
-    shape1.scale.set(scaleFactor, scaleFactor, scaleFactor);
-    shape2.scale.set(scaleFactor, scaleFactor, scaleFactor);
+//     shape1.scale.set(scaleFactor, scaleFactor, scaleFactor);
+//     shape2.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-    console.log(`Scaled shapes to factor: ${scaleFactor}`);
-  }
-});
+//     console.log(`Scaled shapes to factor: ${scaleFactor}`);
+//   }
+// });
