@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="styles copy.css"> -->
+    <script src="main.js" type="module" defer></script>
+    <!-- <script src="animationhandler.js" type="module" defer></script> -->
+
+
+    <style>
+canvas {
+    position: absolute; /* Position the canvas at the background */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Place canvas behind the folder elements */
+}
+* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .filebox {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .folder {
+            position: relative;
+            width: 500px;
+            height: 300px;
+            background-color: #ffffff;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            margin-left: 20px;
+            margin-top: -100px;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        
+        .category {
+            background-color: #000000;
+            border: 1px solid #ffffff;
+        }
+        
+        .tab {
+            position: absolute;
+            top: -30px;
+            left: 15%;
+            transform: translateX(-52%);
+            background-color: #ffffff;
+            border: 1px solid #000000;
+            border-bottom: 2px solid #ffffff;
+            color: rgb(0, 0, 0);
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 10px;
+            text-transform: uppercase;
+            border-radius: 5px 5px 0px 0px;
+            width: 130px;
+            text-align: center;
+            transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
+        }
+        
+        .category .tab {
+            background-color: #000000;
+            color: #ffffff;
+            position: absolute;
+            top: -33px;
+            left: 40%;
+            transform: translateX(-52%);
+            border: 1px solid #ffffff;
+            border-bottom: 2px solid #000000;
+        }
+        
+        .folder:hover,
+        .folder:hover .tab,
+        .tab:hover,
+        .tab:hover .folder {
+            background-color: #000000;
+            color: white;
+            border-bottom: 2px solid #000000;
+        }
+        
+        .folder:not(.category):hover {
+            transform: translate(-20px, -20px);
+            border: px solid white;
+        }
+        
+        .folder + .folder {
+            margin-top: -285px;
+        }
+
+        @media (max-width: 480px) {
+            .folder {
+            position: relative;
+            width: 500px;
+            height: 300px;
+            background-color: #ffffff;
+            border: 1px solid #000000;
+            border-radius: 5px;
+            margin-left: 160px;
+            margin-top: -100px;
+            transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .category {
+            background-color: #000000;
+            border: 1px solid #ffffff;
+        }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="filebox">
+        <div class="folder">
+            <div class="tab">ABOUT</div>
+        </div>
+        <div class="folder">
+            <div class="tab">CV & LINKS</div>
+        </div>
+        <div class="folder category">
+            <div class="tab">PROJECTS</div>
+        </div>
+        <div class="folder">
+            <div class="tab">utopia: PICA</div>
+        </div>
+        <div class="folder">
+            <div class="tab">synthesis</div>
+        </div>
+        <div class="folder">
+            <div class="tab">AUDIO</div>
+        </div>
+        <div class="folder">
+            <div class="tab">PHOTO</div>
+        </div>
+        <div class="folder">
+            <div class="tab">LOG</div>
+        </div>
+    </div>
+
+
+        <!-- <div class="menu">
+            <a href="">home</a>
+            <a href="">exhibits</a>
+            <a href="">video</a>
+            <a href="">images</a>
+            <a href="">item 4</a>
+
+        </div>
+        <div class="box-bg">
+            <span style="font-size: 150px;">meow!!</span> <br>
+            hello world
+         </div> -->
+
+
+</body>
+</html>
+
