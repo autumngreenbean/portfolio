@@ -225,6 +225,44 @@ canvas {
 
     let zIndexCounter = { current: 1000 }; // Start with a base z-index value
 
+    // Function to fetch and load content dynamically based on the file
+    function fetchFileContent(fileName) {
+    console.log('Fetching content for:', fileName);
+
+    return fetch('content.json')  // Fetch the JSON file instead of HTML
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to fetch content.json: ' + response.statusText);
+            }
+            return response.json();  // Parse the JSON file
+        })
+        .then(contentJson => {
+            console.log('Fetched JSON:', contentJson);  // Log the fetched JSON
+
+            // Find the content associated with the fileName
+            const content = contentJson[fileName];
+
+            if (content) {
+                // If the content exists, return the content to be inserted into the form
+                return `
+                    <h2>${content.title}</h2>
+                    ${content.content}
+                `;
+            } else {
+                // If the content is not found, return a message indicating that
+                return `<p>No content found for ${fileName}</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching content:', error);
+            return `<p>Failed to load content for ${fileName}</p>`;
+        });
+}
+
+
+
+
+
     const isMobile = window.innerWidth <= 768; // You can adjust this value as needed for your needs
     let nextLeft, nextTop;
     if (isMobile) {
@@ -240,19 +278,15 @@ canvas {
     
     // Function to create form windows
     function createForm(fileName) {
-        // Check if a form with the same fileName already exists
-        let existingForm = document.getElementById(`form-container-${fileName}`);
-        if (existingForm) {
-            // If form already exists, just bring it to the front by updating its z-index
-            existingForm.style.zIndex = zIndexCounter.current++; // Increment z-index for each active form
-            updateShapes();
-            return;  // Exit the function, no need to create a new form
-        }
+    let existingForm = document.getElementById(`form-container-${fileName}`);
+    if (existingForm) {
+        existingForm.style.zIndex = zIndexCounter.current++;
+        updateShapes();
+        return;  // No need to create a new form if it exists
+    }
 
-        // Create a new form container dynamically
-        const formContainer = document.createElement('div');
-        formContainer.id = `form-container-${fileName}`; // Unique ID for each form container
-
+    const formContainer = document.createElement('div');
+    formContainer.id = `form-container-${fileName}`;
 
        
         // Set styles directly to the form container
@@ -277,25 +311,23 @@ canvas {
                 HI WORLD!!!!!!!!!!!!!!!!!!!!!!!!!!
             </form>
         `;
-
-        // Append the new form container to the body
         document.body.appendChild(formContainer);
 
-        // Update shapes when a new form is created
-        updateShapes();  // Trigger shape update when the form is created
+// Fetch content from content.html based on the fileName (no modifications)
+fetchFileContent(fileName)
+        .then(content => {
+            console.log(`Inserting content for ${fileName}:`, content);  // Log content before inserting
+            formContainer.querySelector('#form-content').innerHTML = content;
+        });
 
-        // Make the form container draggable
-        const formHeader = formContainer.querySelector('#form-header');
-        makeDraggable(formContainer, formHeader, zIndexCounter);  // Pass zIndexCounter to handle drag behavior
+// Update shapes, make form draggable, and handle minimize button
+updateShapes();
+makeDraggable(formContainer, formContainer.querySelector('#form-header'), zIndexCounter);
+handleMinimize(formContainer);
 
-        // Handle minimizing the form container
-        handleMinimize(formContainer);
-
-        nextLeft += 50;  // Move 50px to the right for the next form
-        nextTop += 50;   // Move 50px down for the next form
-    
-    
-    }
+nextLeft += 50; // Adjust position for the next form
+nextTop += 50;
+}
 
     // Add event listeners to each file/tab
     document.querySelectorAll('.tab').forEach(tab => {

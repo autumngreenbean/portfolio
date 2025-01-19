@@ -1,0 +1,31 @@
+{
+    "ARTIST-BIOGRAPHY.txt": {
+        "title": "",
+        "content": "<p>about signalkitten (autumn jing)</p><br><p>based in portland, or.</p>"
+        
+    },
+    "CURRICULUM-VITAE.txt": {
+        "title": "",
+        "content": "<p>-exhibition #1 [date, location]<br> -exhibition #2 [date, location]<br> -exhibition #3 [date, location]</p><br><p>hyperlink  hyperlink hyperlink</p>"
+    },
+    "UTOPIA-PORTLAND-INSTITUTION-OF-CONTEMPORARY-ART.txt": {
+        "title": "Portland Institution of Contemporary Art (PICA)",
+        "content": "<p>fall 2025 launch.  hardware and software development for a sensor-driven audio synthesis experience.</p>"
+    },
+    "SOUND-AND-VIDEO-SIGNAL.wav": {
+        "title": "",
+        "content": "<p>video and sound signal synthesis...</p> <br> <p>hyperlink hyperlink hyperlink </p>"
+    },
+    "video-work.mpeg": {
+        "title": "",
+        "content": "<p>analog video works.</p>"
+    },
+    "imagery.png": {
+        "title": "",
+        "content": "<p>images and stills.</p>"
+    },
+    "DATA.log": {
+        "title": "Log",
+        "content": "<p>Log file with logs.</p>"
+    }
+}
