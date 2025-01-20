@@ -1,4 +1,6 @@
 import * as THREE from 'https://unpkg.com/three/build/three.module.js';
+import { makeDraggable } from './makeDraggable.js';
+
 const scrollableElement = document.querySelector('.right-column');
 
 const scene = new THREE.Scene();
@@ -16,6 +18,8 @@ let currentGeometryIndex = 0;
 let isRight =0;
 const scaleFactors = [1, 1.5, 2, 2.5]; 
 let scaleIndex = 0;
+const isMobile = window.innerWidth <= 768; // You can adjust this value as needed for your needs
+
 
 const torusGeometries = [
   new THREE.TorusGeometry(10, 3, 8, 50),
@@ -110,12 +114,18 @@ var material = new THREE.MeshBasicMaterial({
 
 let shape1 = new THREE.Mesh(new THREE.WireframeGeometry(shapeGeometries[0]), material);
 let shape2 = new THREE.Mesh(new THREE.WireframeGeometry(shapeGeometries[0]), material);
-shape2.position.setX(1);
-shape2.position.setY(1);
-shape2.position.setZ(-50);
-shape2.rotation.x = 15;
+shape2.position.setX(isMobile ? -10 : 1);
+
+// shape2.position.setY(1);
+shape2.position.setY(isMobile ? 10 : 0);
+
+shape2.position.setZ(isMobile ? -150 : -100);
+shape2.rotation.x = 1;
 scene.add(shape1);
 scene.add(shape2);
+
+
+
 
 function moveCamera() {
   const scrollTop = scrollableElement.scrollTop;
@@ -151,6 +161,7 @@ export function updateShapes() {
   shape1.geometry = new THREE.WireframeGeometry(shapeGeometries[currentShapeIndex]);
   shape2.geometry = new THREE.WireframeGeometry(shapeGeometries[currentShapeIndex]);
 
+
   scene.add(shape1);
   scene.add(shape2);
 }
@@ -175,6 +186,22 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+});
+
+
+// Listen for dragStart and dragMove events in main.js
+document.addEventListener('dragStart', (event) => {
+    console.log('Dragging started');
+    // You can set up any initial conditions here if needed
+});
+
+document.addEventListener('dragMove', (event) => {
+    // Apply rotation to shape2 as the form is being dragged
+    if (shape2) {
+        // You can modify the rotation based on the drag distance or position
+        let rotationFactor = event.clientX / window.innerWidth;  // You can use clientX or clientY to rotate
+        shape2.rotation.z += rotationFactor * 0.1;  // Adjust the factor for desired effect
+    }
 });
 
 // document.addEventListener('keydown', (event) => {

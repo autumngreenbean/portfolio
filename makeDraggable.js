@@ -1,4 +1,4 @@
-export function makeDraggable(element, header, zIndexCounter) {
+export function makeDraggable(element, header) {
     let offsetX = 0;
     let offsetY = 0;
     let isDragging = false;
@@ -12,9 +12,6 @@ export function makeDraggable(element, header, zIndexCounter) {
 
         offsetX = clientX - element.offsetLeft;
         offsetY = clientY - element.offsetTop;
-
-        // Update z-index to bring the element to the front
-        element.style.zIndex = zIndexCounter.current++;
 
         // Disable text selection while dragging
         document.body.style.userSelect = 'none';

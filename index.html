@@ -300,13 +300,14 @@ canvas {
         formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
         formContainer.style.overflow = 'hidden';
         formContainer.style.zIndex = zIndexCounter.current++; // New form gets the current z-index
-        document.body.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
-        formContainer.style.backgroundColor = isMobile ? 'rgba(255, 255, 255, 0.4)' : '';
+        formContainer.style.backdropFilter= isMobile ? 'none' : 'blur(5px)';
+        // document.body.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
+        // formContainer.style.backgroundColor = isMobile ? 'rgba(255, 255, 255, 0.4)' : 'blur(5px)';
 
         formContainer.innerHTML = `
             <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
                 <span id="form-title">${fileName}</span>
-                <button id="minimize-btn" style="background-color: transparent; color: rgb(0, 0, 0); cursor: pointer;">-</button>
+                <button id="minimize-btn" style=" color: rgb(0, 0, 0); cursor: pointer;">-</button>
             </div>
             <form id="form-content" style="padding: 20px; display: block;">
                 HI WORLD!!!!!!!!!!!!!!!!!!!!!!!!!!
