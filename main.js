@@ -114,12 +114,12 @@ var material = new THREE.MeshBasicMaterial({
 
 let shape1 = new THREE.Mesh(new THREE.WireframeGeometry(shapeGeometries[0]), material);
 let shape2 = new THREE.Mesh(new THREE.WireframeGeometry(shapeGeometries[0]), material);
-shape2.position.setX(isMobile ? -10 : 1);
+shape2.position.setX(isMobile ? -10 : 20);
 
 // shape2.position.setY(1);
-shape2.position.setY(isMobile ? 10 : 0);
+shape2.position.setY(isMobile ? 10 : -5);
 
-shape2.position.setZ(isMobile ? -150 : -100);
+shape2.position.setZ(isMobile ? -150 : -50);
 shape2.rotation.x = 1;
 scene.add(shape1);
 scene.add(shape2);
@@ -138,15 +138,7 @@ if (scrollableElement) {
   scrollableElement.addEventListener('scroll', moveCamera);
 }
 
-document.addEventListener('keyup', function(event) {
-  if (event.key === 'ArrowLeft') {
-isRight-=1;
-  }
-  if (event.key === 'ArrowRight') {
-    isRight+=1;
-    console.log('im moving right');
-      }
-});
+
 
 export function updateShapes() {
   scene.remove(shape1);
@@ -172,7 +164,6 @@ function animate() {
   shape1.rotation.x += 0.005;
   shape1.rotation.y += 0.005;
   shape1.rotation.z += 0.0001;
-  shape2.position.x=isRight;
 
   
   renderer.render(scene, camera);
