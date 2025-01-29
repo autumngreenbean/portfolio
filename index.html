@@ -28,6 +28,9 @@ canvas {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
+
+            
         }
         
         body {
@@ -136,6 +139,8 @@ canvas {
         }
         }
 
+        
+
 /* window */
 #form-container {
     position: absolute;
@@ -149,6 +154,8 @@ canvas {
     overflow: hidden;
     z-index: 9999; /* Ensure the form is above other content */
 }
+
+
 
     #form-header {
       /* background-color: rgba(255, 255, 255, 0.4); */
@@ -231,7 +238,6 @@ canvas {
     import { handleMinimize } from './window.js';
     import { updateShapes } from './main.js';  // Import updateShapes
 
-    let zIndexCounter = { current: 1000 }; // Start with a base z-index value
 
     // Function to fetch and load content dynamically based on the file
     function fetchFileContent(fileName) {
@@ -269,59 +275,91 @@ canvas {
 
 
 
+const isMobile = window.innerWidth <= 768; // Check for mobile width
+const positions = [
+    { left: 100, top: 100 },
+    { left: 140, top: 100 },
+    { left: 180, top: 100 },
+    { left: 220, top: 100 },
+    { left: 100, top: 140 },
+    { left: 140, top: 140 },
+    { left: 180, top: 140 }
+]; // Define the 7 possible positions
 
+let lastPositionIndex = 0; // Track the last position used
+let formCounter = 0; // Counter to track the next available position
+let zIndexCounter = { current: 1000 }; // Start with a base z-index value
 
-    const isMobile = window.innerWidth <= 768; // You can adjust this value as needed for your needs
-    let nextLeft, nextTop;
-    if (isMobile) {
-        // For mobile, use smaller increments or position
-        nextLeft = 50; // Initial left position for the first form
-        nextTop = 50; // Initial top position for the first form
-    } else {
-        // For desktop, use the current increment values
-        nextLeft = 100; // Initial left position for the first form
-        nextTop = 100; // Initial top position for the first form
-
-    }
     
-    // Function to create form windows
-    function createForm(fileName) {
+function createForm(fileName) {
     let existingForm = document.getElementById(`form-container-${fileName}`);
     if (existingForm) {
-        existingForm.style.zIndex = zIndexCounter.current++;
-        updateShapes();
-        return;  // No need to create a new form if it exists
-    }
+    // Cycle the z-index value
+    existingForm.style.zIndex = zIndexCounter.current; // Apply the z-index
 
-    const formContainer = document.createElement('div');
+    // Update zIndex for the next form spawn
+    zIndexCounter.current = zIndexCounter.current === zIndexCounter.max ? 1000 : zIndexCounter.current + 1;
+
+    // Update form position based on mouse/finger position
+
+    updateShapes();
+    return;  // No need to create a new form if it exists
+}
+
+    //CREATE FORM
+  const formContainer = document.createElement('div');
     formContainer.id = `form-container-${fileName}`;
 
-       
-        // Set styles directly to the form container
-        formContainer.style.position = 'absolute';
-        formContainer.style.fontWeight = '';
-        formContainer.style.top = `${nextTop}px`; // Position form at the current 'top' position
-        formContainer.style.left = `${nextLeft}px`; // Position form at the current 'left' position
-        formContainer.style.transform = 'translate(0, 0)';
-        formContainer.style.width = '300px';
-        formContainer.style.borderRadius = '8px';
-        formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-        formContainer.style.overflow = 'hidden';
-        formContainer.style.zIndex = zIndexCounter.current++; // New form gets the current z-index
-        formContainer.style.backdropFilter= isMobile ? 'none' : 'blur(5px)';
-        // document.body.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
-        // formContainer.style.backgroundColor = isMobile ? 'rgba(255, 255, 255, 0.4)' : 'blur(5px)';
+    const nextLeft = 20 + formCounter * 40; // Adjust horizontal distance between forms
+    const nextTop = 20 + formCounter * 40;  // Adjust vertical distance between forms
 
-        formContainer.innerHTML = `
-            <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
-                <span id="form-title">${fileName}</span>
-                <button id="minimize-btn" style=" color: rgb(0, 0, 0); cursor: pointer;">-</button>
-            </div>
-            <form id="form-content" style="padding: 20px; display: block;">
-                HI WORLD!!!!!!!!!!!!!!!!!!!!!!!!!!
-            </form>
-        `;
-        document.body.appendChild(formContainer);
+    formContainer.style.top = `${nextTop}px`; // Cascading top position
+    formContainer.style.left = `${nextLeft}px`; // Cascading left position
+formCounter++; // Increment to stack the next form
+
+    // Set styles directly to the form container
+    formContainer.style.position = 'absolute';
+formContainer.style.fontWeight = '';
+formContainer.style.transform = 'translate(0, 0)';
+formContainer.style.width = '300px';
+formContainer.style.borderRadius = '8px';
+formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+formContainer.style.overflow = 'hidden';
+formContainer.style.zIndex = zIndexCounter.current; // Apply the current z-index
+formContainer.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
+
+// Set cursor to 'grab' when idle
+formContainer.style.cursor = 'grab'; // Default cursor when not actively dragging
+
+// Add event listeners to handle dragging and cursor changes
+formContainer.addEventListener('mousedown', (e) => {
+    // Set cursor to 'grabbing' while the form is being dragged
+    formContainer.style.cursor = 'grabbing';
+});
+
+
+document.addEventListener('mouseup', () => {
+    // Reset cursor to 'grab' when mouse is released
+    formContainer.style.cursor = 'grab';
+});
+
+    // formContainer.style.filter = isMobile ? 'none' : 'invert(1) contrast(200%)';
+
+    // Correct HTML string formatting using backticks
+    formContainer.innerHTML = `
+        <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+            <span id="form-title">${fileName}</span>
+            <button id="minimize-btn" style="color: rgb(0, 0, 0); cursor: pointer;">-</button>
+        </div>
+        <form id="form-content" style="padding: 20px; display: block;">
+            HI WORLD!!!!!!!!!!!!!!!!!!!!!!!!!!
+        </form>
+    `;
+
+    // Append the form to the body
+    document.body.appendChild(formContainer);
+
+
 
 // Fetch content from content.html based on the fileName (no modifications)
 fetchFileContent(fileName)
