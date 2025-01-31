@@ -3,11 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="styles copy.css"> -->
     <script src="main.js" type="module" defer></script>
-    <!-- <script src="animationhandler.js" type="module" defer></script> -->
-
-
     <style>
 
         a:link {
@@ -17,12 +13,12 @@
             color: lightblue;
         }
 canvas {
-    position: absolute; /* Position the canvas at the background */
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: -1; /* Place canvas behind the folder elements */
+    z-index: -1; 
 }
 * {
             margin: 0;
@@ -139,10 +135,7 @@ canvas {
         }
         }
 
-        
-
-/* window */
-#form-container {
+    #form-container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -152,14 +145,12 @@ canvas {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     overflow: hidden;
-    z-index: 9999; /* Ensure the form is above other content */
+    z-index: 9999; 
 }
 
 
 
     #form-header {
-      /* background-color: rgba(255, 255, 255, 0.4); */
-      /* backdrop-filter: blur(10px); */
       color: rgb(0, 0, 0);
       padding: 10px;
       font-size: 16px;
@@ -236,34 +227,30 @@ canvas {
 <script type="module">
     import { makeDraggable } from './makeDraggable.js';
     import { handleMinimize } from './window.js';
-    import { updateShapes } from './main.js';  // Import updateShapes
+    import { updateShapes } from './main.js';  
 
 
-    // Function to fetch and load content dynamically based on the file
+    //LOAD FORM CONTENT
     function fetchFileContent(fileName) {
     console.log('Fetching content for:', fileName);
 
-    return fetch('content.json')  // Fetch the JSON file instead of HTML
+    return fetch('content.json')  
         .then(response => {
             if (!response.ok) {
                 throw new Error('Failed to fetch content.json: ' + response.statusText);
             }
-            return response.json();  // Parse the JSON file
+            return response.json(); 
         })
         .then(contentJson => {
-            console.log('Fetched JSON:', contentJson);  // Log the fetched JSON
-
-            // Find the content associated with the fileName
+            console.log('Fetched JSON:', contentJson);  
             const content = contentJson[fileName];
 
             if (content) {
-                // If the content exists, return the content to be inserted into the form
                 return `
                     <h2>${content.title}</h2>
                     ${content.content}
                 `;
             } else {
-                // If the content is not found, return a message indicating that
                 return `<p>No content found for ${fileName}</p>`;
             }
         })
@@ -275,7 +262,9 @@ canvas {
 
 
 
-const isMobile = window.innerWidth <= 768; // Check for mobile width
+const isMobile = window.innerWidth <= 768; 
+
+//NOT BEING USED
 const positions = [
     { left: 100, top: 100 },
     { left: 140, top: 100 },
@@ -284,118 +273,97 @@ const positions = [
     { left: 100, top: 140 },
     { left: 140, top: 140 },
     { left: 180, top: 140 }
-]; // Define the 7 possible positions
-
-let lastPositionIndex = 0; // Track the last position used
-let formCounter = 0; // Counter to track the next available position
-let zIndexCounter = { current: 1000 }; // Start with a base z-index value
+]; 
+//NOT FUNCTIONING
+let lastPositionIndex = 0; 
+let formCounter = 0; 
+let zIndexCounter = { current: 1000 }; 
 
     
 function createForm(fileName) {
     let existingForm = document.getElementById(`form-container-${fileName}`);
     if (existingForm) {
-    // Cycle the z-index value
-    existingForm.style.zIndex = zIndexCounter.current; // Apply the z-index
+  
+    // NOT FUNCTIONING: Cycle the z-index value
+    existingForm.style.zIndex = zIndexCounter.current; 
 
-    // Update zIndex for the next form spawn
+    // NOT FUNCTIONING: Update zIndex for the next form spawn
     zIndexCounter.current = zIndexCounter.current === zIndexCounter.max ? 1000 : zIndexCounter.current + 1;
 
-    // Update form position based on mouse/finger position
-
     updateShapes();
-    return;  // No need to create a new form if it exists
+    return;  
 }
 
     //CREATE FORM
-  const formContainer = document.createElement('div');
+    const formContainer = document.createElement('div');
     formContainer.id = `form-container-${fileName}`;
 
-    const nextLeft = 20 + formCounter * 40; // Adjust horizontal distance between forms
-    const nextTop = 20 + formCounter * 40;  // Adjust vertical distance between forms
+    const nextLeft = 20 + formCounter * 40; 
+    const nextTop = 20 + formCounter * 40;  
 
-    formContainer.style.top = `${nextTop}px`; // Cascading top position
-    formContainer.style.left = `${nextLeft}px`; // Cascading left position
-formCounter++; // Increment to stack the next form
+    formContainer.style.top = `${nextTop}px`; 
+    formContainer.style.left = `${nextLeft}px`; 
+    formCounter++;
 
-    // Set styles directly to the form container
     formContainer.style.position = 'absolute';
-formContainer.style.fontWeight = '';
-formContainer.style.transform = 'translate(0, 0)';
-formContainer.style.width = '300px';
-formContainer.style.borderRadius = '8px';
-formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-formContainer.style.overflow = 'hidden';
-formContainer.style.zIndex = zIndexCounter.current; // Apply the current z-index
-formContainer.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
+    formContainer.style.fontWeight = '';
+    formContainer.style.transform = 'translate(0, 0)';
+    formContainer.style.width = '300px';
+    formContainer.style.borderRadius = '8px';
+    formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    formContainer.style.overflow = 'hidden';
+    formContainer.style.zIndex = zIndexCounter.current; 
+    formContainer.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
 
-// Set cursor to 'grab' when idle
-formContainer.style.cursor = 'grab'; // Default cursor when not actively dragging
-
-// Add event listeners to handle dragging and cursor changes
+//CURSOR GRAB
 formContainer.addEventListener('mousedown', (e) => {
-    // Set cursor to 'grabbing' while the form is being dragged
     formContainer.style.cursor = 'grabbing';
 });
 
 
 document.addEventListener('mouseup', () => {
-    // Reset cursor to 'grab' when mouse is released
     formContainer.style.cursor = 'grab';
 });
 
-    // formContainer.style.filter = isMobile ? 'none' : 'invert(1) contrast(200%)';
 
-    // Correct HTML string formatting using backticks
     formContainer.innerHTML = `
         <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
             <span id="form-title">${fileName}</span>
             <button id="minimize-btn" style="color: rgb(0, 0, 0); cursor: pointer;">-</button>
         </div>
         <form id="form-content" style="padding: 20px; display: block;">
-            HI WORLD!!!!!!!!!!!!!!!!!!!!!!!!!!
         </form>
     `;
-
-    // Append the form to the body
     document.body.appendChild(formContainer);
 
-
-
-// Fetch content from content.html based on the fileName (no modifications)
 fetchFileContent(fileName)
         .then(content => {
-            console.log(`Inserting content for ${fileName}:`, content);  // Log content before inserting
             formContainer.querySelector('#form-content').innerHTML = content;
         });
 
-// Update shapes, make form draggable, and handle minimize button
 updateShapes();
 makeDraggable(formContainer, formContainer.querySelector('#form-header'), zIndexCounter);
 handleMinimize(formContainer);
 
-nextLeft += 50; // Adjust position for the next form
+nextLeft += 50; 
 nextTop += 50;
 }
-
-    // Add event listeners to each file/tab
+    //TAB STYLE INTERACTION
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', (event) => {
-            tab.style.transition = 'color 0.2s ease-out'; // Add transition effect for smooth color change
+            tab.style.transition = 'color 0.2s ease-out'; 
         tab.style.color = 'lightblue';  // Change the text color to light blue
 
-        // Reset color back to default after transition duration
         setTimeout(() => {
-            tab.style.color = '';  // Reset to the default color (no inline style)
-        }, 300);  // Match the duration of the transition
+            tab.style.color = '';  
+        }, 300);  
             const fileName = event.target.getAttribute('data-file');
             
-            // Create the form when a tab is clicked
             createForm(fileName);
 
-            // Bring the clicked form to the front by increasing its z-index
             const form = document.getElementById(`form-container-${fileName}`);
             if (form) {
-                form.style.zIndex = zIndexCounter.current++;  // Increment and set a higher z-index for the clicked form
+                form.style.zIndex = zIndexCounter.current++;  
             }
 
             // Ensure the z-index of all other open forms is set to be lower (background)
