@@ -38,13 +38,9 @@ formCounter++;
 formContainer.style.position = 'absolute';
 formContainer.style.fontWeight = '';
 formContainer.style.transform = 'translate(0, 0)';
-// if (fileName==="experiments") {
-//     formContainer.style.width = '1000px';
-// } else formContainer.style.width = '300px';
-
+formContainer.style.width = '550px';
 formContainer.style.borderRadius = '8px';
 formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-// formContainer.style.overflow = 'hidden';
 formContainer.style.zIndex = zIndexCounter.current; 
 formContainer.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
 
