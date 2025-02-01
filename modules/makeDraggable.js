@@ -89,10 +89,6 @@ export function makeDraggable(element, header) {
     document.addEventListener('touchmove', moveElement);
     document.addEventListener('touchend', stopDrag);
 
-    formContainer.addEventListener('mousedown', (e) => {
-
-        formContainer.classList.add('grabbing'); // Change cursor to grabbing when mouse is down
-    });
-
+    
 }
 
