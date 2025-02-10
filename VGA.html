@@ -1,0 +1,83 @@
+<style>
+    * {
+        background-color:black;
+        color: white;
+    }
+  <style>
+<div id="gallery" class="gallery"></div>
+<div id="display"></div>
+
+
+  <script>
+const apiKey = 'bd977387ab9559f7a4ba6026b018ada4'; 
+
+const photosetId = '72177720323740296'; 
+const apiUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&format=json&nojsoncallback=1`;
+
+const displayDiv = document.getElementById('display');
+
+fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        if (data.stat === 'ok') {
+            const photos = data.photoset.photo;
+            const gallery = document.getElementById('gallery');
+            
+            photos.forEach(photo => {
+                const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_m.jpg`;
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.alt = photo.title;
+                
+                gallery.appendChild(img);
+
+                img.addEventListener('mouseenter', () => {
+                    console.log('Image clicked:', photo.title);  
+                    
+                    const displayImage = document.createElement('img');
+                    
+                    const fallbackImgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`; 
+                    displayImage.src = fallbackImgUrl; 
+
+                    displayImage.onerror = () => {
+                        console.log('Image display failed.');
+                    };
+                    const lineBreak = document.createElement('br');
+                    const description = document.createElement('p');
+                    description.textContent = photo.title;  
+                    displayImage.style.display = 'block';  
+
+                    //DISPLAY (Note: Description Linebreak is not working)
+                    displayDiv.innerHTML = '';  
+                    displayDiv.appendChild(displayImage);
+                    // displayDiv.appendChild(lineBreak);
+                    // displayDiv.appendChild(description);
+                    displayDiv.style.visibility = 'visible';  
+                    displayImage.onload = () => {
+                        //EMPTY
+                    };
+                });
+
+
+
+
+            });
+        } else {
+            console.error('Failed to fetch photos:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching from Flickr API:', error);
+    });
+
+            });
+        } else {
+            console.error('Failed to fetch photos:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching from Flickr API:', error);
+    });
+
+
+</script>
