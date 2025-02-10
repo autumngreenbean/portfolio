@@ -1,83 +1,93 @@
+<div class="video-container">
+    <video autoplay muted loop>
+        <source src="https://live.staticflickr.com/video/54319695894/435a6513f0/1080p.mp4?s=eyJpIjo1NDMxOTY5NTg5NCwiZSI6MTczOTIyMzM5NiwicyI6ImE2NzM1YjliOTU4MjIxZDY0ZThhZGUzMjAyOTdlYTdkNjVkNTBhMzQiLCJ2IjoxfQ" type="video/mp4">
+    </video>
+</div> 
+<div class="video-container">
+    <video autoplay muted loop>
+        <source src="https://live.staticflickr.com/video/54319698799/e290e1c54a/1080p.mp4?s=eyJpIjo1NDMxOTY5ODc5OSwiZSI6MTczOTIyMzYxMywicyI6ImNhODdhYzY1MTA0MzYyMTVlYjA4Y2I2ZGVmYWQxZjE0MTNlYTFlZjciLCJ2IjoxfQ" type="video/mp4">
+    </video>
+</div> 
+<div class="video-container">
+    <video autoplay muted loop>
+        <source src="https://live.staticflickr.com/video/54319468856/6d9db86c81/1080p.mp4?s=eyJpIjo1NDMxOTQ2ODg1NiwiZSI6MTczOTIyMzc0MCwicyI6IjYzOTJhYjc1NTA1MmM4NmMwYjZkMDE5YzQwYTRiYTQyZTMyNmZmYTkiLCJ2IjoxfQ" type="video/mp4">
+    </video>
+</div> 
+<div class="video-container">
+    <video autoplay muted loop>
+        <source src="https://live.staticflickr.com/video/54319474806/6d6f8d9d62/1080p.mp4?s=eyJpIjo1NDMxOTQ3NDgwNiwiZSI6MTczOTIyMzc4MiwicyI6IjViOGQzNmEyMWNkMjRhMGRlYWQ4ZTM4MmM2NGYwMmFjNTc4YTU4YTciLCJ2IjoxfQ" type="video/mp4">
+    </video>
+</div> 
+
+<br>
+<b style="font-size: 20px;">ANALOG CLOCK AUDIOVISUAL SYNTHESIZER (VGA)</b> <br>
+<p> <u>Summary</u>: For this project, I designed and fabricated a custom VGA connector to interface with a 1/4" TS (Tip-Sleeve) audio cable, which was then adapted to dual TS cables for stereo (R/L) audio input.
+    <br><br> 
+    <u>Specifications:</u>: 
+    The dual (R/L) TS audio cables were used to inject audio signals into the H-sync and V-sync channels of the VGA connector, deliberately introducing signal interference. This allowed the audio input to modulate the timing of the sync signals, resulting in visual distortions and manipulations on the connected VGA display.
+
+    <br>
+    <br>
+    An Arduino Nano was used to control the pixel array and manage the visual animations displayed on the screen.
+
+    <br>
+    <br>
+    I integrated several switches and buttons from a harvested analog clock. These inputs were used to toggle between different visual modes and glitch effects, as demonstrated in video #4.
+
+
+
+<br>
+
+</p>
+<br>
+
+
+<br>
+<div class="boop">
+    <img src="https://live.staticflickr.com/65535/54319798339_482b43d371_h.jpg" >
+</div>
+<div class="boop">
+    <img src="https://live.staticflickr.com/65535/54319564881_fedb486069_c.jpg" >
+</div>
+<div class="boop">
+    <img src="https://live.staticflickr.com/65535/54318712752_1aee4ba173_n.jpg" >
+</div>
+
+
 <style>
     * {
-        background-color:black;
-        color: white;
+        background-color: black;
+        color:white;
     }
-  <style>
-<div id="gallery" class="gallery"></div>
-<div id="display"></div>
 
+    .boop {
+        width: 300px;
+        height: 300px;
+        overflow: hidden;
+        position: relative;
+        display: inline-block;
+    }
 
-  <script>
-const apiKey = 'bd977387ab9559f7a4ba6026b018ada4'; 
+    img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+    }
 
-const photosetId = '72177720323740296'; 
-const apiUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&format=json&nojsoncallback=1`;
+    .video-container {
+        width: 300px;
+        height: 300px;
+        overflow: hidden;
+        position: relative;
+        display: inline-block;
 
-const displayDiv = document.getElementById('display');
+    }
 
-fetch(apiUrl)
-    .then(response => response.json())
-    .then(data => {
-        if (data.stat === 'ok') {
-            const photos = data.photoset.photo;
-            const gallery = document.getElementById('gallery');
-            
-            photos.forEach(photo => {
-                const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_m.jpg`;
-                const img = document.createElement('img');
-                img.src = imgUrl;
-                img.alt = photo.title;
-                
-                gallery.appendChild(img);
-
-                img.addEventListener('mouseenter', () => {
-                    console.log('Image clicked:', photo.title);  
-                    
-                    const displayImage = document.createElement('img');
-                    
-                    const fallbackImgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`; 
-                    displayImage.src = fallbackImgUrl; 
-
-                    displayImage.onerror = () => {
-                        console.log('Image display failed.');
-                    };
-                    const lineBreak = document.createElement('br');
-                    const description = document.createElement('p');
-                    description.textContent = photo.title;  
-                    displayImage.style.display = 'block';  
-
-                    //DISPLAY (Note: Description Linebreak is not working)
-                    displayDiv.innerHTML = '';  
-                    displayDiv.appendChild(displayImage);
-                    // displayDiv.appendChild(lineBreak);
-                    // displayDiv.appendChild(description);
-                    displayDiv.style.visibility = 'visible';  
-                    displayImage.onload = () => {
-                        //EMPTY
-                    };
-                });
-
-
-
-
-            });
-        } else {
-            console.error('Failed to fetch photos:', data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching from Flickr API:', error);
-    });
-
-            });
-        } else {
-            console.error('Failed to fetch photos:', data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error fetching from Flickr API:', error);
-    });
-
-
-</script>
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+    }
+</style>
