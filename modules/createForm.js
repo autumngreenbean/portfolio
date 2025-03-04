@@ -1,9 +1,9 @@
 import { makeDraggable } from './makeDraggable.js';
-import { handleMinimize } from '../window.js';
+import { handleMinimize } from './makeDraggable.js';
 import { updateShapes } from './canvas.js';  
 import { fetchFileContent } from './fetchContent.js';
 
-console.log("I am called!");
+console.log("createForm.js: 'I am called!");
 const isMobile = window.innerWidth <= 768; 
 
 //NOT FUNCTIONING
