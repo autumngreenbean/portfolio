@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog Display</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('your-background-image.jpg'); /* Background image or color */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;  /* Ensure the body takes the full viewport height */
+    overflow: hidden;  /* Prevent the body from scrolling */
+}
+
+.container {
+    position: fixed;
+    top: 50%; /* Vertically center */
+    left: 50%; /* Horizontally center */
+    transform: translate(-50%, -50%); /* Offset the position to truly center it */
+    width: 90%; /* You can adjust the width here */
+    max-width: 800px; /* Maximum width of the container */
+    height: 80vh;  /* Make the container take up most of the screen height */
+    padding: 20px;
+    overflow-y: auto;  /* Make the container scrollable vertically */
+    background-color: rgba(255, 255, 255, 0);  /* Optional: semi-transparent background */
+    border-radius: 10px;  /* Optional: rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Optional: shadow for visual depth */
+}
+
+.post {
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
+    backdrop-filter: blur(5px); /* Ensures this section has the blur effect */
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;  /* Space between posts */
+    transition: opacity 1s, transform 1s; /* Fade-in effect */
+}
+
+.post:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 3.0rem;
+}
+
+.post h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.post p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.post .title {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.post .body {
+    color: #7f8c8d;
+}
+
+.post .body:hover {
+  font-size: 100px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container" id="posts-container">
+        <!-- Blog posts will be dynamically inserted here -->
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <script>
+     fetch('https://script.google.com/macros/s/AKfycbzvTFReVXRgTmHGRLPtzrnMi8OPRCONK4zwPDmCOtZvEf4y7FZ9nRRK5kKVA9RGR1t_hA/exec')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.json();  // Parse JSON data
+  })
+  .then(posts => {
+    console.log('Fetched posts:', posts);
+    
+    // Render posts (if needed)
+    const postsContainer = document.getElementById('posts-container');
+    
+    posts.forEach(post => {
+      const title = post.title;
+      const body = post.body;
+      
+      const bodyWithLineBreaks = body.replace(/\n/g, '<br>');  // Handle line breaks in body
+
+      // Create post container
+      const postElement = document.createElement('div');
+      postElement.classList.add('post');
+
+      postElement.innerHTML = `
+        <h2 class="title">${title}</h2>
+        <p class="body">${bodyWithLineBreaks}</p>
+      `;
+      
+      postsContainer.appendChild(postElement);
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
+
+    </script>
+    
+<script type="module" src="/modules/createForm.js"></script>
+
+</body>
+</html>
