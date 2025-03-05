@@ -185,10 +185,10 @@ background-color: #0000005d;
 /* -----------------blog */
 
 .container {
-    position: fixed;
-    top: 50%; /* Vertically center */
-    left: 20%; /* Horizontally center */
-    transform: translate(-50%, -50%); /* Offset the position to truly center it */
+    /* position: fixed; */
+    top: 50%; 
+    left: 20%; 
+    /* transform: translate(-50%, -50%); Offset the position to truly center it */
     width: 90%; /* You can adjust the width here */
     max-width: 800px; /* Maximum width of the container */
     height: 80vh;  /* Make the container take up most of the screen height */
