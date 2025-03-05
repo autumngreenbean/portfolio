@@ -1,9 +1,7 @@
 import { makeDraggable } from './makeDraggable.js';
 import { handleMinimize } from './makeDraggable.js';
-import { updateShapes } from './canvas.js';  
 import { fetchFileContent } from './fetchContent.js';
-
-console.log("createForm.js: 'I am called!");
+console.log("createForm.js: 'I am called!'");
 const isMobile = window.innerWidth <= 768; 
 
 //NOT FUNCTIONING
@@ -20,7 +18,7 @@ existingForm.style.zIndex = zIndexCounter.current;
 // NOT FUNCTIONING: Update zIndex for the next form spawn, cycle
 zIndexCounter.current = zIndexCounter.current === zIndexCounter.max ? 1000 : zIndexCounter.current + 1;
 
-updateShapes();
+// updateShapes();
 return;  
 }
 
@@ -80,7 +78,7 @@ fetchFileContent(fileName)
 if (fileName==="imagery.png") {
     window.open('images.html', '_blank');
 }
-updateShapes();
+// updateShapes();
 makeDraggable(formContainer, formContainer.querySelector('#form-header'), zIndexCounter);
 handleMinimize(formContainer);
 
