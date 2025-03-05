@@ -1,6 +1,6 @@
 
   console.log("blog.js: 'I am called!'");
-fetch('https://script.google.com/macros/s/AKfycbygiQ2e_pvpjQJz8bmBezeztjmKuUti3oIAypKzdVSztPLAcUemfquwz-1zYTvhYiRuGA/exec')
+fetch('https://script.google.com/macros/s/AKfycbzq3ZkbiRrSrmk8_AG6QRObHxkJ3R8Qd_NbM5UoJkujdRswDw_DSNEBvsqzn6yHQYzt/exec')
 .then(response => {
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
