@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GIF Converter to 1-Bit and Nokia 5110 Array</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #outputCanvas {
+            display: none;
+        }
+        #arrayOutputContainer {
+            margin-top: 20px;
+            border: 2px solid #ccc;
+            padding: 10px;
+            width: 100%;
+            max-width: 800px;
+            height: 150px;
+            overflow: auto;
+            font-family: monospace;
+            white-space: pre;
+            background-color: #f4f4f4;
+        }
+        #arrayOutputContainer p {
+            margin: 0;
+        }
+        #arrayOutput {
+            word-wrap: break-word;
+        }
+        #convertBtn, #copyBtn {
+            padding: 10px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        #previewGif {
+            margin-top: 20px;
+            max-width: 200px;
+            max-height: 200px;
+        }
+        #downloadLink {
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h3>Upload a GIF</h3>
+    <input type="file" id="fileInput" accept="image/gif">
+    <button id="convertBtn">Convert to 1-Bit 84x48 GIF</button>
+    <br><br>
+
+    <canvas id="outputCanvas"></canvas>
+
+    <h4>Preview Converted GIF:</h4>
+    <img id="previewGif" src="#" alt="GIF Preview" style="display:none;"/>
+
+    <a id="downloadLink" href="#" download="converted_output.gif">Download Converted GIF</a>
+
+    <h4>Nokia 5110 Array:</h4>
+    <div id="arrayOutputContainer">
+        <p id="arrayOutput">The Nokia array will be displayed here after conversion...</p>
+    </div>
+
+    <button id="copyBtn" style="display:none;">Copy Array to Clipboard</button>
+
+    <!-- gif.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.min.js"></script>
+
+    <script>
+        // Ensure GIF.js is available before proceeding
+        if (typeof GIF === 'undefined') {
+            alert('gif.js is not loaded correctly!');
+        }
+
+        // Convert image data to 1-bit black & white (1-bit monochrome)
+        function convertTo1Bit(imageData) {
+            let data = imageData.data;
+            for (let i = 0; i < data.length; i += 4) {
+                // Average color to determine whether to make the pixel black (0) or white (255)
+                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                const color = avg < 128 ? 0 : 255;  // Black or White based on the average color
+                data[i] = data[i + 1] = data[i + 2] = color; // RGB to black or white
+            }
+            return imageData;
+        }
+
+        // Generate Nokia 5110 array from the 1-bit image data
+        function generateNokiaArray(imageData, width, height) {
+            let byteArray = [];
+            let data = imageData.data;
+            let rowByte = [];
+
+            // Each row on the Nokia 5110 screen is 84 pixels (each byte represents 8 pixels)
+            for (let y = 0; y < height; y++) {
+                let row = 0;
+                for (let x = 0; x < width; x++) {
+                    let pixelIndex = (y * width + x) * 4; // Each pixel has 4 channels (RGBA)
+                    let isBlack = data[pixelIndex] === 0 ? 1 : 0; // Black pixel is 1, white is 0
+                    row |= (isBlack << (7 - (x % 8))); // Create a byte where each bit represents a pixel
+                    if (x % 8 === 7) {
+                        rowByte.push(row);
+                        row = 0;
+                    }
+                }
+                if (row !== 0) {  // For remaining pixels that don't form a full byte (on the last row)
+                    rowByte.push(row);
+                }
+            }
+
+            // Convert to string array format
+            let arrayString = rowByte.map(byte => `0x${byte.toString(16).padStart(2, '0')}`).join(', ');
+
+            return arrayString;
+        }
+
+        // Handle file input and conversion
+        document.getElementById('convertBtn').addEventListener('click', function () {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+
+            if (!file || file.type !== 'image/gif') {
+                alert("Please upload a valid GIF file.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = new Image();
+                img.onload = function () {
+                    // Create a canvas to process the image
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const width = 84;
+                    const height = 48;
+
+                    // Resize the image to 84x48
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Step 1: Convert to 1-bit
+                    const imageData = ctx.getImageData(0, 0, width, height);
+                    const bwImageData = convertTo1Bit(imageData);
+
+                    // Step 2: Generate Nokia 5110 array
+                    const nokiaArray = generateNokiaArray(bwImageData, width, height);
+                    document.getElementById('arrayOutput').textContent = nokiaArray;
+
+                    // Step 3: Show the Copy Button
+                    document.getElementById('copyBtn').style.display = 'inline-block';
+
+                    // Step 4: Create GIF using gif.js
+                    const gif = new GIF({
+                        workers: 2,
+                        quality: 10,
+                        width: width,
+                        height: height
+                    });
+
+                    gif.addFrame(bwImageData, { delay: 100 });
+                    gif.on('finished', function (blob) {
+                        const url = URL.createObjectURL(blob);
+                        document.getElementById('previewGif').src = url;
+                        document.getElementById('previewGif').style.display = 'inline';
+
+                        // Provide the link to download the GIF
+                        document.getElementById('downloadLink').href = url;
+                        document.getElementById('downloadLink').style.display = 'inline';
+                    });
+
+                    gif.render();
+                };
+
+                img.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        // Copy the Nokia array to clipboard
+        document.getElementById('copyBtn').addEventListener('click', function () {
+            const textArea = document.createElement('textarea');
+            textArea.value = document.getElementById('arrayOutput').textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert("Array copied to clipboard!");
+        });
+    </script>
+
+</body>
+</html>
