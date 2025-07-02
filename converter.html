@@ -162,15 +162,23 @@
                     });
 
                     gif.addFrame(bwImageData, { delay: 100 });
-                    gif.on('finished', function (blob) {
-                        const url = URL.createObjectURL(blob);
-                        document.getElementById('previewGif').src = url;
-                        document.getElementById('previewGif').style.display = 'inline';
+                   gif.on('finished', function (blob) {
+    // Create an object URL for the generated GIF
+    const url = URL.createObjectURL(blob);
 
-                        // Provide the link to download the GIF
-                        document.getElementById('downloadLink').href = url;
-                        document.getElementById('downloadLink').style.display = 'inline';
-                    });
+    // Set the preview source to the new GIF
+    document.getElementById('previewGif').src = url;
+    document.getElementById('previewGif').style.display = 'inline';
+
+    // Set the download link to the generated GIF
+    const downloadLink = document.getElementById('downloadLink');
+    downloadLink.href = url;  // Use the correct URL
+    downloadLink.style.display = 'inline';
+    
+    // Optional: Triggering the download automatically (if needed)
+    // downloadLink.click();
+});
+
 
                     gif.render();
                 };
