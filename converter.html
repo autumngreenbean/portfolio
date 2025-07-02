@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GIF to Matrix Converter with All Frames</title>
+  <title>GIF to Matrix Converter (No Library)</title>
   <style>
     body { font-family: Arial, sans-serif; }
     #output { margin-top: 20px; }
@@ -11,8 +11,6 @@
     #previewCanvas { margin-top: 20px; border: 1px solid #000; }
     .message { font-weight: bold; }
   </style>
-  <!-- Correct URL for gif.js -->
-  <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.min.js"></script>
 </head>
 <body>
 
@@ -50,74 +48,68 @@
 
     const reader = new FileReader();
     reader.onload = function(event) {
-      const gif = new GIF({
-        workers: 2,
-        quality: 10
-      });
-
-      gif.on('parsed', function() {
-        processAllFrames(gif.frames);
-      });
-
-      gif.load(event.target.result);
+      const gifData = event.target.result;
+      const img = new Image();
+      img.onload = function() {
+        processGif(img);
+      };
+      img.src = event.target.result;
     };
     reader.readAsDataURL(file);
   }
 
   gifInput.addEventListener("change", loadGif);
 
-  function processAllFrames(gifFrames) {
-    // Clear previous canvas and preview
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+  function processGif(image) {
+    // Create an off-screen canvas to handle drawing and extracting frames
+    const gifWidth = image.width;
+    const gifHeight = image.height;
+    
+    const gifCanvas = document.createElement("canvas");
+    const gifCtx = gifCanvas.getContext("2d");
 
-    // Process each frame and convert to matrix
-    frames = [];
-    gifFrames.forEach((frame, index) => {
-      const matrix = processFrame(frame);
-      frames.push(matrix);
-      const option = document.createElement("option");
-      option.value = index;
-      option.textContent = `Frame ${index + 1}`;
-      frameSelector.appendChild(option);
-    });
+    gifCanvas.width = gifWidth;
+    gifCanvas.height = gifHeight;
+
+    // Create an image that holds a copy of the current GIF frame
+    gifCtx.drawImage(image, 0, 0);
+
+    // Extracting frame data from the GIF
+    const frameData = [];
+    const imageData = gifCtx.getImageData(0, 0, gifWidth, gifHeight);
+    const data = imageData.data;
+
+    // Convert image data to black/white matrix
+    for (let y = 0; y < gifHeight; y++) {
+      const row = [];
+      for (let x = 0; x < gifWidth; x++) {
+        const idx = (y * gifWidth + x) * 4;
+        const r = data[idx];
+        const g = data[idx + 1];
+        const b = data[idx + 2];
+        const grayscale = (r + g + b) / 3;
+        const pixel = grayscale < 128 ? 1 : 0;
+        row.push(pixel);
+      }
+      frameData.push(row);
+    }
+
+    // Add this frame's matrix to the frames array
+    frames.push(frameData);
+
+    // Generate frame selector options
+    const option = document.createElement("option");
+    option.value = frames.length - 1;
+    option.textContent = `Frame ${frames.length}`;
+    frameSelector.appendChild(option);
 
     // Show the first frame's matrix and preview by default
-    if (frames.length > 0) {
+    if (frames.length === 1) {
       displayFrame(0);
     }
 
     // Display finished message
     statusDiv.innerHTML = "<span class='message'>Processing Finished!</span>";
-  }
-
-  function processFrame(frame) {
-    // Draw the frame on the canvas
-    ctx.putImageData(frame.imageData, 0, 0);
-
-    // Get pixel data from the canvas
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    const data = imageData.data;
-
-    // Convert the pixels into a matrix
-    const matrix = [];
-    for (let y = 0; y < canvas.height; y++) {
-      const row = [];
-      for (let x = 0; x < canvas.width; x++) {
-        const idx = (y * canvas.width + x) * 4;
-        const r = data[idx];
-        const g = data[idx + 1];
-        const b = data[idx + 2];
-        const a = data[idx + 3];
-
-        const grayscale = (r + g + b) / 3;
-        const pixel = grayscale < 128 ? 1 : 0;
-        row.push(pixel);
-      }
-      matrix.push(row);
-    }
-
-    return matrix;
   }
 
   function drawPreview(matrix) {
