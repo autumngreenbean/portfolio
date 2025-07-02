@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GIF to Matrix Converter (No Library)</title>
+  <title>GIF to Matrix Converter (All Frames)</title>
   <style>
     body { font-family: Arial, sans-serif; }
     #output { margin-top: 20px; }
@@ -48,10 +48,9 @@
 
     const reader = new FileReader();
     reader.onload = function(event) {
-      const gifData = event.target.result;
       const img = new Image();
       img.onload = function() {
-        processGif(img);
+        extractGifFrames(img);
       };
       img.src = event.target.result;
     };
@@ -60,8 +59,8 @@
 
   gifInput.addEventListener("change", loadGif);
 
-  function processGif(image) {
-    // Create an off-screen canvas to handle drawing and extracting frames
+  function extractGifFrames(image) {
+    // Initialize the frame extraction process
     const gifWidth = image.width;
     const gifHeight = image.height;
     
@@ -71,15 +70,44 @@
     gifCanvas.width = gifWidth;
     gifCanvas.height = gifHeight;
 
-    // Create an image that holds a copy of the current GIF frame
-    gifCtx.drawImage(image, 0, 0);
+    let frameCount = 0;
+    frames = []; // Clear previous frames
 
-    // Extracting frame data from the GIF
-    const frameData = [];
-    const imageData = gifCtx.getImageData(0, 0, gifWidth, gifHeight);
+    function processNextFrame() {
+      if (frameCount < image.naturalHeight) {
+        gifCtx.clearRect(0, 0, gifWidth, gifHeight);
+        gifCtx.drawImage(image, 0, 0);
+
+        const frameData = getFrameMatrix(gifWidth, gifHeight);
+        frames.push(frameData);
+
+        // Add this frame's matrix to the dropdown
+        const option = document.createElement("option");
+        option.value = frameCount;
+        option.textContent = `Frame ${frameCount + 1}`;
+        frameSelector.appendChild(option);
+
+        frameCount++;
+        // Repeat for next frame
+        requestAnimationFrame(processNextFrame);
+      } else {
+        statusDiv.innerHTML = "<span class='message'>Processing Finished!</span>";
+        // Show the first frame by default
+        if (frames.length > 0) {
+          displayFrame(0);
+        }
+      }
+    }
+
+    // Start extracting frames
+    processNextFrame();
+  }
+
+  function getFrameMatrix(gifWidth, gifHeight) {
+    const imageData = ctx.getImageData(0, 0, gifWidth, gifHeight);
     const data = imageData.data;
 
-    // Convert image data to black/white matrix
+    const matrix = [];
     for (let y = 0; y < gifHeight; y++) {
       const row = [];
       for (let x = 0; x < gifWidth; x++) {
@@ -91,25 +119,9 @@
         const pixel = grayscale < 128 ? 1 : 0;
         row.push(pixel);
       }
-      frameData.push(row);
+      matrix.push(row);
     }
-
-    // Add this frame's matrix to the frames array
-    frames.push(frameData);
-
-    // Generate frame selector options
-    const option = document.createElement("option");
-    option.value = frames.length - 1;
-    option.textContent = `Frame ${frames.length}`;
-    frameSelector.appendChild(option);
-
-    // Show the first frame's matrix and preview by default
-    if (frames.length === 1) {
-      displayFrame(0);
-    }
-
-    // Display finished message
-    statusDiv.innerHTML = "<span class='message'>Processing Finished!</span>";
+    return matrix;
   }
 
   function drawPreview(matrix) {
@@ -136,6 +148,7 @@
     const selectedFrame = parseInt(frameSelector.value);
     displayFrame(selectedFrame);
   });
+
 </script>
 
 </body>
