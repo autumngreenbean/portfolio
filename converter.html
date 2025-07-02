@@ -44,6 +44,14 @@
             margin-top: 10px;
             display: none;
         }
+        #errorMessages {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: none; /* Hide by default */
+        }
     </style>
 </head>
 <body>
@@ -67,13 +75,16 @@
 
     <button id="copyBtn" style="display:none;">Copy Array to Clipboard</button>
 
+    <!-- Error Message Container -->
+    <div id="errorMessages"></div>
+
     <!-- gif.js Library -->
 <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.min.js"></script>
 
     <script>
         // Ensure GIF.js is available before proceeding
         if (typeof GIF === 'undefined') {
-            alert('gif.js is not loaded correctly!');
+            showError('gif.js is not loaded correctly!');
         }
 
         // Convert image data to 1-bit black & white (1-bit monochrome)
@@ -117,13 +128,20 @@
             return arrayString;
         }
 
+        // Show error messages in the UI
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessages');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block'; // Show the error message div
+        }
+
         // Handle file input and conversion
         document.getElementById('convertBtn').addEventListener('click', function () {
             const fileInput = document.getElementById('fileInput');
             const file = fileInput.files[0];
 
             if (!file || file.type !== 'image/gif') {
-                alert("Please upload a valid GIF file.");
+                showError("Please upload a valid GIF file.");
                 return;
             }
 
@@ -161,24 +179,29 @@
                         height: height
                     });
 
+                    // Add the 1-bit frame to the GIF
                     gif.addFrame(bwImageData, { delay: 100 });
-                   gif.on('finished', function (blob) {
-    // Create an object URL for the generated GIF
-    const url = URL.createObjectURL(blob);
 
-    // Set the preview source to the new GIF
-    document.getElementById('previewGif').src = url;
-    document.getElementById('previewGif').style.display = 'inline';
+                    gif.on('finished', function (blob) {
+                        // Ensure the blob was generated
+                        if (!blob) {
+                            showError("Failed to generate GIF");
+                            return;
+                        }
 
-    // Set the download link to the generated GIF
-    const downloadLink = document.getElementById('downloadLink');
-    downloadLink.href = url;  // Use the correct URL
-    downloadLink.style.display = 'inline';
-    
-    // Optional: Triggering the download automatically (if needed)
-    // downloadLink.click();
-});
+                        // Create a URL for the blob
+                        const url = URL.createObjectURL(blob);
 
+                        // Show the preview GIF
+                        const previewGif = document.getElementById('previewGif');
+                        previewGif.src = url;
+                        previewGif.style.display = 'inline';
+
+                        // Show the download link
+                        const downloadLink = document.getElementById('downloadLink');
+                        downloadLink.href = url;
+                        downloadLink.style.display = 'inline';
+                    });
 
                     gif.render();
                 };
