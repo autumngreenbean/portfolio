@@ -1,228 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GIF Converter to 1-Bit and Nokia 5110 Array</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        #outputCanvas {
-            display: none;
-        }
-        #arrayOutputContainer {
-            margin-top: 20px;
-            border: 2px solid #ccc;
-            padding: 10px;
-            width: 100%;
-            max-width: 800px;
-            height: 150px;
-            overflow: auto;
-            font-family: monospace;
-            white-space: pre;
-            background-color: #f4f4f4;
-        }
-        #arrayOutputContainer p {
-            margin: 0;
-        }
-        #arrayOutput {
-            word-wrap: break-word;
-        }
-        #convertBtn, #copyBtn {
-            padding: 10px 20px;
-            margin: 10px 0;
-            cursor: pointer;
-        }
-        #previewGif {
-            margin-top: 20px;
-            max-width: 200px;
-            max-height: 200px;
-        }
-        #downloadLink {
-            margin-top: 10px;
-            display: none;
-        }
-        #errorMessages {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            display: none; /* Hide by default */
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GIF to Matrix Converter with All Frames</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    #output { margin-top: 20px; }
+    canvas { border: 1px solid #ccc; }
+    #previewCanvas { margin-top: 20px; border: 1px solid #000; }
+    .message { font-weight: bold; }
+  </style>
+  <!-- Correct URL for gif.js -->
+  <script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.min.js"></script>
 </head>
 <body>
 
-    <h3>Upload a GIF</h3>
-    <input type="file" id="fileInput" accept="image/gif">
-    <button id="convertBtn">Convert to 1-Bit 84x48 GIF</button>
-    <br><br>
+<h1>GIF to Matrix Converter</h1>
 
-    <canvas id="outputCanvas"></canvas>
+<input type="file" id="gifInput" accept="image/gif">
+<canvas id="canvas" width="48" height="48"></canvas>
+<canvas id="previewCanvas" width="48" height="48"></canvas>
 
-    <h4>Preview Converted GIF:</h4>
-    <img id="previewGif" src="#" alt="GIF Preview" style="display:none;"/>
+<div id="output"></div>
+<div id="status"></div>
+<div id="frameSelector" style="margin-top: 20px;">
+  <label for="frameIndex">Select Frame:</label>
+  <select id="frameIndex"></select>
+</div>
 
-    <a id="downloadLink" href="#" download="converted_output.gif">Download Converted GIF</a>
+<script>
+  const gifInput = document.getElementById("gifInput");
+  const canvas = document.getElementById("canvas");
+  const previewCanvas = document.getElementById("previewCanvas");
+  const ctx = canvas.getContext("2d");
+  const previewCtx = previewCanvas.getContext("2d");
+  const outputDiv = document.getElementById("output");
+  const statusDiv = document.getElementById("status");
+  const frameSelector = document.getElementById("frameSelector");
 
-    <h4>Nokia 5110 Array:</h4>
-    <div id="arrayOutputContainer">
-        <p id="arrayOutput">The Nokia array will be displayed here after conversion...</p>
-    </div>
+  let frames = []; // To store all matrices of frames
 
-    <button id="copyBtn" style="display:none;">Copy Array to Clipboard</button>
+  function loadGif() {
+    const file = gifInput.files[0];
+    if (!file) return;
 
-    <!-- Error Message Container -->
-    <div id="errorMessages"></div>
+    // Display processing message
+    statusDiv.innerHTML = "<span class='message'>Processing...</span>";
 
-    <!-- gif.js Library -->
-<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.min.js"></script>
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const gif = new GIF({
+        workers: 2,
+        quality: 10
+      });
 
-    <script>
-        // Ensure GIF.js is available before proceeding
-        if (typeof GIF === 'undefined') {
-            showError('gif.js is not loaded correctly!');
-        }
+      gif.on('parsed', function() {
+        processAllFrames(gif.frames);
+      });
 
-        // Convert image data to 1-bit black & white (1-bit monochrome)
-        function convertTo1Bit(imageData) {
-            let data = imageData.data;
-            for (let i = 0; i < data.length; i += 4) {
-                // Average color to determine whether to make the pixel black (0) or white (255)
-                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-                const color = avg < 128 ? 0 : 255;  // Black or White based on the average color
-                data[i] = data[i + 1] = data[i + 2] = color; // RGB to black or white
-            }
-            return imageData;
-        }
+      gif.load(event.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
 
-        // Generate Nokia 5110 array from the 1-bit image data
-        function generateNokiaArray(imageData, width, height) {
-            let byteArray = [];
-            let data = imageData.data;
-            let rowByte = [];
+  gifInput.addEventListener("change", loadGif);
 
-            // Each row on the Nokia 5110 screen is 84 pixels (each byte represents 8 pixels)
-            for (let y = 0; y < height; y++) {
-                let row = 0;
-                for (let x = 0; x < width; x++) {
-                    let pixelIndex = (y * width + x) * 4; // Each pixel has 4 channels (RGBA)
-                    let isBlack = data[pixelIndex] === 0 ? 1 : 0; // Black pixel is 1, white is 0
-                    row |= (isBlack << (7 - (x % 8))); // Create a byte where each bit represents a pixel
-                    if (x % 8 === 7) {
-                        rowByte.push(row);
-                        row = 0;
-                    }
-                }
-                if (row !== 0) {  // For remaining pixels that don't form a full byte (on the last row)
-                    rowByte.push(row);
-                }
-            }
+  function processAllFrames(gifFrames) {
+    // Clear previous canvas and preview
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
 
-            // Convert to string array format
-            let arrayString = rowByte.map(byte => `0x${byte.toString(16).padStart(2, '0')}`).join(', ');
+    // Process each frame and convert to matrix
+    frames = [];
+    gifFrames.forEach((frame, index) => {
+      const matrix = processFrame(frame);
+      frames.push(matrix);
+      const option = document.createElement("option");
+      option.value = index;
+      option.textContent = `Frame ${index + 1}`;
+      frameSelector.appendChild(option);
+    });
 
-            return arrayString;
-        }
+    // Show the first frame's matrix and preview by default
+    if (frames.length > 0) {
+      displayFrame(0);
+    }
 
-        // Show error messages in the UI
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessages');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block'; // Show the error message div
-        }
+    // Display finished message
+    statusDiv.innerHTML = "<span class='message'>Processing Finished!</span>";
+  }
 
-        // Handle file input and conversion
-        document.getElementById('convertBtn').addEventListener('click', function () {
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
+  function processFrame(frame) {
+    // Draw the frame on the canvas
+    ctx.putImageData(frame.imageData, 0, 0);
 
-            if (!file || file.type !== 'image/gif') {
-                showError("Please upload a valid GIF file.");
-                return;
-            }
+    // Get pixel data from the canvas
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = new Image();
-                img.onload = function () {
-                    // Create a canvas to process the image
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    const width = 84;
-                    const height = 48;
+    // Convert the pixels into a matrix
+    const matrix = [];
+    for (let y = 0; y < canvas.height; y++) {
+      const row = [];
+      for (let x = 0; x < canvas.width; x++) {
+        const idx = (y * canvas.width + x) * 4;
+        const r = data[idx];
+        const g = data[idx + 1];
+        const b = data[idx + 2];
+        const a = data[idx + 3];
 
-                    // Resize the image to 84x48
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
+        const grayscale = (r + g + b) / 3;
+        const pixel = grayscale < 128 ? 1 : 0;
+        row.push(pixel);
+      }
+      matrix.push(row);
+    }
 
-                    // Step 1: Convert to 1-bit
-                    const imageData = ctx.getImageData(0, 0, width, height);
-                    const bwImageData = convertTo1Bit(imageData);
+    return matrix;
+  }
 
-                    // Step 2: Generate Nokia 5110 array
-                    const nokiaArray = generateNokiaArray(bwImageData, width, height);
-                    document.getElementById('arrayOutput').textContent = nokiaArray;
+  function drawPreview(matrix) {
+    previewCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    for (let y = 0; y < matrix.length; y++) {
+      for (let x = 0; x < matrix[y].length; x++) {
+        const pixel = matrix[y][x];
+        previewCtx.fillStyle = pixel === 1 ? 'black' : 'white';
+        previewCtx.fillRect(x, y, 1, 1);
+      }
+    }
+  }
 
-                    // Step 3: Show the Copy Button
-                    document.getElementById('copyBtn').style.display = 'inline-block';
+  function displayFrame(frameIndex) {
+    const matrix = frames[frameIndex];
+    // Display the matrix in the output div
+    outputDiv.innerHTML = "<pre>" + matrix.map(row => row.join(' ')).join('\n') + "</pre>";
 
-                    // Step 4: Create GIF using gif.js
-                    const gif = new GIF({
-                        workers: 2,
-                        quality: 10,
-                        width: width,
-                        height: height
-                    });
+    // Display the preview of the selected frame on the preview canvas
+    drawPreview(matrix);
+  }
 
-                    // Add the 1-bit frame to the GIF
-                    gif.addFrame(bwImageData, { delay: 100 });
-
-                    gif.on('finished', function (blob) {
-                        // Ensure the blob was generated
-                        if (!blob) {
-                            showError("Failed to generate GIF");
-                            return;
-                        }
-
-                        // Create a URL for the blob
-                        const url = URL.createObjectURL(blob);
-
-                        // Show the preview GIF
-                        const previewGif = document.getElementById('previewGif');
-                        previewGif.src = url;
-                        previewGif.style.display = 'inline';
-
-                        // Show the download link
-                        const downloadLink = document.getElementById('downloadLink');
-                        downloadLink.href = url;
-                        downloadLink.style.display = 'inline';
-                    });
-
-                    gif.render();
-                };
-
-                img.src = e.target.result;
-            };
-
-            reader.readAsDataURL(file);
-        });
-
-        // Copy the Nokia array to clipboard
-        document.getElementById('copyBtn').addEventListener('click', function () {
-            const textArea = document.createElement('textarea');
-            textArea.value = document.getElementById('arrayOutput').textContent;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert("Array copied to clipboard!");
-        });
-    </script>
+  frameSelector.addEventListener('change', function() {
+    const selectedFrame = parseInt(frameSelector.value);
+    displayFrame(selectedFrame);
+  });
+</script>
 
 </body>
 </html>
