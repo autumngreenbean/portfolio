@@ -1,0 +1,495 @@
+/* ========================================
+   FONT DECLARATIONS
+   ======================================== */
+
+@font-face {
+    font-family: 'Header1-Pixel_2';
+    src: url('assets/fonts/Header1-Pixel_2.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Header2-Pixel';
+    src: url('assets/fonts/Header2-Pixel.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Body-Pixel';
+    src: url('assets/fonts/Body-Pixel.ttf') format('truetype');
+}
+
+/* ========================================
+   ROOT & GLOBAL STYLES
+   ======================================== */
+
+:root {
+    /* ── CONTENT BLOCK POSITION ──────────────────────────────────────────
+       Controls where the header/subheader/body text sits inside the
+       notebook image. Values use clamp(min, preferred, max) so the
+       position shifts gently with the screen size.
+       - Increase --content-offset-x to move the text block further right.
+       - Increase --content-offset-y to move the text block further down.
+    ─────────────────────────────────────────────────────────────────── */
+    --content-offset-x: clamp(-1000px, 20vw, 1000px);
+    --content-offset-y: clamp(-1000px, 30vh, 1000px);
+
+    /* ── TAB STRIP POSITION ──────────────────────────────────────────────
+       Controls where the tab row sits relative to the notebook image.
+       Both values are measured from the notebook's bottom-left corner.
+       Use plain pixel values here — do NOT use vw/vh, because the notebook
+       scales by aspect ratio and viewport units would drift the tabs off it.
+       - Increase --tab-offset-x to push tabs further right along the notebook.
+       - Decrease --tab-offset-y (or use negative) to move tabs below the
+         notebook edge; increase it to move tabs up into the notebook.
+    ─────────────────────────────────────────────────────────────────────────── */
+    --tab-offset-x: 220px;
+    --tab-offset-y: 13.5px;
+
+    /* ── TAB DIMENSIONS ─────────────────────────────────────────────────
+       Height of the tab images. Width is automatic (preserves aspect ratio).
+    ─────────────────────────────────────────────────────────────────── */
+    --tab-height: 32px;
+
+     /* Shared depth shadow used by the notebook and tab art.
+         Kept subtle so the pixel edges stay crisp and the assets still feel light. */
+     --asset-shadow: drop-shadow(4px 3px 5px rgba(0, 0, 0, 255)); 
+     
+     /* parameters are (offset-x, offset-y, blur-radius, color) */
+
+    /* Colors */
+    --text-color: #000;
+    --bg-overlay: rgba(0, 0, 0, 0.7);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Body-Pixel', monospace;
+    overflow: hidden;
+}
+
+/* ========================================
+   PAGE CONTAINER & BUTTON
+   ======================================== */
+
+.page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.open-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-family: 'Body-Pixel', monospace;
+    cursor: pointer;
+    background-color: #ccc;
+    border: 1px solid #999;
+    transition: background-color 0.2s;
+}
+
+.open-btn:hover {
+    background-color: #ddd;
+}
+
+.open-btn:active {
+    background-color: #bbb;
+}
+
+.open-btn.hidden {
+    display: none;
+}
+
+/* ========================================
+   POP-UP MODAL
+   ======================================== */
+
+.popup-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.popup-modal.hidden {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Open-state animation defaults:
+   - Background fades/slides up from the bottom.
+   - Notebook and tabs fade/slides down from the top. */
+.popup-background,
+.notebook-wrapper {
+    opacity: 0;
+    will-change: transform, opacity;
+    transition:
+        opacity 1000ms ease,
+        transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.popup-background {
+    transform: translateY(24px);
+}
+
+.notebook-wrapper {
+    transform: translateY(-24px);
+}
+
+.popup-modal.is-open .popup-background,
+.popup-modal.is-open .notebook-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.popup-modal.is-open .popup-background {
+    transition-delay: 200ms;
+}
+
+.popup-modal.is-open .notebook-wrapper {
+    transition-delay: 500ms;
+}
+
+/* Tiled background: tile.png repeats to fill the full screen.
+   Tiles appear and disappear automatically as the window resizes.
+   background-size: auto keeps each tile at its natural pixel size. */
+.popup-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('assets/tile.png');
+    background-repeat: repeat;
+    background-size: auto;
+    background-position: top left;
+    z-index: 1;
+    background-color: #1a1a2e; /* Fallback if tile.png hasn't loaded */
+    /* Nearest-neighbour scaling keeps 16x16 pixel art sharp at any zoom level.
+       'pixelated' is the standard; 'crisp-edges' is the Firefox fallback. */
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* Notebook wrapper: sizes itself to exactly the rendered notebook image.
+   Content and tabs are positioned absolutely inside this, so they
+   always stay relative to the notebook regardless of screen size. */
+.notebook-wrapper {
+    position: relative;
+    display: inline-block; /* Shrinks to fit the image's rendered size */
+    z-index: 2;
+}
+
+/* The notebook image scales adaptively with the viewport.
+   width: min(...) keeps it from exceeding 1440px or 90% of the viewport.
+   height: auto preserves the aspect ratio. max-height prevents overflow. */
+.notebook-img {
+    display: block;
+    width: min(100vw, 1440px);
+    height: auto;
+    max-height: 100vh;
+    object-fit: contain;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    filter: var(--asset-shadow);
+}
+
+/* ========================================
+   CONTENT AREA
+   ======================================== */
+
+/* Content area sits inside the notebook wrapper, positioned from its top-left.
+   Adjust --content-offset-x and --content-offset-y in :root to reposition. */
+.content-area {
+    position: absolute;
+    top: var(--content-offset-y);
+    left: var(--content-offset-x);
+    pointer-events: none; /* Allow clicks to pass through to tabs */
+}
+
+.tab-content {
+    text-align: left;
+    max-width: 600px;
+    pointer-events: all;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.content-header {
+    font-family: 'Header1-Pixel_2', monospace;
+    font-size: 32px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 0;
+    line-height: 1.2;
+    flex-shrink: 0; /* Stays fixed, never scrolls out */
+}
+
+.content-subheader {
+    font-family: 'Header2-Pixel', monospace;
+    font-size: 20px;
+    font-weight: normal;
+    color: #fff;
+    margin-bottom: 0;
+    line-height: 1.2;
+    flex-shrink: 0; /* Stays fixed, never scrolls out */
+}
+
+.content-body {
+    font-family: 'Body-Pixel', monospace;
+    font-size: 20px;
+    color: #fff;
+    line-height: 1.6;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 12px; /* Space for scrollbar */
+    flex-grow: 1;
+}
+
+/* Custom scrollbar for body: thin track line with rounded thumb */
+.content-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.content-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.content-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.8);
+    background-clip: padding-box;
+}
+
+/* Firefox scrollbar */
+.content-body {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.6) transparent;
+}
+
+/* ========================================
+   TAB STRIP & TABS
+   ======================================== */
+
+/* Tab strip is positioned absolutely within .notebook-wrapper,
+   locked to the notebook's bottom-left corner.
+   --tab-offset-x shifts the whole row horizontally.
+   --tab-offset-y shifts the whole row vertically from the bottom edge.
+   (Positive = up into the notebook, negative = below the bottom edge) */
+.tab-strip {
+    position: absolute;
+    bottom: var(--tab-offset-y);
+    left: var(--tab-offset-x);
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    z-index: 3;
+}
+
+/* Individual tab: a single image with a number label centered on top */
+.tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: none;
+}
+
+.tab:hover {
+    filter: brightness(1.1);
+}
+
+/* The tab image asset. Width is auto to preserve the asset's aspect ratio.
+   Single-digit tabs use tab-single-unit.png, double-digit use tab-double-unit.png.
+   Active state swaps to the _invert variant (handled in JS). */
+.tab-img {
+    display: block;
+    height: var(--tab-height);
+    width: auto;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    filter: var(--asset-shadow);
+}
+
+/* Number label centered over the tab image */
+.tab-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Body-Pixel', monospace;
+    font-size: 24px;
+    color: var(--text-color);
+    white-space: nowrap;
+    pointer-events: none; /* Clicks pass through to the tab div */
+}
+
+/* Active tab: label turns white to contrast with the inverted asset */
+.tab.active .tab-label {
+    color: #fff;
+}
+
+/* Active tab elevation: lifts the tab upward to show it is selected.
+   Adjust the translateY value to control how high it rises. */
+.tab.active {
+    transform: translateY(-10px);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .popup-frame {
+        max-width: 95%;
+        height: 100vh;
+    }
+
+    .content-header {
+        font-size: 26px;
+    }
+
+    .content-subheader {
+        font-size: 18px;
+    }
+
+    .content-body {
+        font-size: 12px;
+    }
+
+    .tab-label {
+        font-size: 10px;
+        padding: 0 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .popup-frame {
+        max-width: 98%;
+        height: 95vh;
+    }
+
+    .content-header {
+        font-size: 18px;
+    }
+
+    .content-subheader {
+        font-size: 14px;
+    }
+
+    .tab-label {
+        font-size: 9px;
+        padding: 0 4px;
+    }
+}
+
+@media (max-width: 430px) {
+    :root {
+        /* Mobile-only tuning knobs:
+           - scale: overall notebook size after rotation
+           - content width: how much room the text block gets
+           - tab scale: size of the tab strip on mobile
+           - tab offsets: move the rotated tab stack around the notebook */
+        --mobile-notebook-scale: 1.4;
+        --mobile-content-width: min(46vw, 210px);
+        --mobile-tab-scale: 0.65;
+        --mobile-tab-offset-x: 10px;
+        --mobile-tab-offset-y: -8px;
+    }
+
+    .popup-modal {
+        overflow: visible;
+    }
+
+    .popup-background {
+        background-position: center bottom;
+    }
+
+    /* Rotate the whole notebook composition left.
+       Tabs travel with the notebook and end up on the right side. */
+    .notebook-wrapper {
+        transform: rotate(-90deg) scale(var(--mobile-notebook-scale));
+        transform-origin: center center;
+    }
+
+    /* Preserve the rotated notebook after the entrance animation finishes.
+       This selector must be mobile-specific because the global open-state rule
+       would otherwise replace the transform with translateY(0). */
+    .popup-modal.is-open .notebook-wrapper {
+        transform: rotate(-90deg) scale(var(--mobile-notebook-scale));
+    }
+
+    /* Keep the text readable horizontally by rotating the text block back.
+       These values can be nudged for small phone models. */
+    .content-area {
+        top: 50%;
+        left: 50%;
+        width: var(--mobile-content-width);
+        transform: translate(-50%, -50%) rotate(90deg);
+        transform-origin: center center;
+    }
+
+    .tab-content {
+        width: 100%;
+        max-width: none;
+        gap: 8px;
+    }
+
+    .content-header {
+        font-size: 16px;
+    }
+
+    .content-subheader {
+        font-size: 12px;
+    }
+
+    .content-body {
+        font-size: 10px;
+        line-height: 1.45;
+        max-height: min(29vh, 150px);
+        padding-right: 8px;
+    }
+
+    .tab-strip {
+        transform: scale(var(--mobile-tab-scale));
+        transform-origin: top left;
+        bottom: var(--mobile-tab-offset-y);
+        left: var(--mobile-tab-offset-x);
+        gap: 4px;
+    }
+
+    .tab-img {
+        height: 24px;
+    }
+
+    .tab-label {
+        font-size: 15px;
+    }
+
+    .tab.active {
+        transform: translateY(-8px);
+    }
+}

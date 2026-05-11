@@ -1,0 +1,197 @@
+<!-- TODO:
+- Optional: Fix description display 
+- Store API keys before uploading to website
+-->
+
+<style>
+    * {
+        background-color:black;
+        color: white;
+    }
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 50%; 
+    max-width: 1200px; 
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .gallery {
+        max-width: 100%; 
+    }
+}
+
+.gallery img {
+    width: auto;
+    height: 100px;
+    max-width: 100%;
+    object-fit: cover; 
+    margin: 0; 
+    padding: 0;
+    transition: transform 0.3s ease-in-out;
+    display: block; 
+}
+
+.gallery img:hover {
+    transform: scale(1.05);
+}
+
+#display {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100vh;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden; 
+    
+}
+
+#display img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+</style>
+
+35mm, 120mm, and digital portraits: 
+<div id="gallery" class="gallery"></div>
+
+
+<div id ="gallery-2"></div>
+
+<br>
+analog: vhs, vhs-c, minidv <br>
+<div id="gallery2" class="gallery"></div>
+<div id="display"></div>
+
+ 
+<script>
+const apiKey = '39716538d4ae5f2bd0365df760bba022'; 
+const apiKey2 = 'bd977387ab9559f7a4ba6026b018ada4'; 
+
+const photosetId = '72177720310358964'; 
+const photosetId2= '72177720315678912';
+const apiUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&format=json&nojsoncallback=1`;
+const apiUrl2 = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey2}&photoset_id=${photosetId2}&format=json&nojsoncallback=1`;
+
+const displayDiv = document.getElementById('display');
+
+fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+        if (data.stat === 'ok') {
+            const photos = data.photoset.photo;
+            const gallery = document.getElementById('gallery');
+            
+            photos.forEach(photo => {
+                const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_m.jpg`;
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.alt = photo.title;
+                
+                gallery.appendChild(img);
+
+                img.addEventListener('mouseenter', () => {
+                    console.log('Image clicked:', photo.title);  
+                    
+                    const displayImage = document.createElement('img');
+                    
+                    const fallbackImgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`; 
+                    displayImage.src = fallbackImgUrl; 
+
+                    displayImage.onerror = () => {
+                        console.log('Image display failed.');
+                    };
+                    const lineBreak = document.createElement('br');
+                    const description = document.createElement('p');
+                    description.textContent = photo.title;  
+                    displayImage.style.display = 'block';  
+
+                    //DISPLAY (Note: Description Linebreak is not working)
+                    displayDiv.innerHTML = '';  
+                    displayDiv.appendChild(displayImage);
+                    // displayDiv.appendChild(lineBreak);
+                    // displayDiv.appendChild(description);
+                    displayDiv.style.visibility = 'visible';  
+                    displayImage.onload = () => {
+                        //EMPTY
+                    };
+                });
+
+
+
+
+            });
+        } else {
+            console.error('Failed to fetch photos:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching from Flickr API:', error);
+    });
+
+
+fetch(apiUrl2)
+    .then(response => response.json())
+    .then(data => {
+        if (data.stat === 'ok') {
+            const photos = data.photoset.photo;
+            const gallery = document.getElementById('gallery2');
+                photos.forEach(photo => {
+                const imgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_m.jpg`;
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                img.alt = photo.title;
+                
+                gallery.appendChild(img);
+
+                img.addEventListener('mouseenter', () => {
+                    console.log('Image clicked:', photo.title);  
+                    
+                    const displayImage = document.createElement('img');
+                    
+                    const fallbackImgUrl = `https://farm${photo.farm}.staticflickr.com/${photo.server}/${photo.id}_${photo.secret}_b.jpg`; 
+                    displayImage.src = fallbackImgUrl;  
+
+                    displayImage.onerror = () => {
+                        console.log('Image display failed.');
+                    };
+                    const lineBreak = document.createElement('br');
+                    const description = document.createElement('p');
+                    description.textContent = photo.title;  
+                    displayImage.style.display = 'block';  
+
+                    //DISPLAY
+                    displayDiv.innerHTML = '';  
+                    displayDiv.appendChild(displayImage);
+                    // displayDiv.appendChild(lineBreak);
+                    // displayDiv.appendChild(description);
+                    displayDiv.style.visibility = 'visible';  
+                    displayImage.onload = () => {
+                        //EMPTY
+                    };
+                });
+
+
+
+
+            });
+        } else {
+            console.error('Failed to fetch photos:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching from Flickr API:', error);
+    });
+
+
+</script>
+
