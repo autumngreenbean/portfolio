@@ -24,6 +24,12 @@
         <div class="notebook-wrapper">
             <img id="notebook-img" class="notebook-img" src="assets/notebook.png" alt="">
 
+            <div id="content-peel" class="content-peel hidden">
+                <div class="peel-top"></div>
+                <div class="peel-back"></div>
+                <div class="peel-bottom"></div>
+            </div>
+
             <!-- Content area: positioned inside the notebook image via CSS custom properties -->
             <div class="content-area">
                 <div id="tab-content" class="tab-content">
@@ -39,8 +45,13 @@
             </div>
         </div>
 
+        <button id="leave-notebook" class="leave-btn" type="button" aria-label="Exit notebook">
+            <img class="leave-img" src="assets/leave.png" alt="">
+        </button>
+
     </div>
 
+    <script src="assets/vendor/peel.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

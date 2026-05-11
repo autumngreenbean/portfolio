@@ -89,6 +89,8 @@ const tabData = [
 
 // Generated once at init. Each entry is a number 1–99.
 let tabNumbers = [];
+let isPeelAnimating = false;
+let queuedTabIndex = null;
 
 // ========================================
 // STATE MANAGEMENT
@@ -102,8 +104,10 @@ let currentActiveTab = 0; // Index of the currently active tab
 
 const popupModal = document.getElementById('popup-modal');
 const openBtn = document.getElementById('open-popup');
+const leaveBtn = document.getElementById('leave-notebook');
 const tabStrip = document.getElementById('tab-strip');
 const tabContent = document.getElementById('tab-content');
+const contentPeel = document.getElementById('content-peel');
 
 // ========================================
 // INITIALIZATION
@@ -113,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     generateTabNumbers();
     initializeEventListeners();
     generateTabs();
-    setActiveTab(0);
+    setActiveTab(0, { animate: false });
 });
 
 // ========================================
@@ -123,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeEventListeners() {
     // Open button
     openBtn.addEventListener('click', openPopup);
+    leaveBtn.addEventListener('click', closePopup);
 
     // Arrow key navigation
     document.addEventListener('keydown', handleKeyNavigation);
@@ -141,7 +146,7 @@ function openPopup() {
     currentActiveTab = 0;
     generateTabNumbers(); // Regenerate random numbers on each open
     generateTabs();
-    setActiveTab(0);
+    setActiveTab(0, { animate: false });
 
     // Wait one frame so the browser can apply the initial state,
     // then add the open class to trigger the entrance animation.
@@ -156,6 +161,12 @@ function openPopup() {
 function closePopup() {
     popupModal.classList.remove('is-open');
     popupModal.classList.add('hidden');
+    openBtn.classList.remove('hidden');
+    isPeelAnimating = false;
+    queuedTabIndex = null;
+    contentPeel.classList.remove('is-visible');
+    contentPeel.classList.remove('is-divide');
+    contentPeel.classList.add('hidden');
 }
 
 // ========================================
@@ -262,11 +273,18 @@ function updateTabImages() {
  * Sets a tab as active and updates content
  * @param {number} index - The index of the tab to activate
  */
-function setActiveTab(index) {
+function setActiveTab(index, options = { animate: true }) {
     // Clamp index to valid range
     if (index < 0 || index >= tabData.length) {
         return;
     }
+
+    if (isPeelAnimating) {
+        queuedTabIndex = index;
+        return;
+    }
+
+    const previousIndex = currentActiveTab;
 
     // Remove active class from all tabs
     document.querySelectorAll('.tab').forEach((tab) => {
@@ -287,8 +305,117 @@ function setActiveTab(index) {
     // Update tab images based on active state
     updateTabImages();
 
-    // Update content area
-    updateContent(index);
+    const shouldAnimate =
+        options.animate !== false &&
+        previousIndex !== index &&
+        !popupModal.classList.contains('hidden');
+
+    if (shouldAnimate) {
+        animatePeelTransition(previousIndex, index);
+    } else {
+        updateContent(index);
+    }
+}
+
+function animatePeelTransition(previousIndex, nextIndex) {
+    if (!window.Peel || !Peel.supported || !contentPeel) {
+        updateContent(nextIndex);
+        return;
+    }
+
+    const topLayer = contentPeel.querySelector('.peel-top');
+    const backLayer = contentPeel.querySelector('.peel-back');
+    const bottomLayer = contentPeel.querySelector('.peel-bottom');
+
+    topLayer.innerHTML = '';
+    backLayer.innerHTML = '';
+    bottomLayer.innerHTML = '';
+
+    contentPeel.classList.remove('is-visible');
+    contentPeel.classList.add('is-divide');
+    contentPeel.classList.remove('hidden');
+    isPeelAnimating = true;
+
+    requestAnimationFrame(() => {
+        contentPeel.classList.add('is-visible');
+    });
+
+    const peel = new Peel(contentPeel, {
+        setPeelOnInit: false,
+        topShadow: false,
+        backShadow: false,
+        backReflection: false,
+        bottomShadow: false,
+        clippingBoxScale: 1
+    });
+
+    const w = contentPeel.offsetWidth || 320;
+    const h = contentPeel.offsetHeight || 220;
+
+    const tabCount = tabData.length;
+    const forwardDelta = (nextIndex - previousIndex + tabCount) % tabCount;
+    const isForward = forwardDelta !== 0 && forwardDelta <= tabCount / 2;
+
+    peel.setCorner(isForward ? Peel.Corners.TOP_RIGHT : Peel.Corners.TOP_LEFT);
+
+    if (isForward) {
+        // Forward peel: turns from right side toward left.
+        peel.setPeelPath(
+            w * 0.98, h * 0.02,
+            w * 0.76, h * 0.12,
+            w * 0.34, h * 0.62,
+            -w * 0.18, h * 0.96
+        );
+    } else {
+        // Backward peel: mirrored left-to-right motion.
+        peel.setPeelPath(
+            w * 0.02, h * 0.02,
+            w * 0.24, h * 0.12,
+            w * 0.66, h * 0.62,
+            w * 1.18, h * 0.96
+        );
+    }
+
+    peel.setFadeThreshold(0.72);
+    peel.setTimeAlongPath(0.01);
+
+    const duration = 1000;
+    const start = performance.now();
+
+    function easeInOutCubic(t) {
+        return t < 0.5
+            ? 4 * t * t * t
+            : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    }
+
+    function finish() {
+        updateContent(nextIndex);
+        contentPeel.classList.remove('is-visible');
+        contentPeel.classList.remove('is-divide');
+        contentPeel.classList.add('hidden');
+        isPeelAnimating = false;
+
+        if (queuedTabIndex !== null && queuedTabIndex !== currentActiveTab) {
+            const queued = queuedTabIndex;
+            queuedTabIndex = null;
+            setActiveTab(queued);
+        } else {
+            queuedTabIndex = null;
+        }
+    }
+
+    function step(now) {
+        const t = Math.min((now - start) / duration, 1);
+        peel.setTimeAlongPath(easeInOutCubic(t));
+
+        if (t < 1) {
+            requestAnimationFrame(step);
+        } else {
+            finish();
+        }
+    }
+
+    requestAnimationFrame(step);
 }
 
 /**

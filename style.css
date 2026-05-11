@@ -32,6 +32,10 @@
     --content-offset-x: clamp(-1000px, 20vw, 1000px);
     --content-offset-y: clamp(-1000px, 30vh, 1000px);
 
+    /* Content container size knobs (header/subheader/body wrapper). */
+    --content-box-width: min(62vw, 600px);
+    --content-box-height: min(52vh, 420px);
+
     /* ── TAB STRIP POSITION ──────────────────────────────────────────────
        Controls where the tab row sits relative to the notebook image.
        Both values are measured from the notebook's bottom-left corner.
@@ -48,6 +52,24 @@
        Height of the tab images. Width is automatic (preserves aspect ratio).
     ─────────────────────────────────────────────────────────────────── */
     --tab-height: 32px;
+
+     /* Peel bounds are relative to the notebook wrapper (percent of notebook).
+         Increase any side value to shrink the peel area inward on that side. */
+     --peel-bound-top: 15%;
+     --peel-bound-right: 13.5%;
+     --peel-bound-bottom: 7.5%;
+     --peel-bound-left: 13%;
+
+     /* Extra peel shadow control (more noticeable page-turn depth). */
+     --peel-shadow-strength: 0.5;
+     --peel-shadow-blur: 18px;
+     --peel-shadow-offset-x: 0px;
+     --peel-shadow-offset-y: 8px;
+
+    /* Leave button placement on screen (viewport-fixed). */
+    --leave-offset-x: 28px;
+    --leave-offset-y: 20px;
+    --leave-scale: 1.35;
 
      /* Shared depth shadow used by the notebook and tab art.
          Kept subtle so the pixel edges stay crisp and the assets still feel light. */
@@ -221,12 +243,73 @@ body {
 }
 
 .tab-content {
+    position: relative;
     text-align: left;
-    max-width: 600px;
+    width: var(--content-box-width);
+    max-width: var(--content-box-width);
+    height: var(--content-box-height);
+    max-height: var(--content-box-height);
     pointer-events: all;
     display: flex;
     flex-direction: column;
     gap: 12px;
+}
+
+/* Peel.js transition overlay (used only during tab changes). */
+.content-peel {
+    position: absolute;
+    top: var(--peel-bound-top);
+    right: var(--peel-bound-right);
+    bottom: var(--peel-bound-bottom);
+    left: var(--peel-bound-left);
+    z-index: 8;
+    pointer-events: none;
+    overflow: hidden;
+    clip-path: inset(0 0 0 0);
+    contain: layout paint;
+    opacity: 0;
+    transition: opacity 220ms ease;
+}
+
+.content-peel.hidden {
+    display: none;
+}
+
+.content-peel.is-visible {
+    opacity: 1;
+}
+
+/* Divide-style look during page peel animation.
+   CSS has no native "divide" blend mode, so use difference + high contrast
+   to create a similar segmented/divided visual effect. */
+.content-peel.is-divide {
+    mix-blend-mode: difference;
+    filter: contrast(1.25) saturate(1.1);
+}
+
+.content-peel .peel-top,
+.content-peel .peel-back,
+.content-peel .peel-bottom {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.content-peel .peel-top {
+    background: #fff;
+    /* Stronger page edge depth during peel. */
+    filter: drop-shadow(var(--peel-shadow-offset-x) var(--peel-shadow-offset-y) var(--peel-shadow-blur) rgba(0, 0, 0, var(--peel-shadow-strength)));
+}
+
+.content-peel .peel-back {
+    background: #f5f5f5;
+    filter: drop-shadow(calc(var(--peel-shadow-offset-x) * 0.5) calc(var(--peel-shadow-offset-y) * 0.7) calc(var(--peel-shadow-blur) * 0.65) rgba(0, 0, 0, calc(var(--peel-shadow-strength) * 0.55)));
+}
+
+.content-peel .peel-bottom {
+    background: transparent;
 }
 
 .content-header {
@@ -358,6 +441,30 @@ body {
     transform: translateY(-10px);
 }
 
+/* Leave/exit button pinned to the notebook corner. */
+.leave-btn {
+    position: fixed;
+    right: var(--leave-offset-x);
+    bottom: var(--leave-offset-y);
+    z-index: 20;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    line-height: 0;
+    transform: scale(var(--leave-scale));
+    transform-origin: center center;
+}
+
+.leave-img {
+    display: block;
+    width: auto;
+    height: 28px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    filter: var(--asset-shadow);
+}
+
 /* ========================================
    RESPONSIVE ADJUSTMENTS
    ======================================== */
@@ -406,18 +513,37 @@ body {
     }
 }
 
+
+
 @media (max-width: 430px) {
     :root {
         /* Mobile-only tuning knobs:
            - scale: overall notebook size after rotation
-           - content width: how much room the text block gets
+              - content width/height: size of the header/subheader/body container
            - tab scale: size of the tab strip on mobile
            - tab offsets: move the rotated tab stack around the notebook */
         --mobile-notebook-scale: 1.4;
+                /* Main mobile container controls (edit these first). */
         --mobile-content-width: min(46vw, 210px);
-        --mobile-tab-scale: 0.65;
+        --mobile-content-height: min(70vh, 300px);
+                --mobile-content-offset-x: 0px;
+                --mobile-content-offset-y: 10px;
+        --mobile-tab-scale: 0.58;
         --mobile-tab-offset-x: 10px;
         --mobile-tab-offset-y: -8px;
+        --leave-offset-x: 12px;
+        --leave-offset-y: 12px;
+        --leave-scale: 1;
+
+        /*  peel bounds (relative to rotated notebook wrapper). */
+        --peel-bound-top: 15%;
+        --peel-bound-right: 2.5%;
+        --peel-bound-bottom: 7.5%;
+        --peel-bound-left: 1.8%;
+
+        --peel-shadow-strength: 0.55;
+        --peel-shadow-blur: 14px;
+        --peel-shadow-offset-y: 7px;
     }
 
     .popup-modal {
@@ -445,16 +571,18 @@ body {
     /* Keep the text readable horizontally by rotating the text block back.
        These values can be nudged for small phone models. */
     .content-area {
-        top: 50%;
-        left: 50%;
+        top: calc(50% + var(--mobile-content-offset-y));
+        left: calc(50% + var(--mobile-content-offset-x));
         width: var(--mobile-content-width);
         transform: translate(-50%, -50%) rotate(90deg);
         transform-origin: center center;
     }
 
     .tab-content {
-        width: 100%;
-        max-width: none;
+        width: var(--mobile-content-width);
+        max-width: var(--mobile-content-width);
+        height: var(--mobile-content-height);
+        max-height: var(--mobile-content-height);
         gap: 8px;
     }
 
@@ -469,7 +597,9 @@ body {
     .content-body {
         font-size: 10px;
         line-height: 1.45;
-        max-height: min(29vh, 150px);
+        max-height: none;
+        min-height: 0;
+        flex: 1 1 auto;
         padding-right: 8px;
     }
 
