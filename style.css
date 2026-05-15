@@ -60,7 +60,7 @@
 
      /* Shared depth shadow used by the notebook and tab art.
          Kept subtle so the pixel edges stay crisp and the assets still feel light. */
-     --asset-shadow: drop-shadow(4px 3px 5px rgba(0, 0, 0, 255)); 
+     /* --asset-shadow: drop-shadow(4px 3px 5px rgba(0, 0, 0, 255));  */
      
      /* parameters are (offset-x, offset-y, blur-radius, color) */
 
@@ -120,7 +120,7 @@ body {
 
 .popup-modal {
     position: fixed;
-    top: 0;
+    top: -15px;
     left: 0;
     width: 100%;
     height: 100%;
@@ -140,14 +140,14 @@ body {
 
 /* Open-state animation defaults:
    - Background fades/slides up from the bottom.
-   - Notebook and tabs fade/slides down from the top. */
+    - Notebook and tabs drop in from the top, then thud into place. */
 .popup-background,
 .notebook-wrapper {
     opacity: 0;
     will-change: transform, opacity;
     transition:
-        opacity 1000ms ease,
-        transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+          opacity 320ms ease,
+          transform 980ms cubic-bezier(0.22, 0.84, 0.2, 1.2);
 }
 
 .popup-background {
@@ -155,7 +155,7 @@ body {
 }
 
 .notebook-wrapper {
-    transform: translateY(-24px);
+    transform: translateY(-182px) rotate(-1.4deg) scale(0.982);
 }
 
 .popup-modal.is-open .popup-background,
@@ -169,6 +169,7 @@ body {
 }
 
 .popup-modal.is-open .notebook-wrapper {
+    transition-timing-function: cubic-bezier(0.1, 0.98, 0.16, 1.34);
     transition-delay: 500ms;
 }
 
@@ -176,7 +177,8 @@ body {
    Tiles appear and disappear automatically as the window resizes.
    background-size: auto keeps each tile at its natural pixel size. */
 .popup-background {
-    position: fixed;
+    background: transparent;
+    /* position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -186,11 +188,11 @@ body {
     background-size: auto;
     background-position: top left;
     z-index: 1;
-    background-color: #1a1a2e; /* Fallback if tile.png hasn't loaded */
-    /* Nearest-neighbour scaling keeps 16x16 pixel art sharp at any zoom level.
-       'pixelated' is the standard; 'crisp-edges' is the Firefox fallback. */
+    background-color: #1a1a2e;
+  
     image-rendering: pixelated;
-    image-rendering: crisp-edges;
+    image-rendering: crisp-edges; 
+    */
 }
 
 /* Notebook wrapper: sizes itself to exactly the rendered notebook image.
@@ -487,7 +489,7 @@ body {
     /* Rotate the whole notebook composition left.
        Tabs travel with the notebook and end up on the right side. */
     .notebook-wrapper {
-        transform: rotate(-90deg) scale(var(--mobile-notebook-scale));
+        transform: translateY(-150px) rotate(-92deg) scale(var(--mobile-notebook-scale));
         transform-origin: center center;
     }
 
@@ -495,7 +497,7 @@ body {
        This selector must be mobile-specific because the global open-state rule
        would otherwise replace the transform with translateY(0). */
     .popup-modal.is-open .notebook-wrapper {
-        transform: rotate(-90deg) scale(var(--mobile-notebook-scale));
+        transform: translateY(0) rotate(-90deg) scale(var(--mobile-notebook-scale));
     }
 
     /* Keep the text readable horizontally by rotating the text block back.
