@@ -30,7 +30,7 @@
        - Increase --content-offset-y to move the text block further down.
     ─────────────────────────────────────────────────────────────────── */
     --content-offset-x: clamp(-1000px, 20vw, 1000px);
-    --content-offset-y: clamp(-1000px, 30vh, 1000px);
+    --content-offset-y: clamp(-1000px, 25vh, 1000px);
 
     /* Content container size knobs (header/subheader/body wrapper). */
     --content-box-width: min(62vw, 600px);
