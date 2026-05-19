@@ -228,18 +228,8 @@ function escapeHtml(str) {
 }
 
 /**
- * For date-type sheets (MM/YYYY) show the month name as the header.
- * For all other sheets (Video Games, etc.) use col B value as-is.
+ * Returns col B value as-is for all sheet types.
  */
 function resolveHeader(rawHeader) {
-    if (currentSheetName && currentSheetName.match(/^\d{2}\/\d{4}$/)) {
-        // Tab is from a date sheet — display just the month name
-        const match = currentSheetName.match(/^(\d{2})\/(\d{4})$/);
-        if (match) {
-            const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-                            'July', 'August', 'September', 'October', 'November', 'December'];
-            return MONTHS[parseInt(match[1], 10) - 1];
-        }
-    }
     return rawHeader;
 }

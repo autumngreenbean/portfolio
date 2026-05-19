@@ -5,9 +5,9 @@
  * ───────────────
  * Tab 1: Drafts   — notebook only, no script functions
  * Tab 2: Control  — script control panel
- *   B2:B*  One sheet tab name per cell (left to right). Entering a name here
- *          triggers processControlSheetUpdates() via the onEdit trigger.
- *   B3     Programmatic log: populated after a push, then B2:B* is cleared
+ *   B2:Z2  One sheet tab name per cell, reading left to right across row 2.
+ *          Entering a name in B2 triggers processControlSheetUpdates().
+ *   B3     Programmatic log: populated after a push, then B2:Z2 is cleared
  *          and B2 is reset to 'Ready for changes'.
  * Tab 3+:  Content sheets (e.g. "Video Games", "03/2025", "05/2026")
  *   Col A  Identifier. Place a single * to mark a row for update.
