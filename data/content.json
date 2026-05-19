@@ -5,7 +5,7 @@
       "03/2025",
       "05/2026"
     ],
-    "lastModified": "2026-05-19T22:51:54.570Z"
+    "lastModified": "2026-05-19T22:55:02.573Z"
   },
   "Video Games": [
     {
@@ -31,14 +31,34 @@
   ],
   "03/2025": [
     {
-      "header": "6",
-      "subheader": "",
-      "body": "I got my breakout boards for the pcm1794a DAC and the opa1612 opamp. I have to solder them. I have soldered small components before, but nothing as small as these. I need to go to the store and see if they have:\n- Solder flux\n- Solder\n- Fine tip for a soldering gun\n- A regulated soldering gun with a temp gauge\n- Another breadboard\n- Capacitors"
+      "header": "3",
+      "subheader": "Today I figured out how to automate these logs from google docs > google sheets > website. I’ve been piecing it together and finally got the front-end to work.",
+      "body": "I <3 JSON!!! Thank you, JSON!!! Now everytime I update this document it will push it automatically to my website. Isn’t that amazing?"
     },
     {
-      "header": "25",
-      "subheader": "",
-      "body": "It’s about 10 days into the commission. I’ve made successful progress in creating a custom audio player interface as well as other interactable UI elements in this wonderfully gray, blocky, nostalgic style. Suprisingly, I landed at using the Apple Music API to power it. Hopefully I’ll be done with the project in the next few days. It will be beautiful to create a documentation page. I cannot wait to share the whole project."
+      "header": "4",
+      "subheader": "Today my breakout boards for the PCM1794A DAC and opamp OPA1612 are supposed to come. But I don’t think they will. They haven’t been shipped out yet. Here is my shopping list for the electronics store:",
+      "body": "- 5V to 3.3V buck converter/step-down converter\n- Block terminals\n- Breadboards\n- 22 AWG gauge wire\n- AC plugin wire"
+    },
+    {
+      "header": "6",
+      "subheader": "I got my breakout boards for the pcm1794a DAC and the opa1612 opamp. I have to solder them. I have soldered small components before, but nothing as small as these. I need to go to the store and see if they have:",
+      "body": "- Solder flux\n- Solder\n- Fine tip for a soldering gun\n- A regulated soldering gun with a temp gauge\n- Another breadboard\n- Capacitors"
+    },
+    {
+      "header": "12",
+      "subheader": "I successfully de-soldered two XLR ports from the preamp.",
+      "body": "I used my old $15 iron that is a pathetic nub. De-soldering components is addicting. As soon as I go home today I’m going to do as many more parts as I can before I become dizzily unable."
+    },
+    {
+      "header": "29",
+      "subheader": "I saw a bald man in a barber shop getting his head shined.",
+      "body": "This was definitely the first time I’ve seen this occurrence live. The image lasted only a moment, but in my mind it will last a long time, I’m sure."
+    },
+    {
+      "header": "30",
+      "subheader": "Last night I started a new save of Pokemon FireRed. I played through all the games of this series except this one.\nMy current team (in this order) is:",
+      "body": "Mankey, Weedle, Wartortle , and Clefairy. I don’t like any of them. I’m hoping to encounter a better one soon."
     }
   ],
   "05/2026": [
