@@ -185,7 +185,7 @@ function generateTabs() {
 
         const label = document.createElement('span');
         label.className = 'tab-label';
-        label.textContent = tabNumbers[i];
+        label.textContent = item.header;
 
         div.appendChild(img);
         div.appendChild(label);
@@ -211,13 +211,25 @@ function setActiveTab(index) {
     const item = tabData[index];
     tabContent.querySelector('.content-header').textContent = resolveHeader(item.header);
     tabContent.querySelector('.content-subheader').textContent = item.subheader || '';
-    tabContent.querySelector('.content-body').textContent = item.body || '';
+    // Use innerHTML to preserve line breaks; escape content first to prevent injection
+    const bodyEl = tabContent.querySelector('.content-body');
+    bodyEl.innerHTML = escapeHtml(item.body || '').replace(/\n/g, '<br>');
 }
 
 /**
- * For date-type sheets (MM/YYYY), the header stored in col B is the raw sheet
- * name repeated or a date string — show the month name instead.
- * For Video Games (and any other sheet), use the value as-is.
+ * Escape HTML special characters for safe innerHTML insertion.
+ */
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+/**
+ * For date-type sheets (MM/YYYY) show the month name as the header.
+ * For all other sheets (Video Games, etc.) use col B value as-is.
  */
 function resolveHeader(rawHeader) {
     if (currentSheetName && currentSheetName.match(/^\d{2}\/\d{4}$/)) {
