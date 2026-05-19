@@ -5,7 +5,7 @@
       "03/2025",
       "05/2026"
     ],
-    "lastModified": "2026-05-19T22:55:02.573Z"
+    "lastModified": "2026-05-19T22:59:51.751Z"
   },
   "Video Games": [
     {
@@ -64,8 +64,8 @@
   "05/2026": [
     {
       "header": "19",
-      "subheader": "Today will mark the day of a new website restructure. I have more time on my hands, and I am very depressed. I have been playing 'Factorio' to breathe a new life.",
-      "body": ""
+      "subheader": "Today will mark the day of a new website restructure. I have more time on my hands, I am very depressed. I have been playing 'Factorio' to breathe a new life.",
+      "body": "Good news - updating my website from an excel sheet has never been more automated than it is now. Separating these two processes, I can focus more on the front-end. I can make it much more snazzy. Yippee! I have always wanted a true hub to host all the information I like, and as a subconscious dump."
     }
   ]
 }
