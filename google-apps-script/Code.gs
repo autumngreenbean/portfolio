@@ -43,6 +43,208 @@ function getConfig() {
   };
 }
 
+// ============================================================
+// FIRST-TIME INIT: Populate data/content.json from all sheets
+// ============================================================
+
+/**
+ * Run ONCE to push all sheet data to data/content.json on GitHub.
+ * Skips 'Drafts' and 'Control' sheets.
+ * Run: Extensions > Apps Script > initializeJSONFromSheet
+ */
+function initializeJSONFromSheet() {
+  const config = getConfig();
+  if (!config.githubToken) throw new Error('GITHUB_TOKEN not set in Script Properties.');
+
+  const data = buildContentJSON();
+
+  const getUrl = `https://api.github.com/repos/${config.githubRepo}/contents/${config.githubFilePath}`;
+  const authHeaders = {
+    'Authorization': 'token ' + config.githubToken,
+    'Accept': 'application/vnd.github.v3+json'
+  };
+
+  const getRes = UrlFetchApp.fetch(getUrl, { method: 'get', headers: authHeaders, muteHttpExceptions: true });
+  let sha = null;
+  if (getRes.getResponseCode() === 200) {
+    sha = JSON.parse(getRes.getContentText()).sha;
+  }
+
+  const payload = {
+    message: 'Initialize JSON cache from Google Sheets',
+    content: Utilities.base64Encode(JSON.stringify(data, null, 2)),
+    branch: config.githubBranch
+  };
+  if (sha) payload.sha = sha;
+
+  const putRes = UrlFetchApp.fetch(getUrl, {
+    method: 'put',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, authHeaders),
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+
+  if (putRes.getResponseCode() === 200 || putRes.getResponseCode() === 201) {
+    SpreadsheetApp.getUi().alert('✅ JSON cache initialized on GitHub.');
+  } else {
+    throw new Error('GitHub push failed: ' + putRes.getContentText());
+  }
+}
+
+// ============================================================
+// INCREMENTAL UPDATE: Process asterisk-marked rows via Control
+// ============================================================
+
+/**
+ * Reads sheet names from Control!B2:B* (one per cell, stop at first empty).
+ * For each sheet, finds rows where col A = '*', collects col B/C/D,
+ * removes the asterisk, updates JSON on GitHub, logs to Control!B3,
+ * then resets Control!B2 to 'Ready for changes'.
+ */
+function processControlSheetUpdates() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const control = ss.getSheetByName('Control');
+  if (!control) throw new Error('"Control" sheet not found.');
+
+  // Collect sheet names from B2 downward
+  const markedSheets = [];
+  const ctrlVals = control.getRange('B2:B100').getValues();
+  for (let i = 0; i < ctrlVals.length; i++) {
+    const name = String(ctrlVals[i][0] || '').trim();
+    if (!name) break;
+    markedSheets.push(name);
+  }
+
+  if (markedSheets.length === 0) {
+    SpreadsheetApp.getUi().alert('No sheet names found in Control B2:B*');
+    return;
+  }
+
+  const changedLog = [];
+
+  for (const sheetName of markedSheets) {
+    const sheet = ss.getSheetByName(sheetName);
+    if (!sheet) { console.warn('Sheet not found: ' + sheetName); continue; }
+
+    const rows = sheet.getDataRange().getValues();
+    const entries = [];
+
+    for (let r = 0; r < rows.length; r++) {
+      if (String(rows[r][0] || '').trim() !== '*') continue;
+      entries.push({
+        header:    String(rows[r][1] || '').trim(),
+        subheader: String(rows[r][2] || '').trim(),
+        body:      String(rows[r][3] || '').trim()
+      });
+      sheet.getRange(r + 1, 1).setValue(''); // remove asterisk
+      changedLog.push(`${sheetName}!A${r + 1}`);
+    }
+
+    if (entries.length > 0) updateJSONForSheet(sheetName, entries);
+  }
+
+  // Write log to Control!B3
+  const logMsg = changedLog.length
+    ? `Updated ${markedSheets.join(', ')} | Cells: ${changedLog.join(', ')} | ${new Date().toLocaleString()}`
+    : `No asterisk rows found in: ${markedSheets.join(', ')} | ${new Date().toLocaleString()}`;
+  control.getRange('B3').setValue(logMsg);
+
+  // Clear B2:B* and reset B2
+  control.getRange('B2:B100').clearContent();
+  control.getRange('B2').setValue('Ready for changes');
+
+  SpreadsheetApp.getUi().alert('✅ Updates complete.\n\n' + logMsg);
+}
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+/**
+ * Builds a full content JSON object from all sheets except Drafts/Control.
+ * Columns: A=identifier, B=header, C=subheader, D=body.
+ * Skips rows with empty col B (excluding row 1 header row).
+ */
+function buildContentJSON() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const data = { _metadata: { sheets: [], lastModified: new Date().toISOString() } };
+
+  for (const sheet of ss.getSheets()) {
+    const name = sheet.getName();
+    if (name === 'Drafts' || name === 'Control') continue;
+
+    const rows = sheet.getDataRange().getValues();
+    const entries = [];
+
+    for (let r = 1; r < rows.length; r++) { // skip row 0 (header)
+      const header = String(rows[r][1] || '').trim();
+      if (!header) continue;
+      entries.push({
+        header,
+        subheader: String(rows[r][2] || '').trim(),
+        body:      String(rows[r][3] || '').trim()
+      });
+    }
+
+    if (entries.length > 0) {
+      data[name] = entries;
+      data._metadata.sheets.push(name);
+    }
+  }
+
+  return data;
+}
+
+/**
+ * Fetches current data/content.json from GitHub, merges the updated sheet entries,
+ * and pushes the result back.
+ */
+function updateJSONForSheet(sheetName, entries) {
+  const config = getConfig();
+  if (!config.githubToken) throw new Error('GITHUB_TOKEN not set in Script Properties.');
+
+  const url = `https://api.github.com/repos/${config.githubRepo}/contents/${config.githubFilePath}`;
+  const headers = {
+    'Authorization': 'token ' + config.githubToken,
+    'Accept': 'application/vnd.github.v3+json'
+  };
+
+  const getRes = UrlFetchApp.fetch(url, { method: 'get', headers, muteHttpExceptions: true });
+  let current = { _metadata: { sheets: [], lastModified: '' } };
+  let sha = null;
+
+  if (getRes.getResponseCode() === 200) {
+    const parsed = JSON.parse(getRes.getContentText());
+    sha = parsed.sha;
+    const decoded = Utilities.base64Decode(parsed.content);
+    current = JSON.parse(Utilities.newBlob(decoded).getAsString());
+  }
+
+  current[sheetName] = entries;
+  current._metadata = current._metadata || {};
+  current._metadata.lastModified = new Date().toISOString();
+  if (!current._metadata.sheets) current._metadata.sheets = [];
+  if (!current._metadata.sheets.includes(sheetName)) current._metadata.sheets.push(sheetName);
+
+  const payload = {
+    message: `Update ${sheetName} from Google Sheets`,
+    content: Utilities.base64Encode(JSON.stringify(current, null, 2)),
+    branch: config.githubBranch,
+    sha
+  };
+
+  const putRes = UrlFetchApp.fetch(url, {
+    method: 'put',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+    payload: JSON.stringify(payload),
+    muteHttpExceptions: true
+  });
+
+  if (putRes.getResponseCode() !== 200 && putRes.getResponseCode() !== 201) {
+    throw new Error(`GitHub push failed for ${sheetName}: ` + putRes.getContentText());
+  }
+}
+
 /**
  * Install trigger to auto-update GitHub on sheet edit
  * Run this function once: Run > installTrigger

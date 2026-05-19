@@ -1,164 +1,147 @@
 /* ========================================
    POP-UP INTERFACE SCRIPT
-   Front-end proof of concept
+   Loads data from data/content.json
    ======================================== */
 
 // ========================================
-// DATA: HARDCODED DUMMY TAB CONTENT
-// Tab labels are random numbers generated at init.
-// Single-digit (1–9) use tab-single-unit assets.
-// Double-digit (10–99) use tab-double-unit assets.
+// GLOBAL STATE
 // ========================================
 
-const tabData = [
-    {
-        header: 'Header Tab 1',
-        subheader: 'Subheader Tab 1',
-        body: 'Body Tab 1xt ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shext ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shext ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shext ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shext ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shext ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shext ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset shext ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset she'
-    },
-    {
-        header: 'Header Tab 2',
-        subheader: 'Subheader Tab 2',
-        body: 'Body Tab 2'
-    },
-    {
-        header: 'Header Tab 3',
-        subheader: 'Subheader Tab 3',
-        body: 'Body Tab 3'
-    },
-    {
-        header: 'Header Tab 4',
-        subheader: 'Subheader Tab 4',
-        body: 'Body Tab 4'
-    },
-    {
-        header: 'Header Tab 5',
-        subheader: 'Subheader Tab 5',
-        body: 'Body Tab 5'
-    }
-    ,    {
-        header: 'Header Tab 1',
-        subheader: 'Subheader Tab 1',
-        body: 'Body Tab 1'
-    },
-    {
-        header: 'Header Tab 2',
-        subheader: 'Subheader Tab 2',
-        body: 'Body Tab 2'
-    },
-    {
-        header: 'Header Tab 3',
-        subheader: 'Subheader Tab 3',
-        body: 'Body Tab 3'
-    },
-    {
-        header: 'Header Tab 4',
-        subheader: 'Subheader Tab 4',
-        body: 'Body Tab 4'
-    },
-    {
-        header: 'Header Tab 5',
-        subheader: 'Subheader Tab 5',
-        body: 'Body Tab 5'
-    },    {
-        header: 'Header Tab 1',
-        subheader: 'Subheader Tab 1',
-        body: 'Body Tab 1'
-    },
-    {
-        header: 'Header Tab 2',
-        subheader: 'Subheader Tab 2',
-        body: 'Body Tab 2'
-    },
-    {
-        header: 'Header Tab 3',
-        subheader: 'Subheader Tab 3',
-        body: 'Body Tab 3'
-    },
-    {
-        header: 'Header Tab 4',
-        subheader: 'Subheader Tab 4',
-        body: 'Body Tab 4'
-    },
-    {
-        header: 'Header Tab 5',
-        subheader: 'Subheader Tab 5',
-        body: 'Body Tab 5'
-    }
-];
-
-// Generated once at init. Each entry is a number 1–99.
+let contentData = {};
+let currentSheetName = null;
+let tabData = [];
 let tabNumbers = [];
-
-// ========================================
-// STATE MANAGEMENT
-// ========================================
-
-let currentActiveTab = 0; // Index of the currently active tab
+let currentActiveTab = 0;
 
 // ========================================
 // DOM ELEMENT REFERENCES
 // ========================================
 
 const popupModal = document.getElementById('popup-modal');
-const openBtn = document.getElementById('open-popup');
 const leaveBtn = document.getElementById('leave-notebook');
 const tabStrip = document.getElementById('tab-strip');
 const tabContent = document.getElementById('tab-content');
+const pageContainer = document.querySelector('.page-container');
 
 // ========================================
 // INITIALIZATION
 // ========================================
 
-document.addEventListener('DOMContentLoaded', () => {
-    generateTabNumbers();
-    initializeEventListeners();
-    generateTabs();
-    setActiveTab(0);
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await loadContentJSON();
+        createSheetButtons();
+        initializeEventListeners();
+    } catch (error) {
+        console.error('Failed to initialize:', error);
+        pageContainer.innerHTML = '<p style="color:red;">Failed to load content. Please refresh.</p>';
+    }
 });
 
 // ========================================
-// EVENT LISTENER SETUP
+// JSON LOADING
 // ========================================
 
-function initializeEventListeners() {
-    // Open button
-    openBtn.addEventListener('click', openPopup);
-    leaveBtn.addEventListener('click', closePopup);
-
-    // Arrow key navigation
-    document.addEventListener('keydown', handleKeyNavigation);
+async function loadContentJSON() {
+    const response = await fetch('data/content.json');
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    contentData = await response.json();
+    console.log('Content JSON loaded');
 }
 
 // ========================================
-// POP-UP CONTROL
+// LANDING PAGE BUTTONS
 // ========================================
 
 /**
- * Opens the pop-up modal
+ * Creates one button per sheet tab from _metadata.sheets.
+ * Date sheets (MM/YYYY) are labelled "Jan 2025" style.
  */
-function openPopup() {
-    popupModal.classList.remove('hidden');
-    openBtn.classList.add('hidden');
+function createSheetButtons() {
+    const sheetNames = contentData._metadata?.sheets || [];
+
+    if (sheetNames.length === 0) {
+        pageContainer.innerHTML = '<p>No content sheets available.</p>';
+        return;
+    }
+
+    pageContainer.innerHTML = '';
+
+    const container = document.createElement('div');
+    container.className = 'sheet-buttons';
+
+    for (const sheetName of sheetNames) {
+        const btn = document.createElement('button');
+        btn.className = 'sheet-button';
+        btn.textContent = formatSheetLabel(sheetName);
+        btn.onclick = () => openSheetNotebook(sheetName);
+        container.appendChild(btn);
+    }
+
+    pageContainer.appendChild(container);
+}
+
+/**
+ * Format sheet name for button label.
+ * MM/YYYY → "Month YYYY"   |   anything else → as-is
+ */
+function formatSheetLabel(name) {
+    const match = name.match(/^(\d{2})\/(\d{4})$/);
+    if (match) {
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+        return `${MONTHS[parseInt(match[1], 10) - 1]} ${match[2]}`;
+    }
+    return name;
+}
+
+// ========================================
+// OPEN / CLOSE NOTEBOOK
+// ========================================
+
+function openSheetNotebook(sheetName) {
+    tabData = contentData[sheetName] || [];
+    if (tabData.length === 0) return;
+
+    currentSheetName = sheetName;
     currentActiveTab = 0;
-    generateTabNumbers(); // Regenerate random numbers on each open
+    generateTabNumbers();
+
+    pageContainer.style.display = 'none';
+    popupModal.classList.remove('hidden');
     generateTabs();
     setActiveTab(0);
 
-    // Wait one frame so the browser can apply the initial state,
-    // then add the open class to trigger the entrance animation.
-    requestAnimationFrame(() => {
-        popupModal.classList.add('is-open');
-    });
+    requestAnimationFrame(() => popupModal.classList.add('is-open'));
 }
 
-/**
- * Closes the pop-up modal
- */
 function closePopup() {
     popupModal.classList.remove('is-open');
     popupModal.classList.add('hidden');
-    openBtn.classList.remove('hidden');
+    pageContainer.style.display = 'flex';
+    currentSheetName = null;
+    tabData = [];
+}
+
+// ========================================
+// EVENT LISTENERS
+// ========================================
+
+function initializeEventListeners() {
+    leaveBtn.addEventListener('click', closePopup);
+    document.addEventListener('keydown', handleKeyNavigation);
+}
+
+function handleKeyNavigation(event) {
+    if (popupModal.classList.contains('hidden')) return;
+
+    if (event.key === 'ArrowLeft') {
+        const i = currentActiveTab - 1;
+        setActiveTab(i < 0 ? tabData.length - 1 : i);
+    } else if (event.key === 'ArrowRight') {
+        const i = currentActiveTab + 1;
+        setActiveTab(i >= tabData.length ? 0 : i);
+    }
 }
 
 // ========================================
@@ -166,185 +149,85 @@ function closePopup() {
 // ========================================
 
 /**
- * Generates random numbers for each tab.
- * Each number is either single-digit (1–9) or double-digit (10–99).
- * 50/50 chance per tab.
+ * Assigns each tab a random display number (1–9 or 10–99).
+ * Single-digit → tab-single-unit asset; double-digit → tab-double-unit asset.
  */
 function generateTabNumbers() {
-    tabNumbers = tabData.map(() => {
-        return Math.random() < 0.5
-            ? Math.floor(Math.random() * 9) + 1    // 1–9  → single-unit asset
-            : Math.floor(Math.random() * 90) + 10; // 10–99 → double-unit asset
-    });
+    tabNumbers = tabData.map(() =>
+        Math.random() < 0.5
+            ? Math.floor(Math.random() * 9) + 1      // 1–9
+            : Math.floor(Math.random() * 90) + 10    // 10–99
+    );
 }
 
-/**
- * Returns the correct asset path for a tab based on its number and active state.
- * Single-digit numbers (1–9) use tab-single-unit assets.
- * Double-digit numbers (10–99) use tab-double-unit assets.
- * Active tabs use the _invert variant.
- * @param {number} number - The tab's numeric label
- * @param {boolean} isActive - Whether this tab is currently active
- * @returns {string} Asset path
- */
 function getTabAsset(number, isActive) {
-    const isDouble = number >= 10;
-    const variant = isActive ? '_invert' : '';
-    return isDouble
-        ? `assets/tab-double-unit${variant}.png`
-        : `assets/tab-single-unit${variant}.png`;
+    const unit = number >= 10 ? 'double' : 'single';
+    const invert = isActive ? '_invert' : '';
+    return `assets/tab-${unit}-unit${invert}.png`;
 }
 
 // ========================================
 // TAB GENERATION
 // ========================================
 
-/**
- * Generates all tabs dynamically from tabData
- */
 function generateTabs() {
-    tabStrip.innerHTML = ''; // Clear existing tabs
+    tabStrip.innerHTML = '';
 
-    tabData.forEach((tab, index) => {
-        const tabElement = createTabElement(tabNumbers[index], index);
-        tabStrip.appendChild(tabElement);
-    });
-}
+    tabData.forEach((item, i) => {
+        const div = document.createElement('div');
+        div.className = 'tab';
+        div.dataset.tabIndex = i;
 
-/**
- * Creates a single tab element: one image asset with a number label centered on top.
- * @param {number} number - The numeric label for this tab
- * @param {number} index - The tab index
- * @returns {HTMLElement} - The tab element
- */
-function createTabElement(number, index) {
-    const tab = document.createElement('div');
-    tab.className = 'tab';
-    tab.dataset.tabIndex = index;
-    tab.dataset.tabNumber = number; // stored so updateTabImages() can pick the right asset
+        const img = document.createElement('img');
+        img.className = 'tab-img';
+        img.src = getTabAsset(tabNumbers[i], i === currentActiveTab);
+        img.alt = '';
 
-    // Tab image: single asset (no three-part composition)
-    const img = document.createElement('img');
-    img.className = 'tab-img';
-    img.src = getTabAsset(number, false);
-    img.alt = '';
+        const label = document.createElement('span');
+        label.className = 'tab-label';
+        label.textContent = tabNumbers[i];
 
-    // Number label centered over the tab image
-    const label = document.createElement('span');
-    label.className = 'tab-label';
-    label.textContent = number;
-
-    tab.appendChild(img);
-    tab.appendChild(label);
-
-    tab.addEventListener('click', () => {
-        setActiveTab(index);
-    });
-
-    return tab;
-}
-
-/**
- * Updates every tab's image src based on whether it is active or not.
- */
-function updateTabImages() {
-    document.querySelectorAll('.tab').forEach((tab) => {
-        const index = parseInt(tab.dataset.tabIndex);
-        const number = parseInt(tab.dataset.tabNumber);
-        const isActive = index === currentActiveTab;
-        const img = tab.querySelector('.tab-img');
-        img.src = getTabAsset(number, isActive);
+        div.appendChild(img);
+        div.appendChild(label);
+        div.onclick = () => setActiveTab(i);
+        tabStrip.appendChild(div);
     });
 }
 
 // ========================================
-// TAB SWITCHING & CONTENT UPDATES
+// TAB SWITCHING & CONTENT
 // ========================================
 
-/**
- * Sets a tab as active and updates content
- * @param {number} index - The index of the tab to activate
- */
 function setActiveTab(index) {
-    // Clamp index to valid range
-    if (index < 0 || index >= tabData.length) {
-        return;
-    }
-
-    // Remove active class from all tabs
-    document.querySelectorAll('.tab').forEach((tab) => {
-        tab.classList.remove('active');
-    });
-
-    // Set new active tab
-    const activeTabElement = document.querySelector(
-        `.tab[data-tab-index="${index}"]`
-    );
-    if (activeTabElement) {
-        activeTabElement.classList.add('active');
-    }
-
-    // Update current active tab state
+    if (index < 0 || index >= tabData.length) return;
     currentActiveTab = index;
 
-    // Update tab images based on active state
-    updateTabImages();
+    // Update all tab images
+    document.querySelectorAll('.tab').forEach((tab, i) => {
+        tab.querySelector('.tab-img').src = getTabAsset(tabNumbers[i], i === index);
+    });
 
-    updateContent(index);
+    // Render content
+    const item = tabData[index];
+    tabContent.querySelector('.content-header').textContent = resolveHeader(item.header);
+    tabContent.querySelector('.content-subheader').textContent = item.subheader || '';
+    tabContent.querySelector('.content-body').textContent = item.body || '';
 }
 
 /**
- * Updates the content area based on the active tab
- * @param {number} index - The index of the active tab
+ * For date-type sheets (MM/YYYY), the header stored in col B is the raw sheet
+ * name repeated or a date string — show the month name instead.
+ * For Video Games (and any other sheet), use the value as-is.
  */
-function updateContent(index) {
-    const tab = tabData[index];
-
-    const headerEl = tabContent.querySelector('.content-header');
-    const subheaderEl = tabContent.querySelector('.content-subheader');
-    const bodyEl = tabContent.querySelector('.content-body');
-
-    if (headerEl) headerEl.textContent = tab.header;
-    if (subheaderEl) subheaderEl.textContent = tab.subheader;
-    if (bodyEl) bodyEl.textContent = tab.body;
-}
-
-// ========================================
-// KEYBOARD NAVIGATION
-// ========================================
-
-/**
- * Handles Left/Right arrow key navigation
- * @param {KeyboardEvent} event - The keyboard event
- */
-function handleKeyNavigation(event) {
-    // Only handle if pop-up is open
-    if (popupModal.classList.contains('hidden')) {
-        return;
+function resolveHeader(rawHeader) {
+    if (currentSheetName && currentSheetName.match(/^\d{2}\/\d{4}$/)) {
+        // Tab is from a date sheet — display just the month name
+        const match = currentSheetName.match(/^(\d{2})\/(\d{4})$/);
+        if (match) {
+            const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+            return MONTHS[parseInt(match[1], 10) - 1];
+        }
     }
-
-    if (event.key === 'ArrowLeft') {
-        event.preventDefault();
-        navigateTabs(-1);
-    } else if (event.key === 'ArrowRight') {
-        event.preventDefault();
-        navigateTabs(1);
-    }
-}
-
-/**
- * Navigates to the next or previous tab
- * @param {number} direction - Direction to navigate (1 for next, -1 for previous)
- */
-function navigateTabs(direction) {
-    const nextIndex = currentActiveTab + direction;
-
-    // Wrap around
-    if (nextIndex < 0) {
-        setActiveTab(tabData.length - 1);
-    } else if (nextIndex >= tabData.length) {
-        setActiveTab(0);
-    } else {
-        setActiveTab(nextIndex);
-    }
+    return rawHeader;
 }
