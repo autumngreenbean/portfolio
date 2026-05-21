@@ -65,7 +65,8 @@ function onControlEdit(e) {
   if (sheet.getName() !== 'Control') return;
   if (e.range.getColumn() !== 2) return;       // must be col B
   if (e.range.getRow() < 2) return;            // must be row 2+
-  if (!e.value || !String(e.value).trim()) return; // must have content
+  // Use getDisplayValue() — e.value is unreliable for date/number cells
+  if (!e.range.getDisplayValue().trim()) return;
 
   processControlSheetUpdates();
 }
@@ -111,10 +112,11 @@ function processControlSheetUpdates() {
   if (!control) throw new Error('"Control" sheet not found.');
 
   // Collect sheet names from row 2 horizontally: B2, C2, D2, ... (stop at first blank)
+  // getDisplayValues() always returns strings — avoids date/number conversion issues
   const markedSheets = [];
-  const ctrlRow = control.getRange('B2:Z2').getValues()[0];
+  const ctrlRow = control.getRange('B2:Z2').getDisplayValues()[0];
   for (let i = 0; i < ctrlRow.length; i++) {
-    const name = String(ctrlRow[i] || '').trim();
+    const name = ctrlRow[i].trim();
     if (!name) break;
     markedSheets.push(name);
   }
@@ -224,7 +226,7 @@ function _mergeSheetIntoJSON(config, sheetName, entries) {
   if (getRes.getResponseCode() === 200) {
     const parsed = JSON.parse(getRes.getContentText());
     sha = parsed.sha;
-    current = JSON.parse(Utilities.newBlob(Utilities.base64Decode(parsed.content)).getAsString());
+    current = JSON.parse(Utilities.newBlob(Utilities.base64Decode(parsed.content)).getDataAsString());
   }
 
   current[sheetName] = entries;
