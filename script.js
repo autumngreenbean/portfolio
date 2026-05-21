@@ -149,14 +149,16 @@ function handleKeyNavigation(event) {
 // ========================================
 
 /**
- * Assigns each tab a random display number (1–9 or 10–99).
- * Single-digit → tab-single-unit asset; double-digit → tab-double-unit asset.
+ * Assigns each tab a display number.
+ * Date sheets (MM/YYYY): parses the entry header as the day number (1–31).
+ *   Single-digit (1–9)  → tab-single-unit asset.
+ *   Double-digit (10–31) → tab-double-unit asset.
+ * Non-date sheets (e.g. "Video Games"): uses null → CSS adaptive text tab.
  */
 function generateTabNumbers() {
-    tabNumbers = tabData.map(() =>
-        Math.random() < 0.5
-            ? Math.floor(Math.random() * 9) + 1      // 1–9
-            : Math.floor(Math.random() * 90) + 10    // 10–99
+    const isDateSheet = /^\d{2}\/\d{4}$/.test(currentSheetName);
+    tabNumbers = tabData.map(item =>
+        isDateSheet ? parseInt(item.header, 10) : null
     );
 }
 
@@ -176,19 +178,34 @@ function generateTabs() {
     tabData.forEach((item, i) => {
         const div = document.createElement('div');
         div.className = 'tab';
+        if (i === currentActiveTab) div.classList.add('active');
         div.dataset.tabIndex = i;
 
-        const img = document.createElement('img');
-        img.className = 'tab-img';
-        img.src = getTabAsset(tabNumbers[i], i === currentActiveTab);
-        img.alt = '';
+        const tabNum = tabNumbers[i];
 
-        const label = document.createElement('span');
-        label.className = 'tab-label';
-        label.textContent = item.header;
+        if (tabNum === null) {
+            // Non-date sheet: CSS-styled adaptive text tab (no image asset).
+            div.classList.add('text-tab');
 
-        div.appendChild(img);
-        div.appendChild(label);
+            const label = document.createElement('span');
+            label.className = 'tab-label';
+            label.textContent = item.header;
+            div.appendChild(label);
+        } else {
+            // Date sheet: image asset sized to the day number.
+            const img = document.createElement('img');
+            img.className = 'tab-img';
+            img.src = getTabAsset(tabNum, i === currentActiveTab);
+            img.alt = '';
+
+            const label = document.createElement('span');
+            label.className = 'tab-label';
+            label.textContent = String(tabNum);
+
+            div.appendChild(img);
+            div.appendChild(label);
+        }
+
         div.onclick = () => setActiveTab(i);
         tabStrip.appendChild(div);
     });
@@ -202,10 +219,26 @@ function setActiveTab(index) {
     if (index < 0 || index >= tabData.length) return;
     currentActiveTab = index;
 
-    // Update all tab images
+    // Toggle active class and update image assets for date tabs
+    let activeTabEl = null;
     document.querySelectorAll('.tab').forEach((tab, i) => {
-        tab.querySelector('.tab-img').src = getTabAsset(tabNumbers[i], i === index);
+        const isActive = i === index;
+        tab.classList.toggle('active', isActive);
+        if (isActive) activeTabEl = tab;
+
+        const img = tab.querySelector('.tab-img');
+        if (img) {
+            img.src = getTabAsset(tabNumbers[i], isActive);
+        }
     });
+
+    // Scroll so the active tab sits at the LEFT edge of the strip.
+    // Deferred to rAF so offsetLeft is resolved after the browser lays out the tabs.
+    if (activeTabEl) {
+        requestAnimationFrame(() => {
+            tabStrip.scrollTo({ left: activeTabEl.offsetLeft, behavior: 'smooth' });
+        });
+    }
 
     // Render content
     const item = tabData[index];

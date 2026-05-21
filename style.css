@@ -373,6 +373,33 @@ body {
     transform: translateY(-10px);
 }
 
+/* Text tab: CSS-styled, adaptive-width tab for non-date sheets (e.g. Video Games).
+   Width is automatic — the inline-flex container grows to fit the label text + padding.
+   No image asset is used; the border and fill replicate the pixel art tab aesthetic. */
+.tab.text-tab {
+    height: var(--tab-height);
+    background: #fff;
+    border: 2px solid #000;
+    padding: 0 10px;
+}
+
+/* Un-absolute the label so the flex container auto-sizes around it. */
+.tab.text-tab .tab-label {
+    position: static;
+    transform: none;
+    font-size: 13px;
+    color: #000;
+}
+
+/* Active text tab: invert fill to mirror the _invert image asset convention. */
+.tab.text-tab.active {
+    background: #000;
+}
+
+.tab.text-tab.active .tab-label {
+    color: #fff;
+}
+
 /* Leave/exit button pinned to the notebook corner. */
 .leave-btn {
     position: fixed;
@@ -462,7 +489,11 @@ body {
                 --mobile-content-offset-y: 10px;
         --mobile-tab-scale: 0.58;
         --mobile-tab-offset-x: 10px;
-        --mobile-tab-offset-y: -8px;
+        --mobile-tab-offset-y: -16px;
+        /* Width of the scrollable tab strip in pre-scale CSS pixels.
+           After scale(--mobile-tab-scale) the visible width = this ÷ scale.
+           Increase to reveal more of the tab collection at once. */
+        --mobile-tab-strip-width: calc(95vw / var(--mobile-tab-scale));
         --leave-offset-x: 12px;
         --leave-offset-y: 12px;
         --leave-scale: 1;
@@ -541,6 +572,18 @@ body {
         bottom: var(--mobile-tab-offset-y);
         left: var(--mobile-tab-offset-x);
         gap: 4px;
+        /* Scrollable tab strip: pre-scale CSS width so the visible window
+           after scale(--mobile-tab-scale) equals --mobile-tab-strip-width.
+           Tune --mobile-tab-strip-width in :root above to show more/fewer tabs. */
+        width: var(--mobile-tab-strip-width);
+        overflow-x: auto;
+        scroll-behavior: smooth;
+        flex-wrap: nowrap;
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .tab-strip::-webkit-scrollbar {
+        display: none; /* Chrome / Safari */
     }
 
     .tab-img {
