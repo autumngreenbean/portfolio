@@ -494,6 +494,14 @@ body {
            After scale(--mobile-tab-scale) the visible width = this ÷ scale.
            Increase to reveal more of the tab collection at once. */
         --mobile-tab-strip-width: calc(95vw / var(--mobile-tab-scale));
+        /* Independent vertical nudge for each tab type (margin-bottom within strip).
+           Positive = pushes tab upward away from the strip baseline.
+           Tune these to align date tabs and text tabs separately. */
+        --mobile-date-tab-nudge: 10px;
+        --mobile-text-tab-nudge: 10px;
+        /* Height of text tabs on mobile. Defaults to match the date tab image
+           height (24px) so both types sit at the same baseline. */
+        --mobile-text-tab-height: 24px;
         --leave-offset-x: 12px;
         --leave-offset-y: 12px;
         --leave-scale: 1;
@@ -588,6 +596,17 @@ body {
 
     .tab-img {
         height: 24px;
+    }
+
+    /* Date tabs: independent vertical nudge within the strip. */
+    .tab:not(.text-tab) {
+        margin-bottom: var(--mobile-date-tab-nudge);
+    }
+
+    /* Text tabs: match date tab height and apply independent nudge. */
+    .tab.text-tab {
+        height: var(--mobile-text-tab-height);
+        margin-bottom: var(--mobile-text-tab-nudge);
     }
 
     .tab-label {
