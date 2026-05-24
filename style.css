@@ -80,16 +80,47 @@ body {
     overflow: hidden;
 }
 
+/* Lift any direct body text above the z-index:0 background layer */
+body > p {
+    position: relative;
+    z-index: 1;
+}
+
+/* Full-viewport background image, always present.
+   .blurred is toggled by JS when a notebook is opened/closed. */
+.page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: url('assets/homepage-prototype.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    image-rendering: pixelated;
+    filter: blur(0px);
+    transform: scale(1);
+    transition: filter 600ms ease, transform 600ms ease;
+    will-change: filter, transform;
+}
+
+.page-bg.blurred {
+    filter: blur(3px);
+    /* Scale up slightly so blur doesn't expose hard edges at the viewport border */
+    transform: scale(1.06);
+}
+
 /* ========================================
    PAGE CONTAINER & BUTTON
    ======================================== */
 
 .page-container {
+    position: relative;
+    z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f0f0f0;
+    background-color: transparent;
 }
 
 .open-btn {
@@ -502,6 +533,13 @@ body {
         /* Height of text tabs on mobile. Defaults to match the date tab image
            height (24px) so both types sit at the same baseline. */
         --mobile-text-tab-height: 24px;
+        /* Background crop for mobile.
+           background-size: cover fills the viewport; position controls which
+           part of the image is visible. 50% 50% = centered, 0% 0% = top-left,
+           100% 100% = bottom-right. */
+        --mobile-bg-size: cover;
+        --mobile-bg-x: 50%;
+        --mobile-bg-y: 50%;
         --leave-offset-x: 12px;
         --leave-offset-y: 12px;
         --leave-scale: 1;
@@ -519,6 +557,11 @@ body {
 
     .popup-modal {
         overflow: visible;
+    }
+
+    .page-bg {
+        background-size: var(--mobile-bg-size);
+        background-position: var(--mobile-bg-x) var(--mobile-bg-y);
     }
 
     .popup-background {

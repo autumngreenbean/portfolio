@@ -18,6 +18,7 @@ let currentActiveTab = 0;
 // ========================================
 
 const popupModal = document.getElementById('popup-modal');
+const pageBg = document.getElementById('page-bg');
 const leaveBtn = document.getElementById('leave-notebook');
 const tabStrip = document.getElementById('tab-strip');
 const tabContent = document.getElementById('tab-content');
@@ -109,6 +110,7 @@ function openSheetNotebook(sheetName) {
 
     pageContainer.style.display = 'none';
     popupModal.classList.remove('hidden');
+    pageBg.classList.add('blurred');
     generateTabs();
     setActiveTab(0);
 
@@ -118,6 +120,7 @@ function openSheetNotebook(sheetName) {
 function closePopup() {
     popupModal.classList.remove('is-open');
     popupModal.classList.add('hidden');
+    pageBg.classList.remove('blurred');
     pageContainer.style.display = 'flex';
     currentSheetName = null;
     tabData = [];

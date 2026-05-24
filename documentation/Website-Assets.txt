@@ -1,0 +1,7 @@
+Website-Assets
+
+**splashpage**
+- Drawers opening 
+- Highlighted items 
+- Narration on top bar (you opened the notebook, the time is 12:00pm. 
+- file cabinet in the back easter egg - themes?
