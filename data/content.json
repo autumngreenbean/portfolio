@@ -3,9 +3,10 @@
     "sheets": [
       "Video Games",
       "03/2025",
-      "05/2026"
+      "05/2026",
+      "06/2026"
     ],
-    "lastModified": "2026-05-27T08:47:57.022Z"
+    "lastModified": "2026-05-27T08:48:06.062Z"
   },
   "Video Games": [
     {
@@ -96,6 +97,13 @@
       "header": "27",
       "subheader": "The parts have arrived. It's time to assemble.",
       "body": "I have plans to livestream and assemble, while my friends play a DJ set. I am still on my Factorio grind, but I'm secretly hoping my friend's interest falls of so I can focus on making things again. Even though it is my own volition that can create things for myself, I am extremely influenced and will pursue even the littlest hint of someone else's curiosities. Games like Factorio are especially dangerous because it seems like it scales endlessly. \n\nI want the clout of finishing the Space Age DLC, or even getting to the point where I can start it. I won't be upset if I continue playing. I am pacing myself well in terms of project management, but I could be having more productive nighttime activities. My media consumption is down - which isn't necessarily a bad thing, but I haven't read any type of written media in a long time. \n\nI want to improve my skills in 3D printing - I have an old delta printer that a coworker/friend let me borrow, but there are some .gcode issues that I have been avoidant in confronting. I tried printing a blue shell. There were explicit errors on the printer that I ignored in blind hope of it being fine. It was an error that was outside my range of knowledge - so I ignored it. Not the best problem-solving mindset, but I also wanted to see how the printer ran with baseline input. \n\nI'll return to it soon by the end of the week. I want to print some dolls."
+    }
+  ],
+  "06/2026": [
+    {
+      "header": "1",
+      "subheader": "this day hasn't happened yet.",
+      "body": "This is a test to see what happens if I make a new tab in my excel sheet. Will it programatically populate a new button for me on my website? That would be so lit if so."
     }
   ]
 }
