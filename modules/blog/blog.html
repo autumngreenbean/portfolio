@@ -1,0 +1,72 @@
+
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('your-background-image.jpg'); /* Background image or color */
+    background-size: cover;
+    background-position: center;
+    height: 100vh;  /* Ensure the body takes the full viewport height */
+    overflow: hidden;  /* Prevent the body from scrolling */
+}
+
+.container {
+    position: fixed;
+    top: 50%; /* Vertically center */
+    left: 50%; /* Horizontally center */
+    transform: translate(-50%, -50%); /* Offset the position to truly center it */
+    width: 90%; /* You can adjust the width here */
+    max-width: 800px; /* Maximum width of the container */
+    height: 80vh;  /* Make the container take up most of the screen height */
+    padding: 20px;
+    overflow-y: auto;  /* Make the container scrollable vertically */
+    background-color: rgba(255, 255, 255, 0);  /* Optional: semi-transparent background */
+    border-radius: 10px;  /* Optional: rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Optional: shadow for visual depth */
+}
+
+.post {
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
+    backdrop-filter: blur(5px); /* Ensures this section has the blur effect */
+    padding: 40px;
+    border-radius: 10px;
+    margin-bottom: 20px;  /* Space between posts */
+    transition: opacity 1s, transform 1s; /* Fade-in effect */
+}
+
+.post:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 3.0rem;
+}
+
+.post h2 {
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.post p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.post .title {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.post .body {
+    color: #7f8c8d;
+}
+
+.post .body:hover {
+  font-size: 100px;
+}
+
+    </style>
+
+ 
+
+  
