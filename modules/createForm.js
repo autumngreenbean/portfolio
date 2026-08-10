@@ -1,7 +1,7 @@
 import { makeDraggable } from './makeDraggable.js';
 import { handleMinimize } from './makeDraggable.js';
 import { fetchFileContent } from './fetchContent.js';
-console.log("createForm.js: 'I am called!'");
+console.log("createForm.js: 'YOOOOO! I am called!'");
 const isMobile = window.innerWidth <= 768; 
 
 //NOT FUNCTIONING
@@ -37,10 +37,11 @@ formContainer.style.position = 'absolute';
 formContainer.style.fontWeight = '';
 formContainer.style.transform = 'translate(0, 0)';
 formContainer.style.width = '550px';
-formContainer.style.borderRadius = '8px';
+formContainer.style.borderRadius = '2px';
 formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
 formContainer.style.zIndex = zIndexCounter.current; 
 formContainer.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
+formContainer.style.outline = '1px solid rgba(255, 255, 255, 0.2)';
 
 //CURSOR GRAB
 formContainer.addEventListener('mousedown', (e) => {
@@ -56,7 +57,7 @@ formContainer.style.cursor = 'grab';
 formContainer.innerHTML = `
     <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
         <span id="form-title">${fileName}</span>
-        <button id="minimize-btn" style="color: rgb(0, 0, 0); cursor: pointer;">-</button>
+        <button id="minimize-btn" style="color: white; cursor: pointer;">-</button>
     </div>
     <form id="form-content" style="padding: 20px; display: block;">
     </form>
@@ -75,7 +76,7 @@ fetchFileContent(fileName)
 .catch(err => {
     console.error('Error fetching content for form:', err);
 });
-if (fileName==="imagery.png") {
+if (fileName==="images.png") {
     window.open('images.html', '_blank');
 }
 // updateShapes();
