@@ -5,7 +5,7 @@
 
 <style>
     * {
-        background-color:black;
+        /* background-color:black; */
         color: white;
     }
 .gallery {
@@ -44,7 +44,7 @@
     right: 0;
     width: 50%;
     height: 100vh;
-    background-color: #fff;
+    /* background-color: #fff; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,9 +59,26 @@
     object-fit: contain;
 }
 
+/* blurred full-page background from hovered thumbnail */
+#bg-display {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent !important;
+    background-size: cover;
+    background-position: center;
+    filter: blur(10px) brightness(0.80);
+    image-rendering: pixelated;
+    z-index: -1;
+    transition: background-image 0s;
+    pointer-events: none;
+}
+
 </style>
 
-35mm, 120mm, and digital portraits: 
+the many different versions of myself
 <div id="gallery" class="gallery"></div>
 
 
@@ -70,6 +87,7 @@
 <br>
 analog: vhs, vhs-c, minidv <br>
 <div id="gallery2" class="gallery"></div>
+<div id="bg-display"></div>
 <div id="display"></div>
 
  
@@ -83,6 +101,7 @@ const apiUrl = `https://api.flickr.com/services/rest/?method=flickr.photosets.ge
 const apiUrl2 = `https://api.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey2}&photoset_id=${photosetId2}&format=json&nojsoncallback=1`;
 
 const displayDiv = document.getElementById('display');
+const bgDisplay = document.getElementById('bg-display');
 
 fetch(apiUrl)
     .then(response => response.json())
@@ -114,6 +133,9 @@ fetch(apiUrl)
                     const description = document.createElement('p');
                     description.textContent = photo.title;  
                     displayImage.style.display = 'block';  
+
+                    // _m thumbnail is already in cache from gallery — instant background update
+                    bgDisplay.style.backgroundImage = `url(${imgUrl})`;
 
                     //DISPLAY (Note: Description Linebreak is not working)
                     displayDiv.innerHTML = '';  
@@ -168,6 +190,9 @@ fetch(apiUrl2)
                     const description = document.createElement('p');
                     description.textContent = photo.title;  
                     displayImage.style.display = 'block';  
+
+                    // _m thumbnail is already in cache from gallery — instant background update
+                    bgDisplay.style.backgroundImage = `url(${imgUrl})`;
 
                     //DISPLAY
                     displayDiv.innerHTML = '';  
