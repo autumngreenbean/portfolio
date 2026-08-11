@@ -40,8 +40,8 @@ function syncAllUi() {
     uiBindings.forEach((ui) => {
         if (ui.trackTitle) ui.trackTitle.textContent = current?.title ?? '—';
         if (ui.miniTitle) ui.miniTitle.textContent = current?.title ?? '—';
-        if (ui.playBtn) ui.playBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '⏸') : getPlayLabel(audio.paused);
-        if (ui.miniPlayBtn) ui.miniPlayBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '⏸') : getPlayLabel(audio.paused);
+        if (ui.playBtn) ui.playBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '•') : getPlayLabel(audio.paused);
+        if (ui.miniPlayBtn) ui.miniPlayBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '•') : getPlayLabel(audio.paused);
         if (ui.durationEl) ui.durationEl.textContent = formatTime(audio.duration || 0);
         if (ui.currentTimeEl) ui.currentTimeEl.textContent = formatTime(audio.currentTime || 0);
         if (ui.progress && audio.duration) {

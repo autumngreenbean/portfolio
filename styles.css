@@ -133,6 +133,15 @@ body {
     object-fit: cover;
 }
 @media (max-width: 480px) {
+
+    .filebox {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    /* position: absolute; */
+    right: -100;
+    z-index: 1;
+}
     body {
         overflow-y: hidden;
         overflow-x: hidden;
