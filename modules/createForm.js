@@ -9,22 +9,41 @@ let lastPositionIndex = 0;
 let formCounter = 0; 
 let zIndexCounter = { current: 1000 }; 
 
+function bringFormToFront(form) {
+if (!form) return;
+
+const topZ = zIndexCounter.current++;
+form.style.zIndex = topZ;
+
+let offset = 1;
+document.querySelectorAll('.form-container').forEach(otherForm => {
+if (otherForm !== form) {
+otherForm.style.zIndex = topZ - offset;
+offset += 1;
+}
+});
+}
+
+function attachFormFocusHandlers(formContainer, formHeader) {
+const focusForm = () => bringFormToFront(formContainer);
+
+formContainer.addEventListener('pointerdown', focusForm, true);
+formContainer.addEventListener('mousedown', focusForm, true);
+formHeader.addEventListener('pointerdown', focusForm, true);
+formHeader.addEventListener('mousedown', focusForm, true);
+}
+
 function createForm(fileName) {
 let existingForm = document.getElementById(`form-container-${fileName}`);
 if (existingForm) {
-
-existingForm.style.zIndex = zIndexCounter.current; 
-
-// NOT FUNCTIONING: Update zIndex for the next form spawn, cycle
-zIndexCounter.current = zIndexCounter.current === zIndexCounter.max ? 1000 : zIndexCounter.current + 1;
-
-// updateShapes();
+bringFormToFront(existingForm);
 return;  
 }
 
 //CREATE FORM
 const formContainer = document.createElement('div');
 formContainer.id = `form-container-${fileName}`;
+formContainer.classList.add('form-container');
 
 let nextLeft = 20 + formCounter * 40; 
 let nextTop = 20 + formCounter * 40;  
@@ -36,12 +55,16 @@ formCounter++;
 formContainer.style.position = 'absolute';
 formContainer.style.fontWeight = '';
 formContainer.style.transform = 'translate(0, 0)';
-formContainer.style.width = '550px';
+formContainer.style.width = isMobile ? 'calc(100vw - 20px)' : '550px';
+formContainer.style.maxWidth = '550px';
 formContainer.style.borderRadius = '2px';
 formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
 formContainer.style.zIndex = zIndexCounter.current; 
-formContainer.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
+formContainer.style.background = 'rgba(255, 255, 255, 0.08)';
+formContainer.style.backdropFilter = 'blur(8px)';
+formContainer.style.webkitBackdropFilter = 'blur(8px)';
 formContainer.style.outline = '1px solid rgba(255, 255, 255, 0.2)';
+formContainer.style.overflow = 'hidden';
 
 //CURSOR GRAB
 formContainer.addEventListener('mousedown', (e) => {
@@ -64,6 +87,9 @@ formContainer.innerHTML = `
 `;
 document.body.appendChild(formContainer);
 
+const formHeader = formContainer.querySelector('#form-header');
+attachFormFocusHandlers(formContainer, formHeader);
+
 fetchFileContent(fileName)
 .then(content => {
     if (content) {
@@ -76,11 +102,11 @@ fetchFileContent(fileName)
 .catch(err => {
     console.error('Error fetching content for form:', err);
 });
-if (fileName==="images.png") {
+if (fileName=="images.png") {
     window.open('images.html', '_blank');
 }
 // updateShapes();
-makeDraggable(formContainer, formContainer.querySelector('#form-header'), zIndexCounter);
+makeDraggable(formContainer, formHeader, zIndexCounter);
 handleMinimize(formContainer);
 
 nextLeft += 50; 
@@ -101,14 +127,6 @@ document.querySelectorAll('.tab').forEach(tab => {
         createForm(fileName);
 
         const form = document.getElementById(`form-container-${fileName}`);
-        if (form) {
-            form.style.zIndex = zIndexCounter.current++;  
-        }
-
-        document.querySelectorAll('.form-container').forEach(otherForm => {
-            if (otherForm !== form) {
-                otherForm.style.zIndex = zIndexCounter.current - 1;  // Lower z-index of other forms to push them to the background
-            }
-        });
+        bringFormToFront(form);
     });
 });

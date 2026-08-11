@@ -1,15 +1,38 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
 <script>
-(() => {
-    const parts = window.location.pathname.split('/').filter(Boolean);
-    const isGithubPages = window.location.hostname.endsWith('github.io');
-    const basePath = isGithubPages && parts.length > 0 ? `/${parts[0]}/` : '/';
-    const base = document.createElement('base');
-    base.href = basePath;
-    document.head.prepend(base);
-})();
+// (() => {
+//     const parts = window.location.pathname.split('/').filter(Boolean);
+//     const isGithubPages = window.location.hostname.endsWith('github.io');
+//     const basePath = isGithubPages && parts.length > 0 ? `/${parts[0]}/` : '/';
+//     const base = document.createElement('base');
+//     base.href = basePath;
+//     document.head.prepend(base);
+// })();
 </script>
 <link rel="stylesheet" href="styles.css">
-<img src="modules/assets/lotus.gif" class="fixed-background" style=" left: 0; position: fixed;" alt="">
+<img id="fixed-background" src="modules/assets/lotus.gif" style="left: 0; position: fixed;" alt=""><title>~~~meow</title>
+<!-- hi
+ if you're reading this i <3 u
+ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⠟⠛⠛⠛⠿⣿⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣠⣴⣿⡟⠁⢀⣤⣀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣦⠀⠀⠀⠀
+⠀⠀⠀⠀⣾⡿⠿⠛⠁⣰⣿⣿⣿⡆⠀⠀⣴⣶⣶⠄⠀⢻⣿⡄⠀⠀⠀
+⠀⠀⣾⡿⠁⠀⠀⠀⠀⠻⣿⣿⣿⠃⠀⣼⣿⣿⣿⠀⠀⠀⢿⣷⣄⠀⠀
+⠀⣾⣿⠁⠀⣤⣶⡄⠀⠀⠈⠉⠁⠀⠀⠈⠛⠊⠁⠀⠀⠀⠀⠙⢿⣷⠀
+⠀⣿⡇⠀⢸⣿⣿⡿⡆⠀⠀⣴⣶⣶⣴⣶⣄⠀⠀⢠⣶⣿⣦⠀⠀⣿⡇
+⠀⣿⡇⠀⠀⠛⠙⠉⠀⣰⣿⣿⣿⣿⣿⣿⣿⣇⠀⣿⣿⣿⣿⠀⠀⣿⡇
+⠀⣿⣇⠀⠀⠀⠀⢀⣾⣿⣿⣿⣿⣿⣿⣷⣿⣷⡀⠀⠉⠉⠀⠀⣸⣿⠇
+⠀⣿⣿⠀⠀⠀⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⣻⡟⠘
+⠀⢹⣿⠀⠀⠀⠀⠀⠉⠛⠉⠁⠉⠁⠙⠻⠿⠟⠀⠀⠀⠀⠀⣾⣿⠁⠀
+⠀⠀⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡏⠀⠀
+⠀⠀⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
+⠀⠀⣻⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
+⠀⠀⢸⣿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀
+ -->
+
 
 <div class="filebox">
     <div class="folder">
@@ -42,6 +65,11 @@
 
 
 <script type="module" src="./modules/createForm.js"></script>
-<script type="module" src="./modules/blog/blog.js"> </script>
+<!-- <script type="module" src="./modules/blog/blog.js"> </script> -->
 <script type="module" src="./modules/mediaPlayer.js"></script>
+<script>
+    if (window.innerWidth <= 480) console.log('mobile mode');
+    else console.log('desktop mode');
 
+    console.log(window.innerWidth);
+</script>
