@@ -283,7 +283,7 @@ function createWindowPlayer() {
                 -webkit-backdrop-filter: blur(8px);
                 padding: 10px 12px 12px;
             ">
-                <div style="font-size: 9px; letter-spacing: 0.12em; opacity: 0.35; margin-bottom: 8px;">Listen and enjoy:</div>
+                <div style="font-size: 9px; letter-spacing: 0.12em; opacity: 0.35; margin-bottom: 8px;">Listen and enjoy... (psst! hit play, use your system's built-in media interface for ease of control <3) </div>
                 <div id="mp-playlist-items" style="max-height: 148px; overflow-y: auto;"></div>
             </div>
         </div>
