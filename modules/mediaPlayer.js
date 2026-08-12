@@ -159,8 +159,8 @@ function createWindowPlayer() {
     player.style.top = '60px';
     player.style.left = '60px';
     player.style.transform = 'translate(0, 0)';
-    player.style.width = '430px';
-    player.style.minWidth = '280px';
+    player.style.width = '620px';
+    player.style.minWidth = '420px';
     player.style.maxWidth = '90vw';
     player.style.resize = 'horizontal';
     player.style.borderRadius = '2px';
@@ -181,13 +181,13 @@ function createWindowPlayer() {
             padding: 10px 12px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         ">
-            <span style="font-size: 12px; letter-spacing: 0.08em; opacity: 0.85;">meowsic</span>
+            <span style="font-size: 14px; letter-spacing: 0.08em; opacity: 0.85;">meowsic</span>
             <button id="mp-minimize-btn" style="
                 background: transparent;
                 border: none;
                 color: white;
                 cursor: pointer;
-                font-size: 18px;
+                font-size: 22px;
                 line-height: 1;
                 padding: 0 2px;
             ">−</button>
@@ -198,13 +198,13 @@ function createWindowPlayer() {
                 background: rgba(0, 0, 0, 0.62);
                 backdrop-filter: blur(8px);
                 -webkit-backdrop-filter: blur(8px);
-                padding: 14px 14px 12px;
+                padding: 18px 18px 16px;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.07);
             ">
-                <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px;">
+                <div style="display: flex; gap: 16px; align-items: flex-start; margin-bottom: 18px;">
                     <div id="mp-art" style="
-                        width: 62px;
-                        height: 62px;
+                        width: 80px;
+                        height: 80px;
                         flex-shrink: 0;
                         border-radius: 4px;
                         border: 1px solid rgba(255, 255, 255, 0.12);
@@ -212,21 +212,21 @@ function createWindowPlayer() {
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        font-size: 24px;
+                        font-size: 28px;
                         overflow: hidden;
                     ">ART</div>
                     <div style="flex: 1; min-width: 0; padding-top: 2px;">
                         <div id="mp-track-title" style="
-                            font-size: 12px;
+                            font-size: 14px;
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
                             margin-bottom: 8px;
                             opacity: 0.9;
                         ">—</div>
-                        <div style="font-size: 10px; opacity: 0.45; letter-spacing: 0.04em; margin-bottom: 3px;">Now Playing artist:</div>
+                        <div style="font-size: 12px; opacity: 0.45; letter-spacing: 0.04em; margin-bottom: 3px;">Now Playing artist:</div>
                         <div id="mp-artist-display" style="
-                            font-size: 11px;
+                            font-size: 13px;
                             opacity: 0.6;
                             font-style: italic;
                         ">&lt;element&gt;</div>
@@ -237,31 +237,35 @@ function createWindowPlayer() {
                     width: 100%;
                     cursor: pointer;
                     accent-color: rgba(255, 255, 255, 0.75);
-                    height: 3px;
+                    height: 5px;
                     margin-top: 18px;
                     margin-bottom: 10px;
                     display: block;
                 ">
-                <div style="display: flex; justify-content: space-between; font-size: 10px; opacity: 0.45; margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 12px; opacity: 0.45; margin-bottom: 12px;">
                     <span id="mp-current-time">00:00</span>
                     <span id="mp-duration">00:00</span>
                 </div>
 
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 14px;">
+                    <button id="mp-skip-back" title="Back 10 seconds" style="
+                        background: transparent; border: none; color: white;
+                        font-size: 12px; cursor: pointer; opacity: 0.8; padding: 0;
+                    ">-10s</button>
+                    <div style="display: flex; align-items: center; gap: 12px; justify-content: center;">
                         <button id="mp-prev" title="Previous" style="
                             background: transparent; border: none; color: white;
-                            font-size: 14px; cursor: pointer; opacity: 0.7; padding: 0;
+                            font-size: 16px; cursor: pointer; opacity: 0.7; padding: 0;
                         ">< back</button>
                         <button id="mp-play" title="Play / Pause" style="
                             background: rgba(255, 255, 255, 0.12);
                             border: 1px solid rgba(255, 255, 255, 0.2);
                             color: skyblue;
-                            font-size: 20px;
+                            font-size: 24px;
                             cursor: pointer;
                             border-radius: 50%;
-                            width: 47px;
-                            height: 47px;
+                            width: 58px;
+                            height: 58px;
                             display: flex;
                             align-items: center;
                             justify-content: center;
@@ -270,26 +274,13 @@ function createWindowPlayer() {
                         ">▶</button>
                         <button id="mp-next" title="Next" style="
                             background: transparent; border: none; color: white;
-                            font-size: 14px; cursor: pointer; opacity: 0.7; padding: 0;
+                            font-size: 16px; cursor: pointer; opacity: 0.7; padding: 0;
                         ">skip ></button>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 7px;">
-                        <span style="font-size: 13px; opacity: 0.5;">volume</span>
-                        <input id="mp-volume" type="range" min="0" max="1" step="0.01" value="0.8" style="
-                            width: 64px;
-                            cursor: pointer;
-                            accent-color: rgba(255, 255, 255, 0.75);
-                            height: 3px;
-                        ">
-                        <button id="mp-shuffle" title="Shuffle: off" style="
-                            background: transparent; border: none; color: white;
-                            font-size: 15px; cursor: pointer; opacity: 0.4; padding: 0;
-                        ">Shuf</button>
-                        <button id="mp-repeat" title="Repeat: none" style="
-                            background: transparent; border: none; color: white;
-                            font-size: 15px; cursor: pointer; opacity: 0.4; padding: 0;
-                        ">Rpt</button>
-                    </div>
+                    <button id="mp-skip-forward" title="Forward 10 seconds" style="
+                        background: transparent; border: none; color: white;
+                        font-size: 12px; cursor: pointer; opacity: 0.8; padding: 0;
+                    ">+10s</button>
                 </div>
             </div>
 
@@ -331,9 +322,6 @@ function createWindowPlayer() {
         progress: player.querySelector('#mp-progress'),
         currentTimeEl: player.querySelector('#mp-current-time'),
         durationEl: player.querySelector('#mp-duration'),
-        volumeSlider: player.querySelector('#mp-volume'),
-        shuffleBtn: player.querySelector('#mp-shuffle'),
-        repeatBtn: player.querySelector('#mp-repeat'),
         trackTitle: player.querySelector('#mp-track-title'),
         artEl: player.querySelector('#mp-art'),
         listEl: player.querySelector('#mp-playlist-items'),
@@ -342,6 +330,24 @@ function createWindowPlayer() {
         miniNextBtn: player.querySelector('#mp-mini-next'),
         miniTitle: player.querySelector('#mp-mini-title'),
     };
+
+    const skipBackBtn = player.querySelector('#mp-skip-back');
+    const skipForwardBtn = player.querySelector('#mp-skip-forward');
+    const skipBySeconds = (seconds) => {
+        if (!audio) return;
+        const minTime = 0;
+        const maxTime = audio.duration || 0;
+        const nextTime = Math.min(Math.max((audio.currentTime || 0) + seconds, minTime), maxTime);
+        audio.currentTime = nextTime;
+        syncAllUi();
+    };
+
+    if (skipBackBtn) {
+        skipBackBtn.addEventListener('click', () => skipBySeconds(-10));
+    }
+    if (skipForwardBtn) {
+        skipForwardBtn.addEventListener('click', () => skipBySeconds(10));
+    }
 
     ui.renderPlaylist = () => {
         ui.listEl.innerHTML = '';
@@ -422,21 +428,24 @@ function createWidePlayer() {
         wide.style.minHeight = '56px';
         console.log('Mobile mode: wide player simplified');
         wide.innerHTML = `
-            <div id="w-middle" style="display:flex; align-items:center; gap:8px; width:100%; min-height:40px; padding:0;">
-                <button id="w-play" title="Play / Pause" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:12px;cursor:pointer;padding:0 2px;line-height:1;font-weight:700;min-width:38px;">Play</button>
+            <div id="w-middle" style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:40px; padding:0;">
+                <button id="w-skip-back" title="Back 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;">-10s</button>
+                <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex:1; min-width:0;">
+                    <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Prev</button>
+                    <button id="w-play" title="Play / Pause" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:18px;cursor:pointer;padding:10px 12px;line-height:1;font-weight:700;min-width:52px;min-height:36px;flex-shrink:0;">Play</button>
+                    <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Next</button>
+                </div>
+                <button id="w-skip-forward" title="Forward 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;">+10s</button>
+                <button id="w-toggle-extra" title="Expand controls" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:18px;cursor:pointer;line-height:1;padding:8px 12px;min-width:64px;min-height:36px;font-weight:700;flex-shrink:0;">More</button>
+            </div>
+
+            <div style="display:flex; align-items:center; gap:8px; width:100%; margin-top:6px;">
                 <span id="w-current-time" style="font-size:11px; color:rgba(0,0,0,0.7); width:34px; text-align:right; flex-shrink:0;">00:00</span>
-                <input id="w-progress" type="range" min="0" max="100" value="0" style="width:100%; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px; min-width:0;">
+                <input id="w-progress" type="range" min="0" max="100" value="0" style="width:100%; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px; min-width:0; flex:1; opacity:0.7;">
                 <span id="w-duration" style="font-size:11px; color:rgba(0,0,0,0.7); width:34px; flex-shrink:0;">00:00</span>
-                <button id="w-toggle-extra" title="Expand controls" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:11px;cursor:pointer;line-height:1;padding:0 2px;min-width:28px;">More</button>
             </div>
 
             <div id="w-extra" style="display:none; align-items:center; justify-content:center; gap:16px; margin-top:6px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.4); font-size:11px;">
-                <button id="w-skip-back" title="Back 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">-10s</button>
-                <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Prev</button>
-                <button id="w-shuffle" title="Shuffle: off" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:11px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Shuf</button>
-                <button id="w-repeat" title="Repeat: none" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:11px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Rpt</button>
-                <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Next</button>
-                <button id="w-skip-forward" title="Forward 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">+10s</button>
                 <button id="w-menu-btn" title="Playlist" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:11px;cursor:pointer;line-height:1;padding:0;">Menu</button>
                 Psst...! you are on mobile, the music will stream as long as the browser is open && you can use media controls on your device to control the track. enjoy listening (-:
             </div>
@@ -462,18 +471,20 @@ function createWidePlayer() {
     } else {
         console.log('Desktop mode: wide media player full');
         wide.innerHTML = `
-            <div style="display:flex; align-items:center; gap:10px; width:100%;">
-                <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0;line-height:1;">Prev</button>
-                <button id="w-play" title="Play / Pause" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0 2px;line-height:1;font-weight:700;min-width:42px;">Play</button>
+            <div style="display:flex; align-items:center; justify-content:center; gap:12px; width:100%;">
+                <button id="w-skip-back" title="Back 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0;line-height:1;">-10s</button>
+                <div style="display:flex; align-items:center; justify-content:center; gap:10px; flex:1; min-width:0;">
+                    <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0;line-height:1;">Prev</button>
+                    <button id="w-play" title="Play / Pause" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0 2px;line-height:1;font-weight:700;min-width:42px;">Play</button>
+                    <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0;line-height:1;">Next</button>
+                </div>
+                <button id="w-skip-forward" title="Forward 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0;line-height:1;">+10s</button>
+                <button id="w-menu-btn" title="Playlist" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:12px;cursor:pointer;line-height:1;padding:0;">Menu</button>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px; width:100%; margin-top:4px;">
                 <span id="w-current-time" style="font-size:12px; color:rgba(0,0,0,0.68); width:38px; text-align:right; flex-shrink:0;">00:00</span>
                 <input id="w-progress" type="range" min="0" max="100" value="0" style="width:100%; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px;">
                 <span id="w-duration" style="font-size:12px; color:rgba(0,0,0,0.68); width:38px; flex-shrink:0;">00:00</span>
-                <span style="font-size:12px; color:rgba(0,0,0,0.65); line-height:1; min-width:28px; text-align:center;">Vol</span>
-                <input id="w-volume" type="range" min="0" max="1" step="0.01" value="0.8" style="width:96px; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px;">
-                <button id="w-shuffle" title="Shuffle: off" style="background:transparent;border:none;color:rgba(0,0,0,0.68);font-size:12px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Shuf</button>
-                <button id="w-repeat" title="Repeat: none" style="background:transparent;border:none;color:rgba(0,0,0,0.68);font-size:12px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Rpt</button>
-                <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;padding:0;line-height:1;">Next</button>
-                <button id="w-menu-btn" title="Playlist" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:12px;cursor:pointer;line-height:1;padding:0;">Menu</button>
             </div>
 
             <div id="w-menu" style="
@@ -507,9 +518,6 @@ function createWidePlayer() {
         progress: wide.querySelector('#w-progress'),
         currentTimeEl: wide.querySelector('#w-current-time'),
         durationEl: wide.querySelector('#w-duration'),
-        volumeSlider: wide.querySelector('#w-volume'),
-        shuffleBtn: wide.querySelector('#w-shuffle'),
-        repeatBtn: wide.querySelector('#w-repeat'),
         trackTitle: wide.querySelector('#w-track-title'),
     };
 
