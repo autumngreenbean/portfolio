@@ -58,7 +58,7 @@
     </div>
 </div>
 <img src="/" alt="">
-<div style="position:fixed; bottom:40; right:0; font-size:100px;"><span style = "">signal</span>kitten</div>
+<div class = "banner" style="position:fixed; bottom:40; right:0; font-size:100px;">signalkitten</div>
 
 
 <script type="module" src="./modules/createForm.js"></script>
@@ -73,23 +73,26 @@
 
 <script>
   (function() {
-    // Detect mobile devices using screen width or User Agent
-    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+    function detectMobileLayout() {
+      const userAgentMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const screenWidth = window.screen && window.screen.width ? window.screen.width : window.innerWidth;
+      const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth, screenWidth);
+      return userAgentMobile || screenWidth <= 768 || viewportWidth <= 768;
+    }
 
-    if (isMobile) {
-      var viewport = document.querySelector('meta[name="viewport"]');
-      if (viewport) {
-        // Update existing tag
-        viewport.setAttribute('content', 'width=device-width, initial-scale=0.5');
-      } else {
-        // Create new tag if missing
-        viewport = document.createElement('meta');
-        viewport.name = "viewport";
-        viewport.content = "width=device-width, initial-scale=0.5";
-        document.getElementsByTagName('head')[0].appendChild(viewport);
+    function applyViewportScale() {
+      const isMobile = detectMobileLayout();
+      const viewport = document.querySelector('meta[name="viewport"]') || document.createElement('meta');
+      viewport.name = 'viewport';
+      viewport.content = isMobile ? 'width=device-width, initial-scale=0.5, viewport-fit=cover' : 'width=device-width, initial-scale=1';
+
+      if (!document.querySelector('meta[name="viewport"]')) {
+        document.head.appendChild(viewport);
       }
     }
-  })();
 
-  
-</script>   
+    window.detectMobileLayout = detectMobileLayout;
+    applyViewportScale();
+    window.addEventListener('resize', applyViewportScale);
+  })();
+</script>

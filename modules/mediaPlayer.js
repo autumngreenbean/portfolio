@@ -1,6 +1,15 @@
 import { makeDraggable } from './makeDraggable.js';
 
-const isMobile = window.innerWidth <= 768;
+function detectMobileLayout() {
+    if (typeof window !== 'undefined' && typeof window.detectMobileLayout === 'function') {
+        return !!window.detectMobileLayout();
+    }
+
+    const userAgentMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const screenWidth = window.screen && window.screen.width ? window.screen.width : window.innerWidth;
+    const viewportWidth = Math.min(window.innerWidth, document.documentElement.clientWidth || window.innerWidth, screenWidth);
+    return userAgentMobile || screenWidth <= 768 || viewportWidth <= 768;
+}
 
 // Modular playlist — add entries as { title, src, art (optional img src) }
 const playlist = [
@@ -118,24 +127,31 @@ function bindCommonControls(ui) {
         syncAllUi();
     });
 
-    ui.volumeSlider.addEventListener('input', () => {
-        audio.volume = Number(ui.volumeSlider.value);
-        syncAllUi();
-    });
+    if (ui.volumeSlider) {
+        ui.volumeSlider.addEventListener('input', () => {
+            audio.volume = Number(ui.volumeSlider.value);
+            syncAllUi();
+        });
+    }
 
-    ui.shuffleBtn.addEventListener('click', () => {
-        state.isShuffled = !state.isShuffled;
-        syncAllUi();
-    });
+    if (ui.shuffleBtn) {
+        ui.shuffleBtn.addEventListener('click', () => {
+            state.isShuffled = !state.isShuffled;
+            syncAllUi();
+        });
+    }
 
     const repeatModes = ['none', 'one', 'all'];
-    ui.repeatBtn.addEventListener('click', () => {
-        state.repeatMode = repeatModes[(repeatModes.indexOf(state.repeatMode) + 1) % repeatModes.length];
-        syncAllUi();
-    });
+    if (ui.repeatBtn) {
+        ui.repeatBtn.addEventListener('click', () => {
+            state.repeatMode = repeatModes[(repeatModes.indexOf(state.repeatMode) + 1) % repeatModes.length];
+            syncAllUi();
+        });
+    }
 }
 
 function createWindowPlayer() {
+    const isMobile = detectMobileLayout();
     const player = document.createElement('div');
     player.id = 'media-player';
 
@@ -386,7 +402,8 @@ function createWindowPlayer() {
 function createWidePlayer() {
     const wide = document.createElement('div');
     wide.id = 'media-player-wide';
-    const mobileMode = window.innerWidth <= 480;
+    const mobileMode = detectMobileLayout();
+    wide.dataset.mobileMode = String(mobileMode);
     wide.style.position = 'fixed';
     wide.style.left = '0';
     wide.style.bottom = '0';
@@ -401,24 +418,27 @@ function createWidePlayer() {
     wide.style.zIndex = '99999';
 
     if (mobileMode) {
+        wide.style.height = '56px';
+        wide.style.minHeight = '56px';
         console.log('Mobile mode: wide player simplified');
         wide.innerHTML = `
-            <div id="w-middle" style="display:flex; align-items:center; gap:10px; width:100%;">
-                <button id="w-play" title="Play / Pause" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:13px;cursor:pointer;padding:0 2px;line-height:1;font-weight:700;min-width:42px;">Play</button>
-                <span id="w-current-time" style="font-size:12px; color:rgba(0,0,0,0.7); width:44px; text-align:right; flex-shrink:0;">00:00</span>
-                <input id="w-progress" type="range" min="0" max="100" value="0" style="width:100%; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px;">
-                <span id="w-duration" style="font-size:12px; color:rgba(0,0,0,0.7); width:44px; flex-shrink:0;">00:00</span>
-                <span style="font-size:12px; color:rgba(0,0,0,0.68); line-height:1; min-width:28px; text-align:center;">Vol</span>
-                <input id="w-volume" type="range" min="0" max="1" step="0.01" value="0.8" style="width:72px; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px;">
-                <button id="w-toggle-extra" title="Expand controls" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:12px;cursor:pointer;line-height:1;padding:0 2px;min-width:24px;">More</button>
+            <div id="w-middle" style="display:flex; align-items:center; gap:8px; width:100%; min-height:40px; padding:0;">
+                <button id="w-play" title="Play / Pause" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:12px;cursor:pointer;padding:0 2px;line-height:1;font-weight:700;min-width:38px;">Play</button>
+                <span id="w-current-time" style="font-size:11px; color:rgba(0,0,0,0.7); width:34px; text-align:right; flex-shrink:0;">00:00</span>
+                <input id="w-progress" type="range" min="0" max="100" value="0" style="width:100%; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px; min-width:0;">
+                <span id="w-duration" style="font-size:11px; color:rgba(0,0,0,0.7); width:34px; flex-shrink:0;">00:00</span>
+                <button id="w-toggle-extra" title="Expand controls" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:11px;cursor:pointer;line-height:1;padding:0 2px;min-width:28px;">More</button>
             </div>
 
-            <div id="w-extra" style="display:none; align-items:center; justify-content:center; gap:22px; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.4);">
-                <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:12px;cursor:pointer;padding:0;line-height:1;">Prev</button>
-                <button id="w-shuffle" title="Shuffle: off" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Shuf</button>
-                <button id="w-repeat" title="Repeat: none" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:12px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Rpt</button>
-                <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:12px;cursor:pointer;padding:0;line-height:1;">Next</button>
-                <button id="w-menu-btn" title="Playlist" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:12px;cursor:pointer;line-height:1;padding:0;">Menu</button>
+            <div id="w-extra" style="display:none; align-items:center; justify-content:center; gap:16px; margin-top:6px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.4); font-size:11px;">
+                <button id="w-skip-back" title="Back 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">-10s</button>
+                <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Prev</button>
+                <button id="w-shuffle" title="Shuffle: off" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:11px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Shuf</button>
+                <button id="w-repeat" title="Repeat: none" style="background:transparent;border:none;color:rgba(0,0,0,0.7);font-size:11px;cursor:pointer;opacity:0.45;padding:0;line-height:1;">Rpt</button>
+                <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Next</button>
+                <button id="w-skip-forward" title="Forward 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">+10s</button>
+                <button id="w-menu-btn" title="Playlist" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:11px;cursor:pointer;line-height:1;padding:0;">Menu</button>
+                Psst...! you are on mobile, the music will stream as long as the browser is open && you can use media controls on your device to control the track. enjoy listening (-:
             </div>
 
             <div id="w-menu" style="
@@ -499,14 +519,38 @@ function createWidePlayer() {
     const menu = wide.querySelector('#w-menu');
     const toggleExtraBtn = wide.querySelector('#w-toggle-extra');
     const extraControls = wide.querySelector('#w-extra');
+    const skipBackBtn = wide.querySelector('#w-skip-back');
+    const skipForwardBtn = wide.querySelector('#w-skip-forward');
+
+    const skipBySeconds = (seconds) => {
+        if (!audio) return;
+        const minTime = 0;
+        const maxTime = audio.duration || 0;
+        const nextTime = Math.min(Math.max((audio.currentTime || 0) + seconds, minTime), maxTime);
+        audio.currentTime = nextTime;
+        syncAllUi();
+    };
+
+    if (skipBackBtn) {
+        skipBackBtn.addEventListener('click', () => skipBySeconds(-10));
+    }
+    if (skipForwardBtn) {
+        skipForwardBtn.addEventListener('click', () => skipBySeconds(10));
+    }
 
     if (toggleExtraBtn && extraControls) {
-        toggleExtraBtn.addEventListener('click', () => {
+        const toggleExpandedControls = (e) => {
+            if (e) e.preventDefault();
             const isOpen = extraControls.style.display === 'flex';
             extraControls.style.display = isOpen ? 'none' : 'flex';
+            wide.style.height = isOpen ? '56px' : 'auto';
+            wide.style.minHeight = isOpen ? '56px' : '56px';
             toggleExtraBtn.textContent = isOpen ? 'More' : 'Less';
             toggleExtraBtn.title = isOpen ? 'Expand controls' : 'Collapse controls';
-        });
+        };
+
+        toggleExtraBtn.addEventListener('click', toggleExpandedControls);
+        toggleExtraBtn.addEventListener('touchstart', toggleExpandedControls, { passive: false });
     }
 
     ui.renderMenuList = () => {
@@ -604,4 +648,15 @@ function createMediaPlayer() {
     }
 }
 
+function refreshMobileMediaPlayerLayout() {
+    const widePlayer = document.getElementById('media-player-wide');
+    if (!widePlayer) return;
+
+    const shouldUseMobile = detectMobileLayout();
+    if (String(shouldUseMobile) === widePlayer.dataset.mobileMode) return;
+
+    createMediaPlayer();
+}
+
 document.addEventListener('DOMContentLoaded', createMediaPlayer);
+window.addEventListener('resize', refreshMobileMediaPlayerLayout);
