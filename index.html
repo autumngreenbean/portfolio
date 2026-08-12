@@ -94,8 +94,20 @@
       }
     }
 
+    function applyFileboxScale() {
+        const isMobile = detectMobileLayout();
+        const filebox = document.querySelector('.filebox');
+        if (isMobile && filebox) {
+            filebox.style.right = '0px';
+            filebox.style.bottom = '500';
+            console.log('Applied mobile filebox scale');
+        }
+    }
+
     window.detectMobileLayout = detectMobileLayout;
     applyViewportScale();
+    applyFileboxScale();
+
     window.addEventListener('resize', applyViewportScale);
   })();
 </script>
