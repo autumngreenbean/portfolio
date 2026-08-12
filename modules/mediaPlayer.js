@@ -49,8 +49,8 @@ function syncAllUi() {
     uiBindings.forEach((ui) => {
         if (ui.trackTitle) ui.trackTitle.textContent = current?.title ?? '—';
         if (ui.miniTitle) ui.miniTitle.textContent = current?.title ?? '—';
-        if (ui.playBtn) ui.playBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '•') : getPlayLabel(audio.paused);
-        if (ui.miniPlayBtn) ui.miniPlayBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '•') : getPlayLabel(audio.paused);
+        if (ui.playBtn) ui.playBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '❚❚') : getPlayLabel(audio.paused);
+        if (ui.miniPlayBtn) ui.miniPlayBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '❚❚') : getPlayLabel(audio.paused);
         if (ui.durationEl) ui.durationEl.textContent = formatTime(audio.duration || 0);
         if (ui.currentTimeEl) ui.currentTimeEl.textContent = formatTime(audio.currentTime || 0);
         if (ui.progress && audio.duration) {
@@ -424,30 +424,92 @@ function createWidePlayer() {
     wide.style.zIndex = '99999';
 
     if (mobileMode) {
-        wide.style.height = '56px';
-        wide.style.minHeight = '56px';
-        console.log('Mobile mode: wide player simplified');
+        wide.style.height = 'auto';
+        wide.style.minHeight = '80px';
+        wide.style.background = 'rgba(0, 0, 0, 0.92)';
+        wide.style.backdropFilter = 'blur(12px)';
+        wide.style.webkitBackdropFilter = 'blur(12px)';
+        wide.style.borderTop = '1px solid rgba(255, 255, 255, 0.08)';
+        console.log('Mobile mode: wide player NTS-style');
         wide.innerHTML = `
-            <div id="w-middle" style="display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:40px; padding:0;">
-                <button id="w-skip-back" title="Back 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;">-10s</button>
-                <div style="display:flex; align-items:center; justify-content:center; gap:8px; flex:1; min-width:0;">
-                    <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Prev</button>
-                    <button id="w-play" title="Play / Pause" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:18px;cursor:pointer;padding:10px 12px;line-height:1;font-weight:700;min-width:52px;min-height:36px;flex-shrink:0;">Play</button>
-                    <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;">Next</button>
+            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; width:100%;">
+                <div id="w-art" style="
+                    width:60px;
+                    height:60px;
+                    flex-shrink:0;
+                    background: rgba(255, 255, 255, 0.05);
+                    border:1px solid rgba(255, 255, 255, 0.1);
+                    border-radius:2px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    font-size:9px;
+                    color:rgba(255,255,255,0.4);
+                    letter-spacing:0.1em;
+                ">ART</div>
+                
+                <div style="display:flex; align-items:center; gap:8px; flex-shrink:0;">
+                    <button id="w-prev" title="Previous" style="background:transparent;border:none;color:rgba(255,255,255,0.7);font-size:18px;cursor:pointer;padding:0;line-height:1;width:24px;height:24px;display:flex;align-items:center;justify-content:center;">‹</button>
+                    <button id="w-play" title="Play / Pause" style="
+                        background:rgba(255,255,255,0.95);
+                        border:none;
+                        color:rgba(0,0,0,0.9);
+                        font-size:14px;
+                        cursor:pointer;
+                        border-radius:50%;
+                        width:36px;
+                        height:36px;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        padding:0;
+                        padding-left:2px;
+                        flex-shrink:0;
+                    ">▶</button>
+                    <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(255,255,255,0.7);font-size:18px;cursor:pointer;padding:0;line-height:1;width:24px;height:24px;display:flex;align-items:center;justify-content:center;">›</button>
                 </div>
-                <button id="w-skip-forward" title="Forward 10 seconds" style="background:transparent;border:none;color:rgba(0,0,0,0.72);font-size:11px;cursor:pointer;padding:0;line-height:1;flex-shrink:0;">+10s</button>
-                <button id="w-toggle-extra" title="Expand controls" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:18px;cursor:pointer;line-height:1;padding:8px 12px;min-width:64px;min-height:36px;font-weight:700;flex-shrink:0;">More</button>
-            </div>
-
-            <div style="display:flex; align-items:center; gap:8px; width:100%; margin-top:6px;">
-                <span id="w-current-time" style="font-size:11px; color:rgba(0,0,0,0.7); width:34px; text-align:right; flex-shrink:0;">00:00</span>
-                <input id="w-progress" type="range" min="0" max="100" value="0" style="width:100%; cursor:pointer; accent-color: rgba(0,0,0,0.35); height:3px; min-width:0; flex:1; opacity:0.7;">
-                <span id="w-duration" style="font-size:11px; color:rgba(0,0,0,0.7); width:34px; flex-shrink:0;">00:00</span>
-            </div>
-
-            <div id="w-extra" style="display:none; align-items:center; justify-content:center; gap:16px; margin-top:6px; padding-top:8px; border-top:1px solid rgba(255,255,255,0.4); font-size:11px;">
-                <button id="w-menu-btn" title="Playlist" style="background:transparent;border:none;color:rgba(0,0,0,0.74);font-size:11px;cursor:pointer;line-height:1;padding:0;">Menu</button>
-                Psst...! you are on mobile, the music will stream as long as the browser is open && you can use media controls on your device to control the track. enjoy listening (-:
+                
+                <div style="flex:1; min-width:0; display:flex; align-items:center; justify-content:center;">
+                    <div style="width:100%; display:flex; flex-direction:column; gap:2px;">
+                        <input id="w-progress" type="range" min="0" max="100" value="0" style="
+                            width:100%;
+                            cursor:pointer;
+                            accent-color: rgba(255,255,255,0.9);
+                            height:2px;
+                            margin:0;
+                        ">
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+                            <span id="w-current-time" style="font-size:9px; color:rgba(255,255,255,0.5);">00:00</span>
+                            <div id="w-track-title" style="
+                                font-size:10px;
+                                color:rgba(255,255,255,0.75);
+                                white-space:nowrap;
+                                overflow:hidden;
+                                text-overflow:ellipsis;
+                                flex:1;
+                                text-align:center;
+                                min-width:0;
+                            ">—</div>
+                            <span id="w-duration" style="font-size:9px; color:rgba(255,255,255,0.5);">00:00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="w-logo-area" style="
+                    width:50px;
+                    height:60px;
+                    flex-shrink:0;
+                    background: rgba(255, 255, 255, 0.03);
+                    border:1px solid rgba(255, 255, 255, 0.08);
+                    border-radius:2px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    overflow:hidden;
+                    cursor:pointer;
+                ">
+                    <img src="./modules/assets/logo.png" alt="Logo" style="width:100%; height:100%; object-fit:contain; opacity:0.8;" onerror="this.style.display='none';">
+                </div>
             </div>
 
             <div id="w-menu" style="
@@ -459,13 +521,13 @@ function createWidePlayer() {
                 max-width:min(90vw, 420px);
                 max-height:220px;
                 overflow-y:auto;
-                background: rgba(255, 255, 255, 0.7);
-                backdrop-filter: blur(8px);
-                -webkit-backdrop-filter: blur(8px);
-                border: 1px solid rgba(255, 255, 255, 0.55);
-                border-radius: 6px;
+                background: rgba(20, 20, 20, 0.95);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.15);
+                border-radius: 4px;
                 padding: 8px;
-                box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+                box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             "></div>
         `;
     } else {
@@ -519,6 +581,8 @@ function createWidePlayer() {
         currentTimeEl: wide.querySelector('#w-current-time'),
         durationEl: wide.querySelector('#w-duration'),
         trackTitle: wide.querySelector('#w-track-title'),
+        artEl: wide.querySelector('#w-art'),
+        useSymbolPlay: mobileMode,
     };
 
     bindCommonControls(ui);
@@ -566,6 +630,7 @@ function createWidePlayer() {
         playlist.forEach((track, i) => {
             const item = document.createElement('button');
             item.type = 'button';
+            const isDark = mobileMode;
             item.style.cssText = `
                 width: 100%;
                 text-align: left;
@@ -575,11 +640,11 @@ function createWidePlayer() {
                 border-radius: 4px;
                 cursor: pointer;
                 font-size: 11px;
-                color: rgba(0,0,0,0.82);
-                background: ${i === state.currentTrack ? 'rgba(255,255,255,0.8)' : 'rgba(255,255,255,0.52)'};
+                color: ${isDark ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.82)'};
+                background: ${i === state.currentTrack ? (isDark ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.8)') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.52)')};
                 opacity: ${i === state.currentTrack ? '1' : '0.9'};
             `;
-            item.textContent = `${i === state.currentTrack ? 'Now ' : ''}${track.title}`;
+            item.textContent = `${i === state.currentTrack ? '▶ ' : ''}${track.title}`;
             item.addEventListener('click', () => {
                 playTrack(i, true);
                 menu.style.display = 'none';
@@ -588,10 +653,22 @@ function createWidePlayer() {
         });
     };
 
-    menuBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    });
+    if (menuBtn) {
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
+
+    // Mobile: tap logo area to open menu
+    const logoArea = wide.querySelector('#w-logo-area');
+    if (logoArea && mobileMode) {
+        logoArea.style.cursor = 'pointer';
+        logoArea.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+    }
 
     document.addEventListener('click', (e) => {
         if (!wide.contains(e.target)) {

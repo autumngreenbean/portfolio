@@ -44,6 +44,7 @@ body {
 
 .banner {
     font-family: "Raleway Dots", serif;
+    position:fixed; bottom:100; right:0; font-size:100px;
 }
 
 .filebox {
@@ -145,6 +146,13 @@ body {
     /* position: absolute; */
     right: -100;
     z-index: 1;
+}
+
+
+.banner {
+    font-family: "Raleway Dots", serif;
+    position:fixed; bottom:80; right:0; font-size:100px;
+    /* color:red; */
 }
     body {
         overflow-y: hidden;
