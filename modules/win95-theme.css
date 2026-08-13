@@ -9,6 +9,12 @@
     font-style: normal;
 }
 
+/* Prevent emoji rendering in Win95 theme */
+body.win95-theme * {
+    font-variant-emoji: text !important;
+    -webkit-font-variant-emoji: text !important;
+}
+
 body.win95-theme .form-container {
     background: #c0c0c0 !important;
     backdrop-filter: none !important;
