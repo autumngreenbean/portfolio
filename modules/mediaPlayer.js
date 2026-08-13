@@ -45,6 +45,19 @@ function formatTime(seconds) {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
+// SVG Icon functions
+function getPlaySvg(size = 24) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 5v14l11-7z" fill="currentColor"/>
+    </svg>`;
+}
+
+function getPauseSvg(size = 24) {
+    return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" fill="currentColor"/>
+    </svg>`;
+}
+
 function getPlayLabel(paused) {
     return paused ? 'Play' : 'Pause';
 }
@@ -60,8 +73,20 @@ function syncAllUi() {
     uiBindings.forEach((ui) => {
         if (ui.trackTitle) ui.trackTitle.textContent = current?.title ?? '—';
         if (ui.miniTitle) ui.miniTitle.textContent = current?.title ?? '—';
-        if (ui.playBtn) ui.playBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '❚❚') : getPlayLabel(audio.paused);
-        if (ui.miniPlayBtn) ui.miniPlayBtn.textContent = ui.useSymbolPlay ? (audio.paused ? '▶' : '❚❚') : getPlayLabel(audio.paused);
+        if (ui.playBtn) {
+            if (ui.useSymbolPlay) {
+                ui.playBtn.innerHTML = audio.paused ? getPlaySvg(24) : getPauseSvg(24);
+            } else {
+                ui.playBtn.textContent = getPlayLabel(audio.paused);
+            }
+        }
+        if (ui.miniPlayBtn) {
+            if (ui.useSymbolPlay) {
+                ui.miniPlayBtn.innerHTML = audio.paused ? getPlaySvg(16) : getPauseSvg(16);
+            } else {
+                ui.miniPlayBtn.textContent = getPlayLabel(audio.paused);
+            }
+        }
         if (ui.durationEl) ui.durationEl.textContent = formatTime(audio.duration || 0);
         if (ui.currentTimeEl) ui.currentTimeEl.textContent = formatTime(audio.currentTime || 0);
         if (ui.progress && audio.duration) {
@@ -282,7 +307,7 @@ function createWindowPlayer() {
                             justify-content: center;
                             padding: 0;
                             padding-left: 2px;
-                        ">▶</button>
+                        ">${getPlaySvg(24)}</button>
                         <button id="mp-next" title="Next" style="
                             background: transparent; border: none; color: white;
                             font-size: 16px; cursor: pointer; opacity: 0.7; padding: 0;
@@ -485,7 +510,7 @@ function createWidePlayer() {
                         padding:0;
                         padding-left:2px;
                         flex-shrink:0;
-                    ">▶</button>
+                    ">${getPlaySvg(16)}</button>
                     <button id="w-next" title="Next" style="background:transparent;border:none;color:rgba(255,255,255,0.7);font-size:18px;cursor:pointer;padding:0;line-height:1;width:24px;height:24px;display:flex;align-items:center;justify-content:center;">›</button>
                 </div>
                 
