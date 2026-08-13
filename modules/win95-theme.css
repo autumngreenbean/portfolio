@@ -1,0 +1,378 @@
+/* Windows 95 Theme Override - Applied when win95-theme class is on body */
+
+@import url('https://fonts.cdnfonts.com/css/w95fa');
+
+@font-face {
+    font-family: 'W95';
+    src: url('https://raw.githubusercontent.com/grassmunk/Chicago95/master/Fonts/vga_font/LessPerfectDOSVGA.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body.win95-theme .form-container {
+    background: #c0c0c0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    padding: 3px !important;
+    box-shadow: 
+        inset -1px -1px #808080,
+        inset 1px 1px #ffffff,
+        inset -2px -2px grey,
+        inset 2px 2px #fff,
+        -1px -1px 0 0 #dfdfdf,
+        0px -1px 0 0 #dfdfdf,
+        -1px 0px 0 0 #dfdfdf,
+        0px 1px 0 0 #000,
+        1px 1px 0 0 #000,
+        -1px 1px 0 0 #000,
+        1px -1px 0 0 #000 !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme .form-container #form-header {
+    background: linear-gradient(to right, #000080, #1084d0) !important;
+    color: white !important;
+    border-bottom: none !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+    font-weight: bold !important;
+    padding: 2px 4px !important;
+    height: 24px !important;
+}
+
+body.win95-theme .form-container #form-header #form-title {
+    font-size: 11px !important;
+    letter-spacing: 0 !important;
+    opacity: 1 !important;
+    color: white !important;
+}
+
+body.win95-theme .form-container #minimize-btn {
+    background: #c0c0c0 !important;
+    border: none !important;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+    width: 16px !important;
+    height: 14px !important;
+    font-size: 8px !important;
+    color: black !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.win95-theme .form-container #minimize-btn:active {
+    box-shadow:
+        inset 1px 1px #0a0a0a,
+        inset -1px -1px #fff,
+        inset 2px 2px grey,
+        inset -2px -2px #dfdfdf !important;
+}
+
+body.win95-theme .form-container #form-content {
+    background: #c0c0c0 !important;
+    color: black !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme .form-container #form-content * {
+    color: black !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme .form-container button {
+    background: #c0c0c0 !important;
+    border: none !important;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+    color: black !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+    padding: 8px 20px !important;
+}
+
+body.win95-theme .form-container button:active {
+    box-shadow:
+        inset 1px 1px #0a0a0a,
+        inset -1px -1px #fff,
+        inset 2px 2px grey,
+        inset -2px -2px #dfdfdf !important;
+}
+
+/* Media Player Windows 95 Theme */
+
+body.win95-theme #media-player {
+    background: #c0c0c0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 0 !important;
+    outline: none !important;
+    padding: 3px !important;
+    box-shadow: 
+        inset -1px -1px #808080,
+        inset 1px 1px #ffffff,
+        inset -2px -2px grey,
+        inset 2px 2px #fff,
+        -1px -1px 0 0 #dfdfdf,
+        0px -1px 0 0 #dfdfdf,
+        -1px 0px 0 0 #dfdfdf,
+        0px 1px 0 0 #000,
+        1px 1px 0 0 #000,
+        -1px 1px 0 0 #000,
+        1px -1px 0 0 #000 !important;
+}
+
+body.win95-theme #media-player #mp-header {
+    background: linear-gradient(to right, #000080, #1084d0) !important;
+    border-bottom: none !important;
+    color: white !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+    padding: 2px 4px !important;
+}
+
+body.win95-theme #media-player #mp-header span {
+    color: white !important;
+    font-size: 11px !important;
+    letter-spacing: 0 !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme #media-player #mp-minimize-btn {
+    background: #c0c0c0 !important;
+    border: none !important;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+    width: 16px !important;
+    height: 14px !important;
+    font-size: 8px !important;
+    color: black !important;
+}
+
+body.win95-theme #media-player #mp-body {
+    background: #c0c0c0 !important;
+}
+
+body.win95-theme #media-player #mp-body > div {
+    background: #c0c0c0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+body.win95-theme #media-player #mp-body * {
+    color: black !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme #media-player button {
+    background: #c0c0c0 !important;
+    border: none !important;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+    color: black !important;
+    padding: 6px 10px !important;
+}
+
+body.win95-theme #media-player button:active {
+    box-shadow:
+        inset 1px 1px #0a0a0a,
+        inset -1px -1px #fff,
+        inset 2px 2px grey,
+        inset -2px -2px #dfdfdf !important;
+}
+
+body.win95-theme #media-player #mp-art {
+    background: #000 !important;
+    border: 2px inset #c0c0c0 !important;
+    color: white !important;
+}
+
+body.win95-theme #media-player #mp-play {
+    background: #c0c0c0 !important;
+    border-radius: 0 !important;
+    color: black !important;
+}
+
+body.win95-theme #media-player input[type="range"] {
+    accent-color: #000080 !important;
+}
+
+/* Wide Player Windows 95 Theme */
+
+body.win95-theme #media-player-wide {
+    background: #c0c0c0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-radius: 0 !important;
+    border-top: 2px solid #dfdfdf !important;
+    box-shadow:
+        inset 0px 2px #fff,
+        inset 0px 3px #dfdfdf !important;
+}
+
+body.win95-theme #media-player-wide * {
+    color: black !important;
+    background: transparent !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme #media-player-wide button {
+    background: #c0c0c0 !important;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+    padding: 6px 10px !important;
+}
+
+body.win95-theme #media-player-wide button:active {
+    box-shadow:
+        inset 1px 1px #0a0a0a,
+        inset -1px -1px #fff,
+        inset 2px 2px grey,
+        inset -2px -2px #dfdfdf !important;
+
+}
+
+body.win95-theme #media-player-wide #w-play {
+    border-radius: 0 !important;
+}
+
+body.win95-theme #media-player-wide #w-art {
+    background: #000 !important;
+    border: 2px inset #808080 !important;
+    color: #c0c0c0 !important;
+}
+
+body.win95-theme #media-player-wide #w-logo-area {
+    background: #000 !important;
+    border: 2px inset #808080 !important;
+}
+
+body.win95-theme #media-player-wide input[type="range"] {
+    accent-color: #000080 !important;
+}
+
+/* Filebox Windows 95 Theme - Transform into Window with Menu */
+
+body.win95-theme .filebox {
+    display: block !important;
+    position: fixed !important;
+    right: 20px !important;
+    bottom: 100px !important;
+    width: 220px !important;
+    max-height: calc(100vh - 100px) !important;
+    overflow-y: auto !important;
+    background: #c0c0c0 !important;
+    border-radius: 0 !important;
+    padding: 3px !important;
+    box-shadow: 
+        inset -1px -1px #808080,
+        inset 1px 1px #ffffff,
+        inset -2px -2px grey,
+        inset 2px 2px #fff,
+        -1px -1px 0 0 #dfdfdf,
+        0px -1px 0 0 #dfdfdf,
+        -1px 0px 0 0 #dfdfdf,
+        0px 1px 0 0 #000,
+        1px 1px 0 0 #000,
+        -1px 1px 0 0 #000,
+        1px -1px 0 0 #000 !important;
+}
+
+/* Add title bar pseudo-element */
+body.win95-theme .filebox::before {
+    content: 'signalkitten';
+    display: block;
+    background: linear-gradient(to right, #000080, #1084d0);
+    color: white;
+    padding: 2px 4px;
+    font-family: 'w95fa', 'W95', monospace;
+    font-size: 11px;
+    font-weight: bold;
+    margin: -3px -3px 0 -3px;
+    height: 18px;
+    line-height: 18px;
+}
+
+body.win95-theme .folder {
+    width: 100% !important;
+    height: auto !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+}
+
+body.win95-theme .category {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+body.win95-theme .tab {
+    position: relative !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+    background: #c0c0c0 !important;
+    border: none !important;
+    border-bottom: 1px solid #808080 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    padding: 6px 12px !important;
+    text-align: left !important;
+    display: block !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+}
+
+body.win95-theme .category .tab {
+    background: #c0c0c0 !important;
+    color: #808080 !important;
+    border-top: 1px solid #808080 !important;
+}
+
+body.win95-theme .folder:hover {
+    transform: none !important;
+    background: transparent !important;
+}
+
+body.win95-theme .folder:hover .tab,
+body.win95-theme .tab:hover {
+    background: #000080 !important;
+    color: #ffffff !important;
+    border-bottom: 1px solid #808080 !important;
+}
+
+body.win95-theme .category:hover .tab,
+body.win95-theme .category .tab:hover {
+    background: #000080 !important;
+    color: #ffffff !important;
+}
+
+/* Hide banner in Win95 theme since it's now in window title */
+body.win95-theme .banner {
+    display: none !important;
+}

@@ -1,7 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway+Dots&display=swap');
-    
+@import url('https://fonts.cdnfonts.com/css/w95fa');
+
+@font-face {
+    font-family: 'W95';
+    src: url('https://raw.githubusercontent.com/grassmunk/Chicago95/master/Fonts/vga_font/LessPerfectDOSVGA.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 * {
     color:white;
+        font-family: 'w95fa', monospace;
+
 }
 .ballet{
   font-family: "Raleway Dots";
@@ -33,7 +43,7 @@ z-index: -1;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'W95', monospace;
     background-color: #ffffff;
     display: flex;
     justify-content: center;

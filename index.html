@@ -9,6 +9,7 @@
 // })();
 </script>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="modules/win95-theme.css">
 <img id="fixed-background" src="modules/assets/lotus.gif" style="left: 0; position: fixed;" alt=""><title>~~~meow</title>
 <!-- hi
  if you're reading this i <3 u
@@ -53,11 +54,15 @@
     <div class="folder">
         <div class="tab" data-file="images.png">images</div>
     </div>
+
     <div class="folder">
+        <div class="tab" data-file="log.md">LOG</div>
+    </div>
+        <div class="folder">
         <div class="tab" data-file="random-images">random</div>
     </div>
     <div class="folder">
-        <div class="tab" data-file="log.md">LOG</div>
+        <div class="tab" data-file="theme-toggle">THEME</div>
     </div>
 </div>
 <img src="/" alt="">
@@ -66,6 +71,7 @@
 
 <script type="module" src="./modules/createForm.js"></script>
 <!-- <script type="module" src="./modules/blog/blog.js"> </script> -->
+<script type="module" src="./modules/themeToggle.js"></script>
 <script type="module" src="./modules/mediaPlayer.js"></script>
 <script>
     if (window.innerWidth <= 480) console.log('mobile mode');
@@ -99,7 +105,7 @@
         const filebox = document.querySelector('.filebox');
         if (isMobile && filebox) {
             filebox.style.right = '0px';
-            filebox.style.bottom = '500';
+            filebox.style.bottom = '350';
             console.log('Applied mobile filebox scale');
         }
     }

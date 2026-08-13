@@ -1,5 +1,16 @@
 import { makeDraggable } from './makeDraggable.js';
 
+// Shared z-index counter for all windows
+if (!window.windowZIndexCounter) {
+    window.windowZIndexCounter = { current: 1000 };
+}
+
+function bringWindowToFront(windowElement) {
+    if (!windowElement) return;
+    const topZ = window.windowZIndexCounter.current++;
+    windowElement.style.zIndex = topZ;
+}
+
 function detectMobileLayout() {
     if (typeof window !== 'undefined' && typeof window.detectMobileLayout === 'function') {
         return !!window.detectMobileLayout();
@@ -165,7 +176,7 @@ function createWindowPlayer() {
     player.style.resize = 'horizontal';
     player.style.borderRadius = '2px';
     player.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-    player.style.zIndex = '990';
+    player.style.zIndex = String(window.windowZIndexCounter.current);
     player.style.backdropFilter = isMobile ? 'none' : 'blur(5px)';
     player.style.webkitBackdropFilter = isMobile ? 'none' : 'blur(5px)';
     player.style.outline = '1px solid rgba(255, 255, 255, 0.2)';
@@ -305,7 +316,7 @@ function createWindowPlayer() {
             -webkit-backdrop-filter: blur(8px);
         ">
             <button id="mp-mini-prev" title="Previous" style="background:transparent;border:none;color:white;font-size:12px;cursor:pointer;opacity:0.7;padding:0;flex-shrink:0;">Prev</button>
-            <button id="mp-mini-play" title="Play / Pause" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:white;font-size:12px;cursor:pointer;border-radius:14px;width:36px;height:28px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;">Play</button>
+            <button id="mp-mini-play" title="Play / Pause" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:white;font-size:12px;cursor:pointer;border-radius:0px;width:36px;height:28px;display:flex;align-items:center;justify-content:center;padding:0;flex-shrink:0;">Play</button>
             <button id="mp-mini-next" title="Next" style="background:transparent;border:none;color:white;font-size:12px;cursor:pointer;opacity:0.7;padding:0;flex-shrink:0;">Next</button>
             <span id="mp-mini-title" style="font-size:11px;opacity:0.75;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;">—</span>
         </div>
@@ -398,9 +409,18 @@ function createWindowPlayer() {
     minimizeBtn.addEventListener('click', toggleMinimize);
     minimizeBtn.addEventListener('touchstart', toggleMinimize);
 
+    const mpHeader = player.querySelector('#mp-header');
+    
+    // Bring to front on header click
+    const bringToFront = () => bringWindowToFront(player);
+    mpHeader.addEventListener('pointerdown', bringToFront);
+    mpHeader.addEventListener('mousedown', bringToFront);
+    player.addEventListener('pointerdown', bringToFront);
+    player.addEventListener('mousedown', bringToFront);
+
     player.addEventListener('mousedown', () => { player.style.cursor = 'grabbing'; });
     document.addEventListener('mouseup', () => { player.style.cursor = 'grab'; });
-    makeDraggable(player, player.querySelector('#mp-header'));
+    makeDraggable(player, mpHeader);
 
     uiBindings.push(ui);
 }

@@ -8,7 +8,12 @@ const isMobile = window.innerWidth <= 768;
 //NOT FUNCTIONING
 let lastPositionIndex = 0; 
 let formCounter = 0; 
-let zIndexCounter = { current: 1000 }; 
+
+// Shared z-index counter for all windows
+if (!window.windowZIndexCounter) {
+    window.windowZIndexCounter = { current: 1000 };
+}
+const zIndexCounter = window.windowZIndexCounter; 
 
 function bringFormToFront(form) {
 if (!form) return;
@@ -36,6 +41,7 @@ formHeader.addEventListener('mousedown', focusForm, true);
 
 async function createForm(fileName) {
 const isRandomImageWindow = fileName === 'random-images';
+const isThemeToggle = fileName === 'theme-toggle';
 const formId = isRandomImageWindow
     ? `form-container-random-${Date.now()}-${Math.random().toString(16).slice(2)}`
     : `form-container-${fileName}`;
@@ -130,6 +136,10 @@ if (isRandomImageWindow) {
         formContent.innerHTML = '<div style="color: rgba(255,255,255,0.7); padding: 20px;">random image failed to load</div>';
     };
     img.src = randomImageSrc;
+} else if (isThemeToggle) {
+    const formContent = formContainer.querySelector('#form-content');
+    const { getThemeMessage } = await import('./themeToggle.js');
+    formContent.innerHTML = `<div style="color: rgba(255,255,255,0.9); padding: 20px; font-size: 14px; line-height: 1.6;">${getThemeMessage()}</div>`;
 } else {
     fetchFileContent(fileName)
     .then(content => {
