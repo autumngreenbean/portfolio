@@ -13,6 +13,14 @@
 body.win95-theme * {
     font-variant-emoji: text !important;
     -webkit-font-variant-emoji: text !important;
+    font-family: 'w95fa', 'W95', monospace, 'Courier New', Courier !important;
+}
+
+/* Force text rendering for buttons specifically */
+body.win95-theme button {
+    font-variant-emoji: text !important;
+    -webkit-font-variant-emoji: text !important;
+    text-rendering: geometricPrecision !important;
 }
 
 body.win95-theme .form-container {
@@ -210,6 +218,20 @@ body.win95-theme #media-player #mp-play {
     background: #c0c0c0 !important;
     border-radius: 0 !important;
     color: black !important;
+    font-family: 'W95', monospace, 'Courier New' !important;
+    -webkit-text-size-adjust: none !important;
+    font-feature-settings: 'emoji' 0 !important;
+}
+
+/* Override emoji presentation for all play/control buttons */
+body.win95-theme #media-player button,
+body.win95-theme #media-player-wide button,
+body.win95-theme button {
+    font-feature-settings: 'emoji' 0 !important;
+    -webkit-text-size-adjust: none !important;
+    -webkit-text-fill-color: currentColor !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
 }
 
 body.win95-theme #media-player input[type="range"] {
