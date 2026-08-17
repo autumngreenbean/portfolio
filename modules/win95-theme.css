@@ -404,3 +404,59 @@ body.win95-theme .category .tab:hover {
 body.win95-theme .banner {
     display: none !important;
 }
+
+/* Suika Zoo game Win95 theme overrides */
+body.win95-theme #zoo-game-iframe {
+    background: #008080 !important; /* Classic Win95 teal background */
+}
+
+body.win95-theme #form-content .panel {
+    background: #c0c0c0 !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border: none !important;
+    box-shadow: 
+        inset -1px -1px #808080,
+        inset 1px 1px #ffffff,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+}
+
+body.win95-theme #form-content .panel h2,
+body.win95-theme #form-content .panel * {
+    color: #000 !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme .dialog {
+    background: #c0c0c0 !important;
+    border: none !important;
+    box-shadow: 
+        inset -1px -1px #808080,
+        inset 1px 1px #ffffff,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+}
+
+body.win95-theme .dialog h2 {
+    color: #000 !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme .dialog p,
+body.win95-theme .dialog span {
+    color: #000 !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}
+
+body.win95-theme .btn {
+    background: #c0c0c0 !important;
+    border: none !important;
+    box-shadow:
+        inset -1px -1px #0a0a0a,
+        inset 1px 1px #dfdfdf,
+        inset -2px -2px grey,
+        inset 2px 2px #fff !important;
+    color: black !important;
+    font-family: 'w95fa', 'W95', monospace !important;
+}

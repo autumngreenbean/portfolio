@@ -42,6 +42,7 @@ formHeader.addEventListener('mousedown', focusForm, true);
 async function createForm(fileName) {
 const isRandomImageWindow = fileName === 'random-images';
 const isThemeToggle = fileName === 'theme-toggle';
+const isZooMerge = fileName === 'zoo-merge';
 const formId = isRandomImageWindow
     ? `form-container-random-${Date.now()}-${Math.random().toString(16).slice(2)}`
     : `form-container-${fileName}`;
@@ -69,8 +70,11 @@ formCounter++;
 formContainer.style.position = 'absolute';
 formContainer.style.fontWeight = '';
 formContainer.style.transform = 'translate(0, 0)';
-formContainer.style.width = isMobile ? 'calc(100vw - 20px)' : '550px';
-formContainer.style.maxWidth = '550px';
+formContainer.style.width = isZooMerge ? '820px' : (isMobile ? 'calc(100vw - 20px)' : '550px');
+formContainer.style.maxWidth = isZooMerge ? '820px' : '550px';
+formContainer.style.minWidth = isZooMerge ? '820px' : '';
+formContainer.style.height = isZooMerge ? 'auto' : 'auto';
+formContainer.style.maxHeight = isZooMerge ? 'none' : 'none';
 formContainer.style.borderRadius = '2px';
 formContainer.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
 formContainer.style.zIndex = zIndexCounter.current;
@@ -78,7 +82,7 @@ formContainer.style.background = 'rgba(255, 255, 255, 0.08)';
 formContainer.style.backdropFilter = 'blur(8px)';
 formContainer.style.webkitBackdropFilter = 'blur(8px)';
 formContainer.style.outline = '1px solid rgba(255, 255, 255, 0.2)';
-formContainer.style.overflow = 'hidden';
+formContainer.style.overflow = isZooMerge ? 'visible' : 'hidden';
 
 //CURSOR GRAB
 formContainer.addEventListener('mousedown', (e) => {
@@ -90,14 +94,14 @@ document.addEventListener('mouseup', () => {
 formContainer.style.cursor = 'grab';
 });
 
-const formTitle = isRandomImageWindow ? `random image ${formCounter}` : fileName;
+const formTitle = isRandomImageWindow ? `random image ${formCounter}` : (isZooMerge ? 'zoo merge' : fileName);
 
 formContainer.innerHTML = `
-    <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+    <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; ${isZooMerge ? 'width: 820px; min-width: 820px; box-sizing: border-box;' : ''}">
         <span id="form-title">${formTitle}</span>
         <button id="minimize-btn" style="color: white; cursor: pointer;">-</button>
     </div>
-    <form id="form-content" style="padding: 20px; display: block;">
+    <form id="form-content" style="${isZooMerge ? 'padding: 0; overflow: visible;' : 'padding: 20px;'} display: block;">
     </form>
 `;
 document.body.appendChild(formContainer);
@@ -140,6 +144,16 @@ if (isRandomImageWindow) {
     const formContent = formContainer.querySelector('#form-content');
     const { getThemeMessage } = await import('./themeToggle.js');
     formContent.innerHTML = `<div style="color: rgba(255,255,255,0.9); padding: 20px; font-size: 14px; line-height: 1.6;">${getThemeMessage()}</div>`;
+} else if (isZooMerge) {
+    const formContent = formContainer.querySelector('#form-content');
+    formContent.style.padding = '0';
+    formContent.style.height = 'auto';
+    formContent.style.overflow = 'visible';
+    formContent.style.display = 'block';
+    const { loadSuikaGame } = await import('./loadSuikaGame.js');
+    await loadSuikaGame(formContent);
+    // Adjust container to fit iframe exactly
+    formContainer.style.height = 'auto';
 } else {
     fetchFileContent(fileName)
     .then(content => {

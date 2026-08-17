@@ -1,0 +1,16 @@
+newmtl Material57
+Ka 0.3764706 0.2509804 0.2509804
+Kd 0.972549 0.972549 0.972549
+d 1
+Tr 1
+map_Ka Material57.png
+map_Kd Material57.png
+map_d Material57.png
+newmtl Material58
+Ka 0.3764706 0.2509804 0.2509804
+Kd 0.972549 0.972549 0.972549
+d 1
+Tr 1
+map_Ka Material58.png
+map_Kd Material58.png
+map_d Material58.png
