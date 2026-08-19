@@ -70,9 +70,9 @@ formCounter++;
 formContainer.style.position = 'absolute';
 formContainer.style.fontWeight = '';
 formContainer.style.transform = 'translate(0, 0)';
-formContainer.style.width = isZooMerge ? '820px' : (isMobile ? 'calc(100vw - 20px)' : '550px');
-formContainer.style.maxWidth = isZooMerge ? '820px' : '550px';
-formContainer.style.minWidth = isZooMerge ? '820px' : '';
+formContainer.style.width = isZooMerge ? 'auto' : (isMobile ? 'calc(100vw - 20px)' : '550px');
+formContainer.style.maxWidth = isZooMerge ? 'none' : '550px';
+formContainer.style.minWidth = isZooMerge ? 'auto' : '';
 formContainer.style.height = isZooMerge ? 'auto' : 'auto';
 formContainer.style.maxHeight = isZooMerge ? 'none' : 'none';
 formContainer.style.borderRadius = '2px';
@@ -97,7 +97,7 @@ formContainer.style.cursor = 'grab';
 const formTitle = isRandomImageWindow ? `random image ${formCounter}` : (isZooMerge ? 'zoo merge' : fileName);
 
 formContainer.innerHTML = `
-    <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; ${isZooMerge ? 'width: 820px; min-width: 820px; box-sizing: border-box;' : ''}">
+    <div id="form-header" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; ${isZooMerge ? 'width: 100%; box-sizing: border-box;' : ''}">
         <span id="form-title">${formTitle}</span>
         <button id="minimize-btn" style="color: white; cursor: pointer;">-</button>
     </div>

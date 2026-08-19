@@ -40,7 +40,7 @@ const CONFIG = {
 
   // ---- Jar / world geometry (world units, arbitrary but consistent) ---
   JAR: {
-    innerWidth: 400,
+    innerWidth: 800,
     innerHeight: 520,
     wallThickness: 22,
     floorThickness: 2,

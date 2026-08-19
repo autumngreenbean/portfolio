@@ -3,6 +3,7 @@
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
 }
 
 body {
@@ -118,11 +119,9 @@ a, button, select, input {
   display: flex;
   gap: var(--space-5);
   padding: var(--space-5);
-  max-width: 1180px;
-  width: 100%;
+  width: fit-content;
   margin: 0 auto;
   align-items: flex-start;
-  flex-wrap: wrap;
   justify-content: center;
 }
 
@@ -139,8 +138,6 @@ a, button, select, input {
 
 #gameCanvas {
   display: block;
-  width: min(92vw, 520px);
-  aspect-ratio: 2 / 3;
   cursor: pointer;
 }
 

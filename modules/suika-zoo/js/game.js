@@ -591,10 +591,32 @@ function initSettingsUI() {
 
 // ============================================================== Render loop
 
+// Calculate ideal canvas dimensions based on jar configuration
+function getIdealCanvasDimensions() {
+  const jar = CONFIG.JAR;
+  const margin = CONFIG.CAMERA.verticalMargin;
+  
+  // Width: jar inner width + walls + some padding for visual comfort
+  const idealWidth = jar.innerWidth + (jar.wallThickness * 2) + 60;
+  
+  // Height: jar inner height + vertical margins
+  const idealHeight = jar.innerHeight + (margin * 2);
+  
+  return { width: idealWidth, height: idealHeight };
+}
+
 function onResize() {
-  const rect = stageWrap.getBoundingClientRect();
-  const w = rect.width, h = rect.height;
+  const ideal = getIdealCanvasDimensions();
+  
+  // Use ideal dimensions directly - let the jar width drive the canvas size
+  const w = ideal.width;
+  const h = ideal.height;
   const aspect = w / h;
+  
+  // Update canvas size in DOM
+  canvas.style.width = `${w}px`;
+  canvas.style.height = `${h}px`;
+  
   renderer.setSize(w, h, false);
   renderer.setPixelRatio(Math.min(CONFIG.RENDER.pixelRatioCap, window.devicePixelRatio || 1));
 
@@ -607,6 +629,37 @@ function onResize() {
     camera.aspect = aspect;
   }
   camera.updateProjectionMatrix();
+  
+  // Notify parent window of size change if in iframe
+  requestAnimationFrame(() => {
+    if (window.parent !== window) {
+      // We're in an iframe - calculate actual content dimensions
+      const mainEl = document.querySelector('.app-main');
+      const stageEl = document.querySelector('.stage-wrap');
+      const sidePanelEl = document.querySelector('.side-panel');
+      
+      // Calculate width from main content
+      const contentWidth = mainEl ? mainEl.scrollWidth : document.documentElement.scrollWidth;
+      
+      // Calculate height based on the taller of canvas or side panel, plus minimal padding
+      let contentHeight;
+      if (stageEl && sidePanelEl) {
+        const stageHeight = stageEl.offsetHeight;
+        const sidePanelHeight = sidePanelEl.offsetHeight;
+        const maxContentHeight = Math.max(stageHeight, sidePanelHeight);
+        // Add padding (24px top + 24px bottom from --space-5)
+        contentHeight = maxContentHeight + 48;
+      } else {
+        contentHeight = document.documentElement.scrollHeight;
+      }
+      
+      window.parent.postMessage({
+        type: 'suika-zoo-resize',
+        width: contentWidth,
+        height: contentHeight
+      }, '*');
+    }
+  });
 }
 
 function tick(now) {
