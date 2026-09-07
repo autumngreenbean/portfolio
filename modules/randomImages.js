@@ -125,20 +125,22 @@ async function loadSources({ forceRefresh = false } = {}) {
 
   loadPromise = (async () => {
     let sources = [];
+    let githubSources = [];
+    let manifestSources = [];
 
     try {
-      sources = await fetchManifestSources();
+      githubSources = await fetchGithubSources();
     } catch (error) {
-      console.info('randomImages: manifest unavailable, trying GitHub API.', error);
+      console.info('randomImages: GitHub API unavailable, trying manifest and bundled sources.', error);
     }
 
-    if (!sources.length) {
-      try {
-        sources = await fetchGithubSources();
-      } catch (error) {
-        console.info('randomImages: GitHub API unavailable, trying bundled sources.', error);
-      }
+    try {
+      manifestSources = await fetchManifestSources();
+    } catch (error) {
+      console.info('randomImages: manifest unavailable, using other sources.', error);
     }
+
+    sources = uniqueEntries([...githubSources, ...manifestSources]);
 
     if (!sources.length) {
       sources = readBundledSources();
