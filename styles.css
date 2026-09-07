@@ -1,17 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Ballet:opsz@16..72&display=swap');
-    
-    
+@import url('https://fonts.googleapis.com/css2?family=Raleway+Dots&display=swap');
+@import url('https://fonts.cdnfonts.com/css/w95fa');
+
+@font-face {
+    font-family: 'W95';
+    src: url('https://raw.githubusercontent.com/grassmunk/Chicago95/master/Fonts/vga_font/LessPerfectDOSVGA.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    color:white;
+        font-family: 'w95fa', monospace;
+
+}
 .ballet{
-  font-family: "Ballet", serif;
+  font-family: "Raleway Dots";
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
 }
 a:link {
-    color:maroon;
+    color:lightblue;
 }
 a:visited {
-    color: lightblue;
+    color: maroon;
 }
 canvas {
 position: absolute;
@@ -31,7 +43,7 @@ z-index: -1;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'W95', monospace;
     background-color: #ffffff;
     display: flex;
     justify-content: center;
@@ -40,18 +52,25 @@ body {
 
 }
 
+.banner {
+    font-family: "Raleway Dots", serif;
+    position:fixed; bottom:100; right:0; font-size:100px;
+}
+
 .filebox {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    position: relative;
+    position: absolute;
+    right: 100;
+    /* bottom: 20; */
     z-index: 1;
 }
 
 .folder {
     position: relative;
     width: 500px;
-    height: 300px;
+    height: 305px;
     background-color: #ffffff;
     border: 1px solid #000000;
     border-radius: 5px;
@@ -67,19 +86,24 @@ body {
 
 .tab {
     position: absolute;
-    top: -30px;
+    top: -28px;
     left: 15%;
     transform: translateX(-52%);
     background-color: #ffffff;
     border: 1px solid #000000;
-    border-bottom: 2px solid #ffffff;
+    border-bottom: 1px solid #ffffff;
     color: rgb(0, 0, 0);
-    padding: 10px 15px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    
+    /* padding: 10px 15px; */
     font-weight: bold;
-    font-size: 10px;
+    font-size: 12px;
     text-transform: uppercase;
     border-radius: 5px 5px 0px 0px;
     width: 130px;
+    height: 30px;
     text-align: center;
     transition: background-color 0.3s ease, color 0.3s ease, border-bottom 0.3s ease;
 }
@@ -88,8 +112,9 @@ body {
     background-color: #000000;
     color: #ffffff;
     position: absolute;
-    top: -33px;
-    left: 40%;
+    top: -25px;
+    left: 80%;
+    height: 30px;
     transform: translateX(-52%);
     border: 1px solid #ffffff;
     border-bottom: 2px solid #000000;
@@ -100,6 +125,7 @@ body {
 .tab:hover,
 .tab:hover .folder {
     background-color: #000000;
+    border: 1px solid #ffffff;
     color: white;
     border-bottom: 2px solid #000000;
 }
@@ -113,27 +139,49 @@ body {
     margin-top: -285px;
 }
 
+#fixed-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    object-fit: cover;
+}
 @media (max-width: 480px) {
 
+  
+
+.banner {
+    font-family: "Raleway Dots", serif;
+    position:fixed; bottom:80; right:0; font-size:100px;
+    /* color:red; */
+}
     body {
-        overflow-y:hidden;
-        overflow-x:hidden;
+        overflow-y: hidden;
+        overflow-x: hidden;
     }
     .folder {
-    position: relative;
-    width: 500px;
-    height: 300px;
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    margin-left: 350px;
-    margin-top: 800px;
-    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
-.category {
-    background-color: #000000;
-    border: 1px solid #ffffff;
-}
+        position: relative;
+        width: 500px;
+        height: 300px;
+        background-color: #ffffff;
+        border: 1px solid #000000;
+        border-radius: 5px;
+        margin-left: 350px;
+        margin-top: 800px;
+        transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+    .category {
+        background-color: #000000;
+        border: 1px solid #ffffff;
+    }
+    #fixed-background {
+        /* width: 100% !important; */
+        /* display:none; */
+        height: 100%;
+        width: auto;
+    }
 }
 
 #form-container {
@@ -209,6 +257,7 @@ background-color: #0000005d;
 }
 
 .post {
+    -webkit-backdrop-filter: blur(5px);
     background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent background */
     backdrop-filter: blur(5px); /* Ensures this section has the blur effect */
     padding: 40px;

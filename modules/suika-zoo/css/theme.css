@@ -1,0 +1,188 @@
+/* ==========================================================================
+   THEME.CSS — Suika Zoo visual configuration
+   ==========================================================================
+   Every color, font, spacing, radius and motion value the game uses lives
+   here as a CSS custom property. Nothing below the :root blocks should ever
+   contain a hard-coded color or font — game.js and styles.css only ever
+   read these variables (many are also read at runtime via
+   getComputedStyle, see js/config.js -> Theme.readCSSVar).
+
+   To make your own theme: duplicate one of the [data-theme="..."] blocks,
+   give it a new name, add it to the <select id="themeSelect"> options in
+   index.html, and every panel, button, and the jar itself will re-skin
+   automatically — no JS changes required.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,600&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root,
+[data-theme="zoo"] {
+  color-scheme: light;
+
+  /* ---- Palette --------------------------------------------------------- */
+  --color-bg-top:        #ffffff;   /* clean white */
+  --color-bg-bottom:     #ffffff;   /* clean white */
+  --color-surface:       #ffffff;   /* white panels */
+  --color-surface-alt:   #fafafa;   /* subtle gray */
+  --color-border:        #d0d0d0;   /* gray outline */
+  --color-border-strong: #999999;   /* darker gray */
+
+  --color-text:          #2a2a2a;   /* dark gray text */
+  --color-text-muted:    #707070;   /* medium gray */
+  --color-text-on-accent:#ffffff;
+
+  --color-accent:        #4a4a4a;   /* dark gray accent */
+  --color-accent-hover:  #2a2a2a;   /* darker on hover */
+  --color-accent-2:      #6a6a6a;   /* medium gray */
+  --color-danger:        #8a8a8a;
+  --color-success:       #5a5a5a;
+
+  --color-jar-glass-1:   rgba(240, 240, 240, 0.5);  /* light gray glass */
+  --color-jar-glass-2:   rgba(230, 230, 230, 0.3);
+  --color-jar-rim:       #999999;   /* gray rim */
+  --color-jar-line:      #666666;   /* dark gray line */
+  --color-jar-floor:     #cccccc;   /* light gray floor */
+
+  --color-focus-ring:    #666666;
+
+  /* Per-tier animal palette (used by placeholder geometry + UI chips) */
+  --tier-0-color: #e7c7c9; /* dog */
+  --tier-1-color: #eab04f; /* cat */
+  --tier-2-color: #f2e2b1; /* bunny */
+  --tier-3-color: #2f3237; /* penguin */
+  --tier-4-color: #c98a53; /* deer */
+  --tier-5-color: #e6c684; /* giraffe */
+  --tier-6-color: #4a7c59; /* alligator */
+  --tier-7-color: #f0b7c4; /* pig */
+  --tier-8-color: #9bb8c4; /* hippo */
+  --tier-9-color: #2c2c2c; /* panda */
+
+  /* ---- Typography -------------------------------------------------------*/
+  --font-display: "Baloo 2", "Segoe UI Rounded", system-ui, sans-serif;
+  --font-body:    "Nunito Sans", system-ui, -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  --scale: 1;               /* master UI scale, adjustable via a11y slider */
+  --fs-xs:   calc(0.72rem * var(--scale));
+  --fs-sm:   calc(0.86rem * var(--scale));
+  --fs-md:   calc(1rem    * var(--scale));
+  --fs-lg:   calc(1.3rem  * var(--scale));
+  --fs-xl:   calc(1.9rem  * var(--scale));
+  --fs-2xl:  calc(2.6rem  * var(--scale));
+
+  /* ---- Space / radius / shadow ------------------------------------------*/
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px;
+
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-pill: 0px;
+
+  --shadow-panel: 0 1px 0 rgba(0, 0, 0, 0.1);
+  --shadow-soft:  0 1px 0 rgba(0, 0, 0, 0.05);
+
+  --border-w: 1px;
+
+  /* ---- Motion ------------------------------------------------------------
+     game.js reads --motion-* as *numbers* (parseFloat), so keep them unitless. */
+  --motion-scale: 1;         /* 0 = effectively off, driven by reduced-motion */
+  --duration-fast: 120ms;
+  --duration-med: 240ms;
+  --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+/* ---- Night theme: same structure, different mood ------------------------ */
+[data-theme="night"] {
+  color-scheme: dark;
+
+  --color-bg-top:        #171c26;
+  --color-bg-bottom:     #0d1016;
+  --color-surface:       #1f2530;
+  --color-surface-alt:   #191e27;
+  --color-border:        #333c4a;
+  --color-border-strong: #4a5567;
+
+  --color-text:          #eef1f6;
+  --color-text-muted:    #9aa4b5;
+  --color-text-on-accent:#101317;
+
+  --color-accent:        #f2b84b;
+  --color-accent-hover:  #d99f34;
+  --color-accent-2:      #57c2b0;
+  --color-danger:        #ef7a63;
+  --color-success:       #79c76a;
+
+  --color-jar-glass-1:   rgba(87, 194, 176, 0.14);
+  --color-jar-glass-2:   rgba(20, 30, 40, 0.35);
+  --color-jar-rim:       #3d4a52;
+  --color-jar-line:      #ef7a63;
+  --color-jar-floor:     #232a33;
+
+  --color-focus-ring:    #57c2b0;
+
+  --tier-0-color: #f0b8bb;
+  --tier-1-color: #f2b84b;
+  --tier-2-color: #f4e6b8;
+  --tier-3-color: #e7ebf1;
+  --tier-4-color: #d99a63;
+  --tier-5-color: #f4d89a;
+  --tier-6-color: #5a8c6f;
+  --tier-7-color: #f3c3cf;
+  --tier-8-color: #8fb6c9;
+  --tier-9-color: #cfd4dc;
+
+  --shadow-panel: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --shadow-soft:  0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* ---- High-contrast theme: WCAG-AAA-minded, motion-quiet ------------------ */
+[data-theme="contrast"] {
+  color-scheme: light;
+
+  --color-bg-top:        #ffffff;
+  --color-bg-bottom:     #ffffff;
+  --color-surface:       #ffffff;
+  --color-surface-alt:   #f2f2f2;
+  --color-border:        #000000;
+  --color-border-strong: #000000;
+
+  --color-text:          #000000;
+  --color-text-muted:    #1a1a1a;
+  --color-text-on-accent:#000000;
+
+  --color-accent:        #005f4b;
+  --color-accent-hover:  #004236;
+  --color-accent-2:      #0044cc;
+  --color-danger:        #b00020;
+  --color-success:       #005f2a;
+
+  --color-jar-glass-1:   rgba(0, 0, 0, 0.04);
+  --color-jar-glass-2:   rgba(0, 0, 0, 0.02);
+  --color-jar-rim:       #000000;
+  --color-jar-line:      #b00020;
+  --color-jar-floor:     #000000;
+
+  --color-focus-ring:    #b00020;
+
+  --tier-0-color: #ffb3b3;
+  --tier-1-color: #ffcf40;
+  --tier-2-color: #fff2a8;
+  --tier-3-color: #444444;
+  --tier-4-color: #d98a3d;
+  --tier-5-color: #ffe680;
+  --tier-6-color: #4d9966;
+  --tier-7-color: #ff9fc0;
+  --tier-8-color: #6fb1c9;
+  --tier-9-color: #111111;
+
+  --border-w: 3px;
+  --shadow-panel: none;
+  --shadow-soft: none;
+  --motion-scale: 0.3;
+}
+
+/* Respect OS-level reduced motion regardless of theme choice */
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-scale: 0; --duration-fast: 1ms; --duration-med: 1ms; }
+}
