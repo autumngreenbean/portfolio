@@ -1,7 +1,7 @@
 import { makeDraggable } from './makeDraggable.js';
 import { handleMinimize } from './makeDraggable.js';
 import { fetchFileContent } from './fetchContent.js';
-import { getRandomImageSource } from './generatedImageList.js';
+import { getRandomImageSource, refreshRandomImageSources } from './randomImages.js';
 console.log("createForm.js: 'YOOOOO! I am called!'");
 const isMobile = window.innerWidth <= 768; 
 
@@ -196,5 +196,11 @@ document.querySelectorAll('.tab').forEach(tab => {
             ? document.querySelector('.form-container:last-of-type')
             : document.getElementById(`form-container-${fileName}`);
         if (form) bringFormToFront(form);
+    });
+});
+
+window.addEventListener('load', () => {
+    refreshRandomImageSources().catch((error) => {
+        console.info('createForm: random image source refresh failed on load.', error);
     });
 });
