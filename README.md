@@ -39,6 +39,7 @@ Entering this screen
 
 ## Spawn 'Text box' Specifictions
 Spawns text box with dotted border. Right side of text box has column of text-box properties options, from top to bottom:
+
     - Lock Width (Locks width of current text box width when resizing. Toggles on/off)
     - Lock Height (Locks height of current text box height when resizing. Toggles on/off)
     - Move (Clicking a dragging this button allows user to move the text box across the screen. Text box will lock to the same X position as other text boxes if close. Button can be held and arrow keys used synchronously to make small adjustments to position)
