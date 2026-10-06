@@ -37,7 +37,7 @@ Entering this screen
 - Menu: Represented by 'Menu', opens a panel displaying all saved entries, which can be opened and edited. 
 
 
-**Spawn 'Text box' Specifictions**
+## Spawn 'Text box' Specifictions
 Spawns text box with dotted border. Right side of text box has column of text-box properties options, from top to bottom:
     - Lock Width (Locks width of current text box width when resizing. Toggles on/off)
     - Lock Height (Locks height of current text box height when resizing. Toggles on/off)
@@ -51,4 +51,4 @@ Top of text box has a row of text-box properties, from top to bottom:
     - Decoration (Several options for CSS-related text styles)
     - Custom css (Opens text panel to insert CSS-formatted styling to overwrite defaults, save this CSS formatting as a Decoration with `Save as` option in opened panel, otherwise saves as custom formatting just for the selected text box)
 
-**Decoration Specifications**
+## Decoration Specifications**
