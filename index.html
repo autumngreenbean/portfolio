@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Magazine Archive</title>
   <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/w95fa">
   <style>
@@ -28,6 +28,7 @@
       font-family: 'W95FA', monospace;
       font-size: 16px;
       line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
     }
 
     .app {
@@ -45,6 +46,13 @@
       min-height: 0;
     }
 
+    .top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
     .sidebar h1 {
       margin: 0;
       padding: 20px 20px 14px;
@@ -53,6 +61,40 @@
       letter-spacing: 0.04em;
 /*       text-transform: uppercase; */
       color: var(--accent);
+    }
+
+    /* Mobile-only buttons (shown in the media query below) */
+    .top-actions {
+      display: none;
+      gap: 6px;
+      padding-right: 12px;
+    }
+
+    .top-btn {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-size: 14px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .top-btn:hover { background: var(--hover); }
+    .top-btn:focus-visible { outline: 1px solid var(--muted); }
+    .top-btn[aria-expanded="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
     }
 
     .sidebar .count {
@@ -74,7 +116,7 @@
       background: var(--bg);
       color: var(--text);
       font-family: inherit;
-      font-size: 16px;
+      font-size: 16px; /* 16px stops iPhones zooming in when the box is focused */
     }
 
     .search input::placeholder { color: var(--muted); }
@@ -114,6 +156,7 @@
       padding: 8px;
       overflow-y: auto;
       flex: 1;
+      min-height: 0;
     }
 
     .list button {
@@ -186,59 +229,94 @@
 
     .note a { color: var(--accent); }
 
-    /* ---------- Mobile ---------- */
+    /* ---------- Mobile ----------
+       The page fills the real visible screen (dvh accounts for the
+       phone's address bar). The viewer takes all the space left over,
+       and the menu opens as an overlay so it never squeezes the viewer. */
     @media (max-width: 768px) {
       .app {
         grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
-        height: auto;
-        min-height: 100%;
+        grid-template-rows: auto minmax(0, 1fr);
+        height: 100vh;
+        height: 100dvh;
       }
-      .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
-      .sidebar .count { display: none; }
-      .sidebar h1 { padding: 14px 16px 8px; }
-      .list {
-        display: flex;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding: 4px 8px 12px;
+
+      .sidebar {
+        position: relative;
+        z-index: 10;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .sidebar h1 { padding: 12px 14px; font-size: 17px; }
+      .top-actions { display: flex; }
+
+      .panel {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        max-height: calc(100vh - 60px);
+        max-height: calc(100dvh - 60px);
+        padding-top: 4px;
+        background: var(--panel);
+        border-bottom: 1px solid var(--line);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+      }
+      .sidebar.open .panel { display: flex; }
+
+      .search { padding: 0 8px 8px; }
+      .filters { padding: 0 8px 8px; }
+      .filters button { padding: 6px 12px; }
+      .sidebar .count { padding: 8px 14px; }
+      .list { padding: 4px 8px 12px; }
+      .list button { padding: 12px; }
+
+      .main {
+        padding: 6px;
+        padding-bottom: calc(6px + env(safe-area-inset-bottom));
         gap: 6px;
       }
-      .list li { flex: 0 0 auto; }
-      .list button { white-space: nowrap; border: 1px solid var(--line); }
-      .filters {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding: 0 8px 8px;
+
+      .viewer { min-height: 0; border-radius: 6px; }
+
+      .note {
+        max-height: 24vh;
+        max-height: 24dvh;
+        padding: 10px 12px;
+        font-size: 15px;
       }
-      .filters button { flex: 0 0 auto; white-space: nowrap; }
-      .search { padding: 0 8px 8px; }
-      .main { padding: 12px; }
-      .viewer { min-height: 60vh; }
-      .note { max-height: none; }
     }
   </style>
 </head>
 <body>
 
 <div class="app">
-  <aside class="sidebar">
-    <h1>Kitten's Archive</h1>
-    <div class="search">
-      <input type="search" id="search" placeholder="Search descriptions…"
-             aria-label="Search descriptions" autocomplete="off">
+  <aside class="sidebar" id="sidebar">
+    <div class="top">
+      <h1>Kitten's Archive</h1>
+      <div class="top-actions">
+        <button type="button" class="top-btn" id="mode-btn"
+                aria-label="Switch between one-page and two-page view">1 page</button>
+        <button type="button" class="top-btn" id="menu-btn"
+                aria-expanded="false" aria-controls="panel">Browse</button>
+      </div>
     </div>
-    <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
-    <div class="count" id="count"></div>
-    <ul class="list" id="list"></ul>
+
+    <div class="panel" id="panel">
+      <div class="search">
+        <input type="search" id="search" placeholder="Search descriptions…"
+               aria-label="Search descriptions" autocomplete="off">
+      </div>
+      <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
+      <div class="count" id="count"></div>
+      <ul class="list" id="list"></ul>
+    </div>
   </aside>
 
   <main class="main">
-    <div class="viewer">
-      <iframe id="viewer"
-              title="Archive.org magazine viewer"
-              allowfullscreen></iframe>
-    </div>
+    <div class="viewer" id="viewer-wrap"></div>
 
     <section class="note" id="note">
       <h2 id="note-title"></h2>
@@ -281,8 +359,7 @@
       description: "Replace this with a short description of the issue.",
       note: "Webmaster's note: replace this with your own comments."
     },
-
-        {
+    {
       id: "ComputerPlayer09Feb1995",
       category: "Video Games",
       tagline: "Multimedia Gaming & Beyond",
@@ -291,8 +368,7 @@
       description: "Journey through time to the LOST EDEN",
       note: "Webmaster's note: replace this with your own comments."
     },
-
-        {
+    {
       id: "InterActivity01NovDec1994",
       category: "Computing",
       tagline: "The How-To Multimedia Magazine",
@@ -301,7 +377,7 @@
       description: "Interactive fiction & CD-ROM basics",
       note: "Webmaster's note: replace this with your own comments."
     },
-     {
+    {
       id: "GPGMSDOSCGVol1No2",
       category: "Video Games",
       tagline: "the Game Player's Guide",
@@ -310,7 +386,7 @@
       description: "100 PC Games Revealed",
       note: "Webmaster's note: replace this with your own comments."
     },
-         {
+    {
       id: "TokyoPop01AugSep1999",
       category: "Anime",
       tagline: "Exclusive Manga",
@@ -319,8 +395,7 @@
       description: "GUNDAM, Knight Rayearth, Parasyte",
       note: "Webmaster's note: replace this with your own comments."
     },
-
-             {
+    {
       id: "ElectronicEntertainment07Jul1994",
       category: "Computing",
       tagline: "Multimedia to the Max!",
@@ -331,26 +406,56 @@
     },
   ];
 
+  const sidebarEl = document.getElementById('sidebar');
+  const menuBtn = document.getElementById('menu-btn');
+  const modeBtn = document.getElementById('mode-btn');
   const listEl = document.getElementById('list');
-  const viewer = document.getElementById('viewer');
-  const embedUrl = id => `https://archive.org/embed/${encodeURIComponent(id)}?ui=embed#mode/2up`;
-
+  const viewerWrap = document.getElementById('viewer-wrap');
   const filtersEl = document.getElementById('filters');
   const countEl = document.getElementById('count');
+  const searchEl = document.getElementById('search');
+
+  /* Page mode: one page at a time on phones (fits the screen far better),
+     two-page spread on larger screens. The "1 page / 2 pages" button on
+     mobile lets the reader override it. */
+  const mobileQuery = window.matchMedia('(max-width: 768px)');
+  let pageMode = mobileQuery.matches ? '1up' : '2up';
+  let userPickedMode = false;
+
+  const embedUrl = id =>
+    `https://archive.org/embed/${encodeURIComponent(id)}?ui=embed#mode/${pageMode}`;
+
   const norm = c => Array.isArray(c) ? c : (c ? [c] : []);
   const categories = [...new Set(MAGAZINES.flatMap(m => norm(m.category)))];
   let activeCategory = 'All';
   let currentId = null;
   let query = '';
-  const searchEl = document.getElementById('search');
+
+  function updateModeBtn() {
+    modeBtn.textContent = pageMode === '1up' ? '1 page' : '2 pages';
+  }
+
+  function setMenu(open) {
+    sidebarEl.classList.toggle('open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.textContent = open ? 'Close' : 'Browse';
+  }
+
+  // A fresh iframe each time guarantees the viewer reloads at the right mode
+  function loadViewer(m) {
+    const frame = document.createElement('iframe');
+    frame.title = m.title + (m.issue ? ' – ' + m.issue : '') + ' (Internet Archive)';
+    frame.setAttribute('allowfullscreen', '');
+    frame.src = embedUrl(m.id);
+    viewerWrap.replaceChildren(frame);
+  }
 
   function select(id, pushHash = true) {
     const m = MAGAZINES.find(x => x.id === id) || MAGAZINES[0];
     if (!m) return;
 
     currentId = m.id;
-    viewer.src = embedUrl(m.id);
-    viewer.title = m.title + (m.issue ? ' – ' + m.issue : '') + ' (Internet Archive)';
+    loadViewer(m);
 
     document.getElementById('note-title').textContent =
       m.title + (m.issue ? ' – ' + m.issue : '');
@@ -363,6 +468,8 @@
 
     listEl.querySelectorAll('button').forEach(b =>
       b.setAttribute('aria-current', String(b.dataset.id === m.id)));
+
+    setMenu(false); // on mobile, picking an issue closes the menu to reveal the viewer
 
     if (pushHash) history.replaceState(null, '', '#' + encodeURIComponent(m.id));
   }
@@ -423,6 +530,25 @@
     renderList();
   });
 
+  menuBtn.addEventListener('click', () => setMenu(!sidebarEl.classList.contains('open')));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
+
+  modeBtn.addEventListener('click', () => {
+    userPickedMode = true;
+    pageMode = pageMode === '1up' ? '2up' : '1up';
+    updateModeBtn();
+    if (currentId) select(currentId, false);
+  });
+
+  // Rotating the phone or resizing the window picks the better default
+  mobileQuery.addEventListener('change', e => {
+    if (userPickedMode) return;
+    pageMode = e.matches ? '1up' : '2up';
+    updateModeBtn();
+    if (currentId) select(currentId, false);
+  });
+
+  updateModeBtn();
   renderFilters();
   renderList();
 
