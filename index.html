@@ -306,7 +306,7 @@
 
   <main class="main">
     <div class="viewer" id="viewer-wrap">
-      <div id="pdf-viewer" style="display:none; flex-direction:column; height:100%; width:100%;">
+      <div id="pdf-viewer" style="display:none; flex-direction:column; height:100%; width:100%; overflow:auto;">
         <div style="display:flex; gap:10px; padding:10px; background:#111; align-items:center; border-bottom:1px solid #222;">
           <button id="pdf-prev" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">← Prev</button>
           <span id="pdf-page-info" style="color:#8a8a8a; min-width:100px;">Page 1 of 0</span>
@@ -316,7 +316,10 @@
           <span id="pdf-zoom-level" style="color:#8a8a8a; min-width:50px; text-align:center;">100%</span>
           <button id="pdf-zoom-in" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">+</button>
         </div>
-        <canvas id="pdf-canvas" style="flex:1; display:flex; justify-content:center; align-items:center; background:#222; border:0;"></canvas>
+        <div style="flex:1; display:flex; justify-content:center; align-items:flex-start; background:#222; overflow:auto; padding:10px; gap:10px;">
+          <canvas id="pdf-canvas-1" style="max-height:100%; width:auto;"></canvas>
+          <canvas id="pdf-canvas-2" style="max-height:100%; width:auto; display:none;"></canvas>
+        </div>
       </div>
     </div>
 
@@ -337,46 +340,75 @@
   let currentPage = 1;
   let currentZoom = 1;
 
-  async function renderPdfPage(pageNum) {
-    if (!currentPdfDoc) return;
+  const isMobileView = () => window.innerWidth <= 768;
+
+  async function renderPdfCanvas(canvasId, pageNum) {
+    if (!currentPdfDoc || pageNum > currentPdfDoc.numPages || pageNum < 1) return false;
+
     const page = await currentPdfDoc.getPage(pageNum);
-    const scale = 1.0 * currentZoom;
-    const viewport = page.getViewport({ scale });
-    const canvas = document.getElementById('pdf-canvas');
+    const canvas = document.getElementById(canvasId);
+    const container = canvas.parentElement;
+
+    const availableHeight = container.clientHeight - 20;
+    const viewport = page.getViewport({ scale: 1 });
+    const scaleToFitHeight = availableHeight / viewport.height;
+    const renderScale = scaleToFitHeight * currentZoom * 1.5;
+
+    const scaledViewport = page.getViewport({ scale: renderScale });
     const ctx = canvas.getContext('2d');
+    canvas.width = scaledViewport.width;
+    canvas.height = scaledViewport.height;
 
-    canvas.width = viewport.width;
-    canvas.height = viewport.height;
-
-    const renderContext = { canvasContext: ctx, viewport };
+    const renderContext = { canvasContext: ctx, viewport: scaledViewport };
     await page.render(renderContext);
+    return true;
+  }
 
-    document.getElementById('pdf-page-info').textContent = `Page ${pageNum} of ${currentPdfDoc.numPages}`;
+  async function renderPdfPage() {
+    if (!currentPdfDoc) return;
+
+    const isMobile = isMobileView();
+    const canvas2 = document.getElementById('pdf-canvas-2');
+
+    if (isMobile) {
+      canvas2.style.display = 'none';
+      await renderPdfCanvas('pdf-canvas-1', currentPage);
+      document.getElementById('pdf-page-info').textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
+    } else {
+      canvas2.style.display = 'block';
+      await renderPdfCanvas('pdf-canvas-1', currentPage);
+      await renderPdfCanvas('pdf-canvas-2', currentPage + 1);
+      const endPage = Math.min(currentPage + 1, currentPdfDoc.numPages);
+      document.getElementById('pdf-page-info').textContent = `Pages ${currentPage}-${endPage} of ${currentPdfDoc.numPages}`;
+    }
+
     document.getElementById('pdf-zoom-level').textContent = Math.round(currentZoom * 100) + '%';
   }
 
   document.getElementById('pdf-prev').addEventListener('click', () => {
+    const pageSize = isMobileView() ? 1 : 2;
     if (currentPage > 1) {
-      currentPage--;
-      renderPdfPage(currentPage);
+      currentPage = Math.max(1, currentPage - pageSize);
+      renderPdfPage();
     }
   });
 
   document.getElementById('pdf-next').addEventListener('click', () => {
+    const pageSize = isMobileView() ? 1 : 2;
     if (currentPage < currentPdfDoc.numPages) {
-      currentPage++;
-      renderPdfPage(currentPage);
+      currentPage = Math.min(currentPdfDoc.numPages - 1, currentPage + pageSize);
+      renderPdfPage();
     }
   });
 
   document.getElementById('pdf-zoom-in').addEventListener('click', () => {
     currentZoom = Math.min(currentZoom + 0.2, 3);
-    renderPdfPage(currentPage);
+    renderPdfPage();
   });
 
   document.getElementById('pdf-zoom-out').addEventListener('click', () => {
     currentZoom = Math.max(currentZoom - 0.2, 0.5);
-    renderPdfPage(currentPage);
+    renderPdfPage();
   });
 
   async function loadPdf(url) {
