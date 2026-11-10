@@ -76,7 +76,7 @@
       cursor: pointer;
       padding: 6px 12px;
       border: 1px solid var(--line);
-      border-radius: 6px;
+      border-radius: 0px;
       font-size: 14px;
       color: var(--text);
       white-space: nowrap;
@@ -112,7 +112,7 @@
       width: 100%;
       padding: 8px 12px;
       border: 1px solid var(--line);
-      border-radius: 6px;
+      border-radius: 0px;
       background: var(--bg);
       color: var(--text);
       font-family: inherit;
@@ -135,7 +135,7 @@
       cursor: pointer;
       padding: 2px 10px;
       border: 1px solid var(--line);
-      border-radius: 999px;
+      border-radius: 0px;
       font-size: 14px;
       color: var(--muted);
     }
@@ -229,61 +229,60 @@
        The page fills the real visible screen (dvh accounts for the
        phone's address bar). The viewer takes all the space left over,
        and the menu opens as an overlay so it never squeezes the viewer. */
-    @media (max-width: 768px) {
-      .app {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto minmax(0, 1fr);
-        height: 100vh;
-        height: 100dvh;
-      }
+  @media (max-width: 768px) {
+  body { zoom: .4923; }
 
-      .sidebar {
-        position: relative;
-        z-index: 10;
-        border-right: 0;
-        border-bottom: 1px solid var(--line);
-      }
+ .app {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto minmax(0, 1fr) 29%;  /* title | viewer | bottom column */
+  height: 100%;                                 /* was 93% */
+}
 
-      .sidebar h1 { padding: 12px 14px; font-size: 17px; }
-      .top-actions { display: flex; }
+  .sidebar, .main { display: contents; }
 
-      .panel {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        max-height: calc(100vh - 60px);
-        max-height: calc(100dvh - 60px);
-        padding-top: 4px;
-        background: var(--panel);
-        border-bottom: 1px solid var(--line);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
-      }
-      .sidebar.open .panel { display: flex; }
+  .top { grid-column: 1 / 3; grid-row: 1; padding: 6px; }
+  .sidebar h1 { padding: 15px 14px; font-size: 17px; }
 
-      .search { padding: 0 8px 8px; }
-      .filters { padding: 0 8px 8px; }
-      .filters button { padding: 6px 12px; }
-      .sidebar .count { padding: 8px 14px; }
-      .list { padding: 4px 8px 12px; }
-      .list button { padding: 12px; }
+  .viewer {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    min-height: 0;      /* overrides the desktop 320px */
+    padding: 6px;
+  }
 
-      .main {
-        padding: 6px;
-        padding-bottom: calc(6px + env(safe-area-inset-bottom));
-        gap: 6px;
-      }
+  /* Bottom left: search + filters + list */
+  .panel {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 0;
+    overflow: hidden;   /* the list scrolls, not the panel */
+    border-top: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+  }
+  .search { padding: 0 8px 8px; }
+  .search input { font-size: 140%; }
+  .filters { flex-wrap: nowrap; overflow-x: auto; padding: 0 8px 8px; }
+  .filters button { padding: 8px 14px; font-size: 130%; white-space: nowrap; }
+  .sidebar .count { display: none; }
+  .list { flex: 1; min-height: 0; padding: 6px 8px 12px; }
+  .list button { padding: 14px; font-size: 130%; }
 
-      .viewer { min-height: 0; }
-
-      .note {
-        max-height: 24vh;
-        max-height: 24dvh;
-        padding: 10px 12px;
-        font-size: 15px;
-      }
-    }
+  /* Bottom right: description */
+  .note {
+    grid-column: 2;
+    grid-row: 3;
+    min-height: 0;
+    max-height: none;   /* overrides the desktop 30vh */
+    overflow-y: auto;
+    padding: 14px;
+    border-top: 1px solid var(--line);
+  }
+  .note h2 { font-size: 140%; margin: 0 0 6px; }
+  .note p { font-size: 130%; margin: 0 0 10px; }
+  .note .webmaster { font-size: 120%; margin-bottom: 10px; }
+  .note a { font-size: 130%; }
+}
   </style>
 </head>
 <body>
@@ -291,13 +290,7 @@
 <div class="app">
   <aside class="sidebar" id="sidebar">
     <div class="top">
-      <h1>Kitten's Archive</h1>
-      <div class="top-actions">
-        <button type="button" class="top-btn" id="mode-btn"
-                aria-label="Switch between one-page and two-page view">1 page</button>
-        <button type="button" class="top-btn" id="menu-btn"
-                aria-expanded="false" aria-controls="panel">Browse</button>
-      </div>
+      <h1>Kitten's Catalog Archive</h1>
     </div>
 
     <div class="panel" id="panel">
@@ -403,20 +396,15 @@
   ];
 
   const sidebarEl = document.getElementById('sidebar');
-  const menuBtn = document.getElementById('menu-btn');
-  const modeBtn = document.getElementById('mode-btn');
   const listEl = document.getElementById('list');
   const viewerWrap = document.getElementById('viewer-wrap');
   const filtersEl = document.getElementById('filters');
   const countEl = document.getElementById('count');
   const searchEl = document.getElementById('search');
 
-  /* Page mode: one page at a time on phones (fits the screen far better),
-     two-page spread on larger screens. The "1 page / 2 pages" button on
-     mobile lets the reader override it. */
+  /* Page mode: two-page spread by default. */
   const mobileQuery = window.matchMedia('(max-width: 768px)');
-  let pageMode = mobileQuery.matches ? '1up' : '2up';
-  let userPickedMode = false;
+  let pageMode = '2up';
 
   const embedUrl = id =>
     `https://archive.org/embed/${encodeURIComponent(id)}?ui=embed#mode/${pageMode}`;
@@ -426,10 +414,6 @@
   let activeCategory = 'All';
   let currentId = null;
   let query = '';
-
-  function updateModeBtn() {
-    modeBtn.textContent = pageMode === '1up' ? '1 page' : '2 pages';
-  }
 
   function setMenu(open) {
     sidebarEl.classList.toggle('open', open);
@@ -464,8 +448,6 @@
 
     listEl.querySelectorAll('button').forEach(b =>
       b.setAttribute('aria-current', String(b.dataset.id === m.id)));
-
-    setMenu(false); // on mobile, picking an issue closes the menu to reveal the viewer
 
     if (pushHash) history.replaceState(null, '', '#' + encodeURIComponent(m.id));
   }
@@ -526,25 +508,8 @@
     renderList();
   });
 
-  menuBtn.addEventListener('click', () => setMenu(!sidebarEl.classList.contains('open')));
   document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
-  modeBtn.addEventListener('click', () => {
-    userPickedMode = true;
-    pageMode = pageMode === '1up' ? '2up' : '1up';
-    updateModeBtn();
-    if (currentId) select(currentId, false);
-  });
-
-  // Rotating the phone or resizing the window picks the better default
-  mobileQuery.addEventListener('change', e => {
-    if (userPickedMode) return;
-    pageMode = e.matches ? '1up' : '2up';
-    updateModeBtn();
-    if (currentId) select(currentId, false);
-  });
-
-  updateModeBtn();
   renderFilters();
   renderList();
 
