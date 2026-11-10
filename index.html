@@ -190,8 +190,6 @@
     .viewer {
       flex: 1;
       min-height: 320px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
       overflow: hidden;
       background: #111;
     }
@@ -204,8 +202,6 @@
     }
 
     .note {
-      border: 1px solid var(--line);
-      border-radius: 8px;
       padding: 14px 18px;
       background: var(--panel);
       max-height: 30vh;
@@ -279,7 +275,7 @@
         gap: 6px;
       }
 
-      .viewer { min-height: 0; border-radius: 6px; }
+      .viewer { min-height: 0; }
 
       .note {
         max-height: 24vh;
@@ -347,7 +343,7 @@
       tagline: "The Videotex/Computer Magazine",
       title: "Today",
       issue: "Vol. 2, No. 6",
-      description: "Replace this with a short description of the issue.",
+      description: "An exploration in modern computing devices to optimize your everyday life. Computers, devices, software, and games.",
       note: "Kitten's note: I haven't read this yet. I'll put notes here later."
     },
     {
@@ -356,7 +352,7 @@
       tagline: "Your CyberSpace Companion",
       title: "The Net",
       issue: "June 1995",
-      description: "Replace this with a short description of the issue.",
+      description: "All about interacting with the Internet.",
       note: "Kitten's note: I haven't read this yet. I'll put notes here later."
     },
     {
@@ -365,7 +361,7 @@
       tagline: "Multimedia Gaming & Beyond",
       title: "Computer Player",
       issue: "February 1995",
-      description: "Journey through time to the LOST EDEN",
+      description: "Gaming reviews and opinions... 'Geek is Chic!'",
       note: "Kitten's note: I haven't read this yet. I'll put notes here later."
     },
     {
@@ -552,8 +548,14 @@
   renderFilters();
   renderList();
 
-  // Open from a shared link (#IDENTIFIER) or default to the first item
-  select(decodeURIComponent(location.hash.slice(1)), false);
+  // Open from a shared link (#IDENTIFIER) or pick a random magazine
+  const hash = decodeURIComponent(location.hash.slice(1));
+  if (hash) {
+    select(hash, false);
+  } else {
+    const randomId = MAGAZINES[Math.floor(Math.random() * MAGAZINES.length)].id;
+    select(randomId, false);
+  }
 </script>
 
 </body>
