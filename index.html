@@ -306,19 +306,27 @@
 
   <main class="main">
     <div class="viewer" id="viewer-wrap">
-      <div id="pdf-viewer" style="display:none; flex-direction:column; height:100%; width:100%; overflow:auto;">
-        <div style="display:flex; gap:10px; padding:10px; background:#111; align-items:center; border-bottom:1px solid #222;">
-          <button id="pdf-prev" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">← Prev</button>
-          <span id="pdf-page-info" style="color:#8a8a8a; min-width:100px;">Page 1 of 0</span>
-          <button id="pdf-next" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">Next →</button>
-          <div style="flex:1;"></div>
-          <button id="pdf-zoom-out" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">−</button>
-          <span id="pdf-zoom-level" style="color:#8a8a8a; min-width:50px; text-align:center;">100%</span>
-          <button id="pdf-zoom-in" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">+</button>
+      <div id="pdf-viewer" style="display:none; flex-direction:column; height:100%; width:100%;">
+        <!-- Top bar matching Archive.org style -->
+        <div style="background:#1a1a1a; border-bottom:1px solid #333; padding:12px 20px; display:flex; align-items:center; gap:15px;">
+          <span style="color:#999; font-size:14px;">📚</span>
+          <span id="pdf-title" style="color:#e8e8e8; font-size:14px; flex:1;"></span>
         </div>
-        <div style="flex:1; display:flex; justify-content:center; align-items:flex-start; background:#222; overflow:auto; padding:10px; gap:10px;">
-          <canvas id="pdf-canvas-1" style="max-height:100%; width:auto;"></canvas>
-          <canvas id="pdf-canvas-2" style="max-height:100%; width:auto; display:none;"></canvas>
+
+        <!-- Viewer container -->
+        <div id="pdf-container" style="flex:1; overflow-y:auto; overflow-x:hidden; background:#0a0a0a; display:flex; flex-direction:column; align-items:center; padding:20px;">
+          <!-- Pages will be rendered here -->
+        </div>
+
+        <!-- Bottom bar for desktop controls (hidden on mobile) -->
+        <div id="pdf-controls" style="background:#1a1a1a; border-top:1px solid #333; padding:12px 20px; display:flex; align-items:center; gap:15px; font-size:12px; color:#999; display:none;">
+          <button id="pdf-prev" style="padding:6px 12px; background:#2a2a2a; color:#e8e8e8; border:1px solid #444; cursor:pointer; border-radius:2px;">← Prev</button>
+          <span id="pdf-page-info">Page 1 of 0</span>
+          <button id="pdf-next" style="padding:6px 12px; background:#2a2a2a; color:#e8e8e8; border:1px solid #444; cursor:pointer; border-radius:2px;">Next →</button>
+          <div style="flex:1;"></div>
+          <button id="pdf-zoom-out" style="padding:6px 12px; background:#2a2a2a; color:#e8e8e8; border:1px solid #444; cursor:pointer; border-radius:2px;">−</button>
+          <span id="pdf-zoom-level" style="min-width:50px; text-align:center;">100%</span>
+          <button id="pdf-zoom-in" style="padding:6px 12px; background:#2a2a2a; color:#e8e8e8; border:1px solid #444; cursor:pointer; border-radius:2px;">+</button>
         </div>
       </div>
     </div>
@@ -339,6 +347,7 @@
   let currentPdfDoc = null;
   let currentPage = 1;
   let currentZoom = 1;
+  let pdfTitle = '';
 
   const isMobileView = () => window.innerWidth <= 768;
 
@@ -347,9 +356,10 @@
 
     const page = await currentPdfDoc.getPage(pageNum);
     const canvas = document.getElementById(canvasId);
-    const container = canvas.parentElement;
+    if (!canvas) return false;
 
-    const availableHeight = container.clientHeight - 20;
+    const container = canvas.parentElement;
+    const availableHeight = container ? container.clientHeight - 40 : 800;
     const viewport = page.getViewport({ scale: 1 });
     const scaleToFitHeight = availableHeight / viewport.height;
     const renderScale = scaleToFitHeight * currentZoom * 1.5;
@@ -364,29 +374,118 @@
     return true;
   }
 
-  async function renderPdfPage() {
+  async function renderMobileVerticalScroll() {
     if (!currentPdfDoc) return;
 
-    const isMobile = isMobileView();
-    const canvas2 = document.getElementById('pdf-canvas-2');
+    const container = document.getElementById('pdf-container');
+    container.innerHTML = '';
 
-    if (isMobile) {
-      canvas2.style.display = 'none';
-      await renderPdfCanvas('pdf-canvas-1', currentPage);
-      document.getElementById('pdf-page-info').textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
-    } else {
+    const viewport = (await currentPdfDoc.getPage(1)).getViewport({ scale: 1 });
+    const availableWidth = container.clientWidth - 40;
+    const scaleToFitWidth = availableWidth / viewport.width;
+    const renderScale = scaleToFitWidth * currentZoom * 1.5;
+
+    // Render all pages vertically
+    for (let p = 1; p <= currentPdfDoc.numPages; p++) {
+      const canvas = document.createElement('canvas');
+      canvas.style.maxWidth = '100%';
+      canvas.style.marginBottom = '20px';
+      canvas.style.border = '1px solid #333';
+      container.appendChild(canvas);
+
+      const page = await currentPdfDoc.getPage(p);
+      const scaledViewport = page.getViewport({ scale: renderScale });
+      const ctx = canvas.getContext('2d');
+      canvas.width = scaledViewport.width;
+      canvas.height = scaledViewport.height;
+
+      const renderContext = { canvasContext: ctx, viewport: scaledViewport };
+      await page.render(renderContext);
+    }
+
+    document.getElementById('pdf-page-info').textContent = `${currentPdfDoc.numPages} pages`;
+    document.getElementById('pdf-zoom-level').textContent = Math.round(currentZoom * 100) + '%';
+  }
+
+  async function renderDesktopSpread() {
+    if (!currentPdfDoc) return;
+
+    const container = document.getElementById('pdf-container');
+    const isMobile = isMobileView();
+
+    // Clear container
+    container.innerHTML = '';
+
+    const spreadDiv = document.createElement('div');
+    spreadDiv.style.display = 'flex';
+    spreadDiv.style.gap = '20px';
+    spreadDiv.style.justifyContent = 'center';
+    spreadDiv.style.alignItems = 'flex-start';
+
+    // Create canvases for two-page spread
+    const canvas1 = document.createElement('canvas');
+    const canvas2 = document.createElement('canvas');
+
+    canvas1.style.maxHeight = '80vh';
+    canvas1.style.width = 'auto';
+    canvas2.style.maxHeight = '80vh';
+    canvas2.style.width = 'auto';
+    canvas2.style.display = 'none';
+
+    spreadDiv.appendChild(canvas1);
+    spreadDiv.appendChild(canvas2);
+    container.appendChild(spreadDiv);
+
+    // Render pages
+    await renderPdfCanvasDesktop(canvas1, currentPage);
+    if (!isMobile) {
       canvas2.style.display = 'block';
-      await renderPdfCanvas('pdf-canvas-1', currentPage);
-      await renderPdfCanvas('pdf-canvas-2', currentPage + 1);
+      await renderPdfCanvasDesktop(canvas2, currentPage + 1);
       const endPage = Math.min(currentPage + 1, currentPdfDoc.numPages);
       document.getElementById('pdf-page-info').textContent = `Pages ${currentPage}-${endPage} of ${currentPdfDoc.numPages}`;
+    } else {
+      document.getElementById('pdf-page-info').textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
     }
 
     document.getElementById('pdf-zoom-level').textContent = Math.round(currentZoom * 100) + '%';
   }
 
+  async function renderPdfCanvasDesktop(canvas, pageNum) {
+    if (!currentPdfDoc || pageNum > currentPdfDoc.numPages || pageNum < 1) return;
+
+    const page = await currentPdfDoc.getPage(pageNum);
+    const viewport = page.getViewport({ scale: 1 });
+
+    const maxHeight = window.innerHeight * 0.8;
+    const scaleToFitHeight = maxHeight / viewport.height;
+    const renderScale = scaleToFitHeight * currentZoom * 1.5;
+
+    const scaledViewport = page.getViewport({ scale: renderScale });
+    const ctx = canvas.getContext('2d');
+    canvas.width = scaledViewport.width;
+    canvas.height = scaledViewport.height;
+
+    const renderContext = { canvasContext: ctx, viewport: scaledViewport };
+    await page.render(renderContext);
+  }
+
+  async function renderPdfPage() {
+    if (!currentPdfDoc) return;
+
+    const isMobile = isMobileView();
+    const controls = document.getElementById('pdf-controls');
+
+    if (isMobile) {
+      controls.style.display = 'none';
+      await renderMobileVerticalScroll();
+    } else {
+      controls.style.display = 'flex';
+      await renderDesktopSpread();
+    }
+  }
+
   document.getElementById('pdf-prev').addEventListener('click', () => {
-    const pageSize = isMobileView() ? 1 : 2;
+    const pageSize = 2; // Desktop always advances by 2 pages (spread)
     if (currentPage > 1) {
       currentPage = Math.max(1, currentPage - pageSize);
       renderPdfPage();
@@ -394,7 +493,7 @@
   });
 
   document.getElementById('pdf-next').addEventListener('click', () => {
-    const pageSize = isMobileView() ? 1 : 2;
+    const pageSize = 2; // Desktop always advances by 2 pages (spread)
     if (currentPage < currentPdfDoc.numPages) {
       currentPage = Math.min(currentPdfDoc.numPages - 1, currentPage + pageSize);
       renderPdfPage();
@@ -411,19 +510,22 @@
     renderPdfPage();
   });
 
-  async function loadPdf(url) {
+  async function loadPdf(url, title) {
     try {
       currentPdfDoc = await pdfjsLib.getDocument(url).promise;
       currentPage = 1;
       currentZoom = 1;
+      pdfTitle = title;
+
+      document.getElementById('pdf-title').textContent = title;
       document.getElementById('pdf-viewer').style.display = 'flex';
-      await renderPdfPage(1);
+      await renderPdfPage();
     } catch (err) {
       console.error('PDF loading error:', err);
       document.getElementById('pdf-viewer').style.display = 'none';
       document.getElementById('viewer-wrap').innerHTML = `
         <div style="padding:20px; color:#a8a8a8; background:#111; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
-          <div style="font-size:14px; margin-bottom:20px;">PDF viewer requires server hosting</div>
+          <div style="font-size:14px; margin-bottom:20px;">PDF viewer requires HTTPS or Brave browser</div>
           <a href="${url}" target="_blank" style="padding:10px 20px; background:#1f1f1f; color:#f2f2f2; text-decoration:none; border:1px solid #333; border-radius:2px; display:inline-block;">Open PDF in New Tab</a>
           <div style="font-size:12px; color:#666; margin-top:10px;">For best viewing experience</div>
         </div>
@@ -551,7 +653,8 @@
     if (m.type === 'pdf') {
       const pdfPath = m.pdfFile ? `${m.id}/${m.pdfFile}` : m.id;
       const pdfUrl = `https://archive.org/download/${pdfPath}`;
-      loadPdf(pdfUrl);
+      const title = m.title + (m.issue ? ' – ' + m.issue : '');
+      loadPdf(pdfUrl, title);
     } else {
       // Hide PDF viewer for magazines
       document.getElementById('pdf-viewer').style.display = 'none';
