@@ -305,7 +305,20 @@
   </aside>
 
   <main class="main">
-    <div class="viewer" id="viewer-wrap"></div>
+    <div class="viewer" id="viewer-wrap">
+      <div id="pdf-viewer" style="display:none; flex-direction:column; height:100%; width:100%;">
+        <div style="display:flex; gap:10px; padding:10px; background:#111; align-items:center; border-bottom:1px solid #222;">
+          <button id="pdf-prev" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">← Prev</button>
+          <span id="pdf-page-info" style="color:#8a8a8a; min-width:100px;">Page 1 of 0</span>
+          <button id="pdf-next" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">Next →</button>
+          <div style="flex:1;"></div>
+          <button id="pdf-zoom-out" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">−</button>
+          <span id="pdf-zoom-level" style="color:#8a8a8a; min-width:50px; text-align:center;">100%</span>
+          <button id="pdf-zoom-in" style="padding:8px 12px; background:#1f1f1f; color:#e8e8e8; border:1px solid #333; cursor:pointer; border-radius:2px;">+</button>
+        </div>
+        <canvas id="pdf-canvas" style="flex:1; display:flex; justify-content:center; align-items:center; background:#222; border:0;"></canvas>
+      </div>
+    </div>
 
     <section class="note" id="note">
       <h2 id="note-title"></h2>
@@ -316,6 +329,76 @@
   </main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  let currentPdfDoc = null;
+  let currentPage = 1;
+  let currentZoom = 1;
+
+  async function renderPdfPage(pageNum) {
+    if (!currentPdfDoc) return;
+    const page = await currentPdfDoc.getPage(pageNum);
+    const scale = 1.0 * currentZoom;
+    const viewport = page.getViewport({ scale });
+    const canvas = document.getElementById('pdf-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = viewport.width;
+    canvas.height = viewport.height;
+
+    const renderContext = { canvasContext: ctx, viewport };
+    await page.render(renderContext);
+
+    document.getElementById('pdf-page-info').textContent = `Page ${pageNum} of ${currentPdfDoc.numPages}`;
+    document.getElementById('pdf-zoom-level').textContent = Math.round(currentZoom * 100) + '%';
+  }
+
+  document.getElementById('pdf-prev').addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderPdfPage(currentPage);
+    }
+  });
+
+  document.getElementById('pdf-next').addEventListener('click', () => {
+    if (currentPage < currentPdfDoc.numPages) {
+      currentPage++;
+      renderPdfPage(currentPage);
+    }
+  });
+
+  document.getElementById('pdf-zoom-in').addEventListener('click', () => {
+    currentZoom = Math.min(currentZoom + 0.2, 3);
+    renderPdfPage(currentPage);
+  });
+
+  document.getElementById('pdf-zoom-out').addEventListener('click', () => {
+    currentZoom = Math.max(currentZoom - 0.2, 0.5);
+    renderPdfPage(currentPage);
+  });
+
+  async function loadPdf(url) {
+    try {
+      currentPdfDoc = await pdfjsLib.getDocument(url).promise;
+      currentPage = 1;
+      currentZoom = 1;
+      document.getElementById('pdf-viewer').style.display = 'flex';
+      await renderPdfPage(1);
+    } catch (err) {
+      console.error('PDF loading error:', err);
+      document.getElementById('pdf-viewer').style.display = 'none';
+      document.getElementById('viewer-wrap').innerHTML = `
+        <div style="padding:20px; color:#a8a8a8; background:#111; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+          <div style="font-size:14px; margin-bottom:20px;">PDF viewer requires server hosting</div>
+          <a href="${url}" target="_blank" style="padding:10px 20px; background:#1f1f1f; color:#f2f2f2; text-decoration:none; border:1px solid #333; border-radius:2px; display:inline-block;">Open PDF in New Tab</a>
+          <div style="font-size:12px; color:#666; margin-top:10px;">For best viewing experience</div>
+        </div>
+      `;
+    }
+  }
+</script>
 <script>
   /* ------------------------------------------------------------
      EDIT THIS LIST to add magazines. Separate entries with commas.
@@ -330,6 +413,17 @@
      note        = your webmaster's note (optional)
      ------------------------------------------------------------ */
   const MAGAZINES = [
+    {
+      id: "Tekken3PrimasOfficialStrategyGuide1998",
+      type: "pdf",
+      pdfFile: "MafiaprimasOfficialPs2AndXboxStrategyGuide-2004.pdf",
+      category: "Video Games",
+      tagline: "Strategy Guide",
+      title: "Mafia - Prima's Official Strategy Guide",
+      issue: "PS2 and Xbox",
+      description: "Complete walkthrough and strategies for Mafia on PlayStation 2 and Xbox.",
+      note: "Kitten's note: Classic strategy guide for the iconic open-world crime game."
+    },
     {
       id: "TODAYV02N06",
       category: "Computing",
@@ -406,9 +500,6 @@
   const mobileQuery = window.matchMedia('(max-width: 768px)');
   let pageMode = '2up';
 
-  const embedUrl = id =>
-    `https://archive.org/embed/${encodeURIComponent(id)}?ui=embed#mode/${pageMode}`;
-
   const norm = c => Array.isArray(c) ? c : (c ? [c] : []);
   const categories = [...new Set(MAGAZINES.flatMap(m => norm(m.category)))];
   let activeCategory = 'All';
@@ -423,11 +514,22 @@
 
   // A fresh iframe each time guarantees the viewer reloads at the right mode
   function loadViewer(m) {
-    const frame = document.createElement('iframe');
-    frame.title = m.title + (m.issue ? ' – ' + m.issue : '') + ' (Internet Archive)';
-    frame.setAttribute('allowfullscreen', '');
-    frame.src = embedUrl(m.id);
-    viewerWrap.replaceChildren(frame);
+    const viewerWrap = document.getElementById('viewer-wrap');
+
+    if (m.type === 'pdf') {
+      const pdfPath = m.pdfFile ? `${m.id}/${m.pdfFile}` : m.id;
+      const pdfUrl = `https://archive.org/download/${pdfPath}`;
+      loadPdf(pdfUrl);
+    } else {
+      // Hide PDF viewer for magazines
+      document.getElementById('pdf-viewer').style.display = 'none';
+
+      const frame = document.createElement('iframe');
+      frame.title = m.title + (m.issue ? ' – ' + m.issue : '') + ' (Internet Archive)';
+      frame.setAttribute('allowfullscreen', '');
+      frame.src = `https://archive.org/embed/${encodeURIComponent(m.id)}?ui=embed#mode/2up`;
+      viewerWrap.replaceChildren(frame);
+    }
   }
 
   function select(id, pushHash = true) {
