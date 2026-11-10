@@ -314,7 +314,7 @@
         </div>
 
         <!-- Viewer container -->
-        <div id="pdf-container" style="flex:1; overflow-y:auto; overflow-x:hidden; background:#0a0a0a; display:flex; flex-direction:column; align-items:center; padding:20px; min-height:0;">
+        <div id="pdf-container" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; background:#0a0a0a; display:flex; flex-direction:column; align-items:center;">
           <!-- Pages will be rendered here -->
         </div>
 
@@ -378,6 +378,7 @@
     if (!currentPdfDoc) return;
 
     const container = document.getElementById('pdf-container');
+    container.style.overflow = 'auto';
     container.innerHTML = '';
 
     const viewport = (await currentPdfDoc.getPage(1)).getViewport({ scale: 1 });
@@ -411,6 +412,7 @@
     if (!currentPdfDoc) return;
 
     const container = document.getElementById('pdf-container');
+    container.style.overflow = 'hidden';
     const isMobile = isMobileView();
 
     // Update slider
@@ -461,11 +463,13 @@
     const page = await currentPdfDoc.getPage(pageNum);
     const viewport = page.getViewport({ scale: 1 });
 
-    const maxHeight = window.innerHeight * 0.8;
+    // Use a conservative scale based on viewport, not container (which may be miscalculated)
+    // This ensures the PDF actually fits without overflow
+    const maxHeight = Math.min(window.innerHeight * 0.70, 700);
     const scaleToFitHeight = maxHeight / viewport.height;
-    const renderScale = scaleToFitHeight * currentZoom * 1.5;
+    const baseScale = scaleToFitHeight * currentZoom;
 
-    const scaledViewport = page.getViewport({ scale: renderScale });
+    const scaledViewport = page.getViewport({ scale: baseScale });
     const ctx = canvas.getContext('2d');
     canvas.width = scaledViewport.width;
     canvas.height = scaledViewport.height;
