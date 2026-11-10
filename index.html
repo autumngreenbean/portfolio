@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Magazine Archive</title>
+  <link rel="stylesheet" href="https://fonts.cdnfonts.com/css/w95fa">
+  <style>
+    :root {
+      --bg: #000;
+      --panel: #0b0b0b;
+      --line: #222;
+      --text: #e8e8e8;
+      --muted: #8a8a8a;
+      --accent: #f2f2f2;
+      --hover: #161616;
+      --active: #1f1f1f;
+      --sidebar-w: 280px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'W95FA', monospace;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
+      height: 100%;
+    }
+
+    /* ---------- Side panel ---------- */
+    .sidebar {
+      background: var(--panel);
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .sidebar h1 {
+      margin: 0;
+      padding: 20px 20px 14px;
+      font-size: 18px;
+      font-weight: normal;
+      letter-spacing: 0.04em;
+/*       text-transform: uppercase; */
+      color: var(--accent);
+    }
+
+    .sidebar .count {
+      padding: 12px 20px 14px;
+      color: var(--muted);
+      font-size: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .search { padding: 0 12px 12px; }
+
+    .search input {
+      all: unset;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 16px;
+    }
+
+    .search input::placeholder { color: var(--muted); }
+    .search input:focus { border-color: var(--muted); }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 12px 12px;
+    }
+
+    .filters button {
+      all: unset;
+      box-sizing: border-box;
+      cursor: pointer;
+      padding: 2px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .filters button:hover { color: var(--text); background: var(--hover); }
+    .filters button:focus-visible { outline: 1px solid var(--muted); }
+    .filters button[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+
+    .list .empty { color: var(--muted); padding: 10px 12px; }
+
+    .list {
+      list-style: none;
+      margin: 0;
+      padding: 8px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .list button {
+      all: unset;
+      box-sizing: border-box;
+      display: block;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .list button:hover { background: var(--hover); }
+    .list button:focus-visible { outline: 1px solid var(--muted); }
+    .list button[aria-current="true"] { background: var(--active); color: var(--accent); }
+
+    .list .name { display: block; }
+    .list .sub { display: block; color: var(--muted); font-size: 14px; }
+
+    /* ---------- Main ---------- */
+    .main {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      min-height: 0;
+      padding: 20px;
+      gap: 16px;
+    }
+
+    .viewer {
+      flex: 1;
+      min-height: 320px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .viewer iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .note {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px 18px;
+      background: var(--panel);
+      max-height: 30vh;
+      overflow-y: auto;
+    }
+
+    .note h2 {
+      margin: 0 0 4px;
+      font-size: 16px;
+      font-weight: normal;
+      color: var(--accent);
+    }
+
+    .note p { margin: 0 0 8px; color: var(--text); }
+
+    .note .webmaster {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .note a { color: var(--accent); }
+
+    /* ---------- Mobile ---------- */
+    @media (max-width: 768px) {
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: auto;
+        min-height: 100%;
+      }
+      .sidebar { border-right: 0; border-bottom: 1px solid var(--line); }
+      .sidebar .count { display: none; }
+      .sidebar h1 { padding: 14px 16px 8px; }
+      .list {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 4px 8px 12px;
+        gap: 6px;
+      }
+      .list li { flex: 0 0 auto; }
+      .list button { white-space: nowrap; border: 1px solid var(--line); }
+      .filters {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 0 8px 8px;
+      }
+      .filters button { flex: 0 0 auto; white-space: nowrap; }
+      .search { padding: 0 8px 8px; }
+      .main { padding: 12px; }
+      .viewer { min-height: 60vh; }
+      .note { max-height: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="sidebar">
+    <h1>Kitten's Archive</h1>
+    <div class="search">
+      <input type="search" id="search" placeholder="Search descriptions…"
+             aria-label="Search descriptions" autocomplete="off">
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter by category"></div>
+    <div class="count" id="count"></div>
+    <ul class="list" id="list"></ul>
+  </aside>
+
+  <main class="main">
+    <div class="viewer">
+      <iframe id="viewer"
+              title="Archive.org magazine viewer"
+              allowfullscreen></iframe>
+    </div>
+
+    <section class="note" id="note">
+      <h2 id="note-title"></h2>
+      <p id="note-desc"></p>
+      <div class="webmaster" id="note-webmaster"></div>
+      <a id="note-link" target="_blank" rel="noopener">View on Archive.org</a>
+    </section>
+  </main>
+</div>
+
+<script>
+  /* ------------------------------------------------------------
+     EDIT THIS LIST to add magazines. Separate entries with commas.
+     id          = the identifier from the archive.org URL
+                   (archive.org/details/THIS_PART)
+     category    = filter group, e.g. "Computing". Use a list for
+                   several: ["Computing", "Internet"]
+     tagline     = FIRST line in the menu (e.g. "Your CyberSpace Companion")
+     title       = SECOND line in the menu (the magazine's name)
+     issue       = issue label shown above the description
+     description = text shown under the viewer
+     note        = your webmaster's note (optional)
+     ------------------------------------------------------------ */
+  const MAGAZINES = [
+    {
+      id: "TODAYV02N06",
+      category: "Computing",
+      tagline: "The Videotex/Computer Magazine",
+      title: "Today",
+      issue: "Vol. 2, No. 6",
+      description: "Replace this with a short description of the issue.",
+      note: "Webmaster's note: replace this with your own comments."
+    },
+    {
+      id: "TheNet01Jun1995",
+      category: "Internet",
+      tagline: "Your CyberSpace Companion",
+      title: "The Net",
+      issue: "June 1995",
+      description: "Replace this with a short description of the issue.",
+      note: "Webmaster's note: replace this with your own comments."
+    },
+
+        {
+      id: "ComputerPlayer09Feb1995",
+      category: "Video Games",
+      tagline: "Multimedia Gaming & Beyond",
+      title: "Computer Player",
+      issue: "February 1995",
+      description: "Journey through time to the LOST EDEN",
+      note: "Webmaster's note: replace this with your own comments."
+    },
+
+        {
+      id: "InterActivity01NovDec1994",
+      category: "Computing",
+      tagline: "The How-To Multimedia Magazine",
+      title: "Interactivity",
+      issue: "Nov/Dec 1994",
+      description: "Interactive fiction & CD-ROM basics",
+      note: "Webmaster's note: replace this with your own comments."
+    },
+     {
+      id: "GPGMSDOSCGVol1No2",
+      category: "Video Games",
+      tagline: "the Game Player's Guide",
+      title: "MS-DOS COMPUTER GAMES",
+      issue: "Volume 1 No 2",
+      description: "100 PC Games Revealed",
+      note: "Webmaster's note: replace this with your own comments."
+    },
+         {
+      id: "TokyoPop01AugSep1999",
+      category: "Anime",
+      tagline: "Exclusive Manga",
+      title: "TOKYOPOP",
+      issue: "Aug/Sep 1999",
+      description: "GUNDAM, Knight Rayearth, Parasyte",
+      note: "Webmaster's note: replace this with your own comments."
+    },
+
+             {
+      id: "ElectronicEntertainment07Jul1994",
+      category: "Computing",
+      tagline: "Multimedia to the Max!",
+      title: "Electronic Entertainment",
+      issue: "July 1994",
+      description: "CD Game Decks Which One's Best for You?",
+      note: "Webmaster's note: replace this with your own comments."
+    },
+  ];
+
+  const listEl = document.getElementById('list');
+  const viewer = document.getElementById('viewer');
+  const embedUrl = id => `https://archive.org/embed/${encodeURIComponent(id)}?ui=embed#mode/2up`;
+
+  const filtersEl = document.getElementById('filters');
+  const countEl = document.getElementById('count');
+  const norm = c => Array.isArray(c) ? c : (c ? [c] : []);
+  const categories = [...new Set(MAGAZINES.flatMap(m => norm(m.category)))];
+  let activeCategory = 'All';
+  let currentId = null;
+  let query = '';
+  const searchEl = document.getElementById('search');
+
+  function select(id, pushHash = true) {
+    const m = MAGAZINES.find(x => x.id === id) || MAGAZINES[0];
+    if (!m) return;
+
+    currentId = m.id;
+    viewer.src = embedUrl(m.id);
+    viewer.title = m.title + (m.issue ? ' – ' + m.issue : '') + ' (Internet Archive)';
+
+    document.getElementById('note-title').textContent =
+      m.title + (m.issue ? ' – ' + m.issue : '');
+    document.getElementById('note-desc').textContent = m.description || '';
+    const wm = document.getElementById('note-webmaster');
+    wm.textContent = m.note || '';
+    wm.style.display = m.note ? '' : 'none';
+    document.getElementById('note-link').href =
+      'https://archive.org/details/' + encodeURIComponent(m.id);
+
+    listEl.querySelectorAll('button').forEach(b =>
+      b.setAttribute('aria-current', String(b.dataset.id === m.id)));
+
+    if (pushHash) history.replaceState(null, '', '#' + encodeURIComponent(m.id));
+  }
+
+  function renderFilters() {
+    filtersEl.innerHTML = '';
+    ['All', ...categories].forEach(cat => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = cat;
+      b.setAttribute('aria-pressed', String(cat === activeCategory));
+      b.addEventListener('click', () => {
+        activeCategory = cat;
+        renderFilters();
+        renderList();
+      });
+      filtersEl.appendChild(b);
+    });
+  }
+
+  function renderList() {
+    listEl.innerHTML = '';
+    // Every typed word must appear in the description (case-insensitive)
+    const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
+    const items = MAGAZINES.filter(m => {
+      const inCategory = activeCategory === 'All' || norm(m.category).includes(activeCategory);
+      const desc = (m.description || '').toLowerCase();
+      return inCategory && terms.every(t => desc.includes(t));
+    });
+
+    countEl.textContent = items.length + (items.length === 1 ? ' item' : ' items');
+
+    if (!items.length) {
+      const li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = 'No magazines match.';
+      listEl.appendChild(li);
+      return;
+    }
+
+    items.forEach(m => {
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      btn.dataset.id = m.id;
+      btn.innerHTML = '<span class="name"></span><span class="sub"></span>';
+      // Line 1: tagline. Line 2: magazine title.
+      btn.querySelector('.name').textContent = m.tagline || m.title;
+      btn.querySelector('.sub').textContent = m.tagline ? m.title : '';
+      btn.setAttribute('aria-current', String(m.id === currentId));
+      btn.addEventListener('click', () => select(m.id));
+      li.appendChild(btn);
+      listEl.appendChild(li);
+    });
+  }
+
+  searchEl.addEventListener('input', () => {
+    query = searchEl.value;
+    renderList();
+  });
+
+  renderFilters();
+  renderList();
+
+  // Open from a shared link (#IDENTIFIER) or default to the first item
+  select(decodeURIComponent(location.hash.slice(1)), false);
+</script>
+
+</body>
+</html>
