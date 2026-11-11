@@ -709,10 +709,14 @@
       const collectionId = m.collectionId || m.id;
       const pdfPath = m.pdfFile ? `${collectionId}/${m.pdfFile}` : collectionId;
       const pdfUrl = `https://archive.org/download/${pdfPath}`;
+      // Route through CORS proxy for live site, use direct URL for localhost
+      const proxyUrl = window.location.origin.includes('localhost')
+        ? pdfUrl
+        : `https://api.allorigins.win/raw?url=${encodeURIComponent(pdfUrl)}`;
       const title = m.title + (m.issue ? ' – ' + m.issue : '');
-      loadPdf(pdfUrl, title);
+      loadPdf(proxyUrl, title);
     } else {
-      // Hide PDF viewer, remove any iframes, create new one
+      // Hide PDF viewer for magazines
       pdfViewer.style.display = 'none';
       Array.from(viewerWrap.children).forEach(child => {
         if (child.tagName === 'IFRAME') child.remove();
