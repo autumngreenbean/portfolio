@@ -98,7 +98,7 @@ async function renderMobileVerticalScroll() {
     const slots = [];
 
     const pagePromises = [];
-    for (let p = 1; p <= Math.min(doc.numPages, 10); p++) {
+    for (let p = 1; p <= Math.min(doc.numPages, 1); p++) {
       pagePromises.push(doc.getPage(p));
     }
     const firstPages = await Promise.all(pagePromises);
@@ -132,7 +132,7 @@ async function renderMobileVerticalScroll() {
 
     slots.forEach(s => mobileObserver.observe(s.el));
 
-    for (let i = 0; i < Math.min(3, slots.length); i++) {
+    for (let i = 0; i < Math.min(1, slots.length); i++) {
       renderMobilePage(slots[i], doc, gen);
     }
 
