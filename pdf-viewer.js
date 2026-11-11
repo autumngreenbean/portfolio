@@ -87,22 +87,27 @@ async function renderMobileVerticalScroll() {
     const availableWidth = container.clientWidth - 40;
     const slots = [];
 
+    const pagePromises = [];
+    for (let p = 1; p <= Math.min(doc.numPages, 5); p++) {
+      pagePromises.push(doc.getPage(p));
+    }
+    const firstPages = await Promise.all(pagePromises);
+    if (gen !== renderGen) return;
+
     for (let p = 1; p <= doc.numPages; p++) {
-      const page = await doc.getPage(p);
-      if (gen !== renderGen) return;
-      const base = page.getViewport({ scale: 1 });
-      const cssScale = (availableWidth / base.width) * currentZoom;
+      const page = p <= firstPages.length ? firstPages[p - 1] : null;
+      const cssScale = page ? (availableWidth / page.getViewport({ scale: 1 }).width) * currentZoom : 1;
 
       const el = document.createElement('div');
-      el.style.width = base.width * cssScale + 'px';
-      el.style.height = base.height * cssScale + 'px';
+      el.style.width = page ? page.getViewport({ scale: 1 }).width * cssScale + 'px' : availableWidth + 'px';
+      el.style.height = page ? page.getViewport({ scale: 1 }).height * cssScale + 'px' : '400px';
       el.style.margin = '0 auto 20px';
       el.style.flexShrink = '0';
       el.style.border = '1px solid #333';
       el.style.background = '#1a1a1a';
       container.appendChild(el);
 
-      const slot = { num: p, el, cssScale, state: 'empty', canvas: null };
+      const slot = { num: p, el, cssScale, state: 'empty', canvas: null, page };
       el._slot = slot;
       slots.push(slot);
     }
@@ -117,7 +122,6 @@ async function renderMobileVerticalScroll() {
 
     slots.forEach(s => mobileObserver.observe(s.el));
 
-    // Render first 3 pages immediately so they're ready on load
     for (let i = 0; i < Math.min(3, slots.length); i++) {
       renderMobilePage(slots[i], doc, gen);
     }
