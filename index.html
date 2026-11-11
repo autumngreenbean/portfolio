@@ -712,7 +712,7 @@
       // Route through CORS proxy for live site, use direct URL for localhost
       const proxyUrl = window.location.origin.includes('localhost')
         ? pdfUrl
-        : `https://api.allorigins.win/raw?url=${encodeURIComponent(pdfUrl)}`;
+        : `https://thingproxy.freeboard.io/fetch/${pdfUrl}`;
       const title = m.title + (m.issue ? ' – ' + m.issue : '');
       loadPdf(proxyUrl, title);
     } else {
