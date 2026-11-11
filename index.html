@@ -581,9 +581,8 @@
   const MAGAZINES = [
 {
   id: "MarioPaintPlayersGuide1993",
-  collectionId: "Tekken3PrimasOfficialStrategyGuide1998",
   type: "pdf",
-  pdfFile: "Mario%20Paint%20-%20Player's%20Guide%20(1993).pdf",
+  pdfUrl: "https://raw.githubusercontent.com/autumngreenbean/portfolio/main/pdfs/Mario%20Paint%20-%20Player's%20Guide%20(1993).pdf",
   category: "Video Games",
   tagline: "MARIO PAINT Guide",
   title: "Mario Paint - Player's Guide",
@@ -594,17 +593,29 @@
 },
 
 {
-  id: "Tekken3PrimasOfficialStrategyGuide1998",
-  collectionId: "Tekken3PrimasOfficialStrategyGuide1998",
+  id: "MafiaPrimasOfficialStrategyGuide2004",
   type: "pdf",
-  pdfFile: "MafiaprimasOfficialPs2AndXboxStrategyGuide-2004.pdf",
+  pdfUrl: "https://raw.githubusercontent.com/autumngreenbean/portfolio/main/pdfs/MafiaprimasOfficialPcStrategyGuide-2004.pdf",
   category: "Video Games",
   tagline: "MAFIA Strategy Guide",
   title: "Mafia - Prima's Official Strategy Guide",
-  issue: "PS2 and Xbox",
-  description: "Complete walkthrough and strategies for Mafia on PlayStation 2 and Xbox.",
-  note: "Kitten's note: Classic strategy guide for the iconic open-world crime game.",
-  featured: true
+  issue: "PC",
+  description: "Complete walkthrough and strategies for Mafia on PC.",
+  note: "Kitten's note: Crime never pays.",
+  featured: false
+},
+
+{
+  id: "SuperMonkeyBall2PrimasOfficialStrategyGuide2002",
+  type: "pdf",
+  pdfUrl: "https://raw.githubusercontent.com/autumngreenbean/portfolio/main/pdfs/SuperMonkeyBall2primasOfficialStrategyGuide-2002.pdf",
+  category: "Video Games",
+  tagline: "SUPER MONKEY BALL 2 Guide",
+  title: "Super Monkey Ball 2 - Prima's Official Strategy Guide",
+  issue: "GameCube",
+  description: "Complete guide and strategies for Super Monkey Ball 2.",
+  note: "Kitten's note: I like being a monkey in a ball.",
+  featured: false
 },
     {
       id: "TODAYV02N06",
@@ -701,23 +712,17 @@
 
     if (m.type === 'pdf') {
       // Show PDF viewer, remove any iframes
-      pdfViewer.style.display = 'flex';
+      if (pdfViewer) pdfViewer.style.display = 'flex';
       Array.from(viewerWrap.children).forEach(child => {
         if (child.tagName === 'IFRAME') child.remove();
       });
 
-      const collectionId = m.collectionId || m.id;
-      const pdfPath = m.pdfFile ? `${collectionId}/${m.pdfFile}` : collectionId;
-      const pdfUrl = `https://archive.org/download/${pdfPath}`;
-      // Route through CORS proxy for live site, use direct URL for localhost
-      const proxyUrl = window.location.origin.includes('localhost')
-        ? pdfUrl
-        : `https://thingproxy.freeboard.io/fetch/${pdfUrl}`;
+      const pdfUrl = m.pdfUrl;
       const title = m.title + (m.issue ? ' – ' + m.issue : '');
-      loadPdf(proxyUrl, title);
+      loadPdf(pdfUrl, title);
     } else {
       // Hide PDF viewer for magazines
-      pdfViewer.style.display = 'none';
+      if (pdfViewer) pdfViewer.style.display = 'none';
       Array.from(viewerWrap.children).forEach(child => {
         if (child.tagName === 'IFRAME') child.remove();
       });
