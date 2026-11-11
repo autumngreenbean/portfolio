@@ -153,6 +153,7 @@ async function renderDesktopSpread() {
   if (!currentPdfDoc) return;
 
   const container = document.getElementById('pdf-container');
+  if (!container) return;
   container.style.overflow = 'hidden';
   container.style.justifyContent = 'center';
   const isMobile = isMobileView();
