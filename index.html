@@ -225,6 +225,16 @@
 
     .note a { color: var(--accent); }
 
+    .note.hidden { display: none; }
+
+    .main.full-viewer {
+      gap: 0;
+    }
+
+    .main.full-viewer .viewer {
+      min-height: unset;
+    }
+
     /* Loading indicator */
     #pdf-loading {
       display: none;
@@ -253,7 +263,7 @@
        phone's address bar). The viewer takes all the space left over,
        and the menu opens as an overlay so it never squeezes the viewer. */
   @media (max-width: 768px) {
-  body { zoom: 0.43; }
+  body { zoom: 0.55; }
 
  .app {
   display: grid;
@@ -379,6 +389,15 @@
      note        = your webmaster's note (optional)
      ------------------------------------------------------------ */
   const MAGAZINES = [
+{
+  id: "READMEOW",
+  type: "html",
+  htmlPath: "READMEOW.html",
+  tagline: "READMEOW.md",
+  title: "readmeow",
+  hideNote: true
+},
+
 {
   id: "MarioPaintPlayersGuide1993",
   type: "pdf",
@@ -521,7 +540,7 @@
       const title = m.title + (m.issue ? ' – ' + m.issue : '');
       loadPdf(pdfUrl, title);
     } else {
-      // Hide PDF viewer for magazines
+      // Hide PDF viewer for magazines/HTML
       if (pdfViewer) pdfViewer.style.display = 'none';
       Array.from(viewerWrap.children).forEach(child => {
         if (child.tagName === 'IFRAME') child.remove();
@@ -530,7 +549,13 @@
       const frame = document.createElement('iframe');
       frame.title = m.title + (m.issue ? ' – ' + m.issue : '') + ' (Internet Archive)';
       frame.setAttribute('allowfullscreen', '');
-      frame.src = `https://archive.org/embed/${encodeURIComponent(m.id)}?ui=embed#mode/2up`;
+
+      if (m.type === 'html') {
+        frame.src = m.htmlPath;
+      } else {
+        frame.src = `https://archive.org/embed/${encodeURIComponent(m.id)}?ui=embed#mode/2up`;
+      }
+
       viewerWrap.appendChild(frame);
     }
   }
@@ -542,14 +567,25 @@
     currentId = m.id;
     loadViewer(m);
 
-    document.getElementById('note-title').textContent =
-      m.title + (m.issue ? ' – ' + m.issue : '');
-    document.getElementById('note-desc').textContent = m.description || '';
-    const wm = document.getElementById('note-webmaster');
-    wm.textContent = m.note || '';
-    wm.style.display = m.note ? '' : 'none';
-    document.getElementById('note-link').href =
-      'https://archive.org/details/' + encodeURIComponent(m.id);
+    const noteEl = document.getElementById('note');
+    const mainEl = document.querySelector('.main');
+
+    if (m.hideNote) {
+      noteEl.classList.add('hidden');
+      mainEl.classList.add('full-viewer');
+    } else {
+      noteEl.classList.remove('hidden');
+      mainEl.classList.remove('full-viewer');
+
+      document.getElementById('note-title').textContent =
+        m.title + (m.issue ? ' – ' + m.issue : '');
+      document.getElementById('note-desc').textContent = m.description || '';
+      const wm = document.getElementById('note-webmaster');
+      wm.textContent = m.note || '';
+      wm.style.display = m.note ? '' : 'none';
+      document.getElementById('note-link').href =
+        'https://archive.org/details/' + encodeURIComponent(m.id);
+    }
 
     listEl.querySelectorAll('button').forEach(b =>
       b.setAttribute('aria-current', String(b.dataset.id === m.id)));
@@ -588,7 +624,8 @@
     // Every typed word must appear in the description (case-insensitive)
     const terms = query.toLowerCase().split(/\s+/).filter(Boolean);
     const items = MAGAZINES.filter(m => {
-      const inCategory = activeCategory === 'All' || norm(m.category).includes(activeCategory);
+      // Items without a category (like READMEOW) always show
+      const inCategory = !m.category || activeCategory === 'All' || norm(m.category).includes(activeCategory);
       const desc = (m.description || '').toLowerCase();
       return inCategory && terms.every(t => desc.includes(t));
     });
