@@ -45,6 +45,16 @@ async function renderMobilePage(slot, doc, gen) {
     const page = await doc.getPage(slot.num);
     if (gen !== renderGen) return;
 
+    const availableWidth = document.getElementById('pdf-container').clientWidth - 40;
+    const base = page.getViewport({ scale: 1 });
+    const correctCssScale = (availableWidth / base.width) * currentZoom;
+
+    if (slot.cssScale !== correctCssScale) {
+      slot.el.style.width = base.width * correctCssScale + 'px';
+      slot.el.style.height = base.height * correctCssScale + 'px';
+      slot.cssScale = correctCssScale;
+    }
+
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const viewport = page.getViewport({ scale: slot.cssScale * dpr });
 
@@ -88,7 +98,7 @@ async function renderMobileVerticalScroll() {
     const slots = [];
 
     const pagePromises = [];
-    for (let p = 1; p <= Math.min(doc.numPages, 5); p++) {
+    for (let p = 1; p <= Math.min(doc.numPages, 10); p++) {
       pagePromises.push(doc.getPage(p));
     }
     const firstPages = await Promise.all(pagePromises);
@@ -107,7 +117,7 @@ async function renderMobileVerticalScroll() {
       el.style.background = '#1a1a1a';
       container.appendChild(el);
 
-      const slot = { num: p, el, cssScale, state: 'empty', canvas: null, page };
+      const slot = { num: p, el, cssScale, state: 'empty', canvas: null };
       el._slot = slot;
       slots.push(slot);
     }
