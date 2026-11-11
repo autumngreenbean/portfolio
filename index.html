@@ -225,6 +225,29 @@
 
     .note a { color: var(--accent); }
 
+    /* Loading indicator */
+    #pdf-loading {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--muted);
+      font-size: 14px;
+      font-family: inherit;
+    }
+
+    @keyframes dots {
+      0% { content: 'Loading.'; }
+      33% { content: 'Loading..'; }
+      66% { content: 'Loading...'; }
+    }
+
+    #pdf-loading::after {
+      content: 'Loading.';
+      animation: dots 1s steps(3, end) infinite;
+    }
+
     /* ---------- Mobile ----------
        The page fills the real visible screen (dvh accounts for the
        phone's address bar). The viewer takes all the space left over,
@@ -314,7 +337,8 @@
         </div>
 
         <!-- Viewer container -->
-        <div id="pdf-container" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; background:#0a0a0a; display:flex; flex-direction:column; align-items:center;">
+        <div id="pdf-container" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; background:#0a0a0a; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+          <div id="pdf-loading"></div>
           <!-- Pages will be rendered here -->
         </div>
 
@@ -535,6 +559,10 @@
 
   async function loadPdf(url, title) {
     try {
+      // Show loading indicator
+      const loading = document.getElementById('pdf-loading');
+      if (loading) loading.style.display = 'block';
+
       // Clean up previous PDF
       if (currentPdfDoc) {
         currentPdfDoc.destroy();
@@ -542,7 +570,12 @@
       }
 
       const container = document.getElementById('pdf-container');
-      if (container) container.innerHTML = '';
+      if (container) {
+        // Clear only the canvases, keep the loading indicator
+        Array.from(container.children).forEach(child => {
+          if (child.id !== 'pdf-loading') child.remove();
+        });
+      }
 
       currentPdfDoc = await pdfjsLib.getDocument(url).promise;
       currentPage = 1;
@@ -552,6 +585,9 @@
       document.getElementById('pdf-title').textContent = title;
       document.getElementById('pdf-viewer').style.display = 'flex';
       await renderPdfPage();
+
+      // Hide loading indicator when done
+      if (loading) loading.style.display = 'none';
     } catch (err) {
       console.error('PDF loading error:', err);
       document.getElementById('pdf-viewer').style.display = 'none';
