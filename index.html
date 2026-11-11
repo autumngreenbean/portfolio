@@ -463,18 +463,27 @@
     const page = await currentPdfDoc.getPage(pageNum);
     const viewport = page.getViewport({ scale: 1 });
 
-    // Use a conservative scale based on viewport, not container (which may be miscalculated)
-    // This ensures the PDF actually fits without overflow
-    const maxHeight = Math.min(window.innerHeight * 0.70, 700);
+    // Display scale to fit in viewport
+    const maxHeight = Math.min(window.innerHeight * 0.67, 700);
     const scaleToFitHeight = maxHeight / viewport.height;
-    const baseScale = scaleToFitHeight * currentZoom;
+    const displayScale = scaleToFitHeight * currentZoom;
 
-    const scaledViewport = page.getViewport({ scale: baseScale });
+    // Render at 2x resolution for quality
+    const renderScale = displayScale * 2;
+
+    const displayViewport = page.getViewport({ scale: displayScale });
+    const renderViewport = page.getViewport({ scale: renderScale });
+
     const ctx = canvas.getContext('2d');
-    canvas.width = scaledViewport.width;
-    canvas.height = scaledViewport.height;
+    // High-resolution internal buffer
+    canvas.width = renderViewport.width;
+    canvas.height = renderViewport.height;
 
-    const renderContext = { canvasContext: ctx, viewport: scaledViewport };
+    // Display at fitted size
+    canvas.style.width = displayViewport.width + 'px';
+    canvas.style.height = displayViewport.height + 'px';
+
+    const renderContext = { canvasContext: ctx, viewport: renderViewport };
     await page.render(renderContext);
   }
 
@@ -526,6 +535,15 @@
 
   async function loadPdf(url, title) {
     try {
+      // Clean up previous PDF
+      if (currentPdfDoc) {
+        currentPdfDoc.destroy();
+        currentPdfDoc = null;
+      }
+
+      const container = document.getElementById('pdf-container');
+      if (container) container.innerHTML = '';
+
       currentPdfDoc = await pdfjsLib.getDocument(url).promise;
       currentPage = 1;
       currentZoom = 1;
@@ -561,17 +579,33 @@
      note        = your webmaster's note (optional)
      ------------------------------------------------------------ */
   const MAGAZINES = [
-    {
-      id: "Tekken3PrimasOfficialStrategyGuide1998",
-      type: "pdf",
-      pdfFile: "MafiaprimasOfficialPs2AndXboxStrategyGuide-2004.pdf",
-      category: "Video Games",
-      tagline: "Strategy Guide",
-      title: "Mafia - Prima's Official Strategy Guide",
-      issue: "PS2 and Xbox",
-      description: "Complete walkthrough and strategies for Mafia on PlayStation 2 and Xbox.",
-      note: "Kitten's note: Classic strategy guide for the iconic open-world crime game."
-    },
+{
+  id: "MarioPaintPlayersGuide1993",
+  collectionId: "Tekken3PrimasOfficialStrategyGuide1998",
+  type: "pdf",
+  pdfFile: "Mario%20Paint%20-%20Player's%20Guide%20(1993).pdf",
+  category: "Video Games",
+  tagline: "MARIO PAINT Guide",
+  title: "Mario Paint - Player's Guide",
+  issue: "SNES",
+  description: "Mario Paint on the Super Nintendo Entertainment System.",
+  note: "Kitten's note: Meow. The perfect game for painting.",
+  featured: true
+},
+
+{
+  id: "Tekken3PrimasOfficialStrategyGuide1998",
+  collectionId: "Tekken3PrimasOfficialStrategyGuide1998",
+  type: "pdf",
+  pdfFile: "MafiaprimasOfficialPs2AndXboxStrategyGuide-2004.pdf",
+  category: "Video Games",
+  tagline: "MAFIA Strategy Guide",
+  title: "Mafia - Prima's Official Strategy Guide",
+  issue: "PS2 and Xbox",
+  description: "Complete walkthrough and strategies for Mafia on PlayStation 2 and Xbox.",
+  note: "Kitten's note: Classic strategy guide for the iconic open-world crime game.",
+  featured: true
+},
     {
       id: "TODAYV02N06",
       category: "Computing",
@@ -663,21 +697,32 @@
   // A fresh iframe each time guarantees the viewer reloads at the right mode
   function loadViewer(m) {
     const viewerWrap = document.getElementById('viewer-wrap');
+    const pdfViewer = document.getElementById('pdf-viewer');
 
     if (m.type === 'pdf') {
-      const pdfPath = m.pdfFile ? `${m.id}/${m.pdfFile}` : m.id;
+      // Show PDF viewer, remove any iframes
+      pdfViewer.style.display = 'flex';
+      Array.from(viewerWrap.children).forEach(child => {
+        if (child.tagName === 'IFRAME') child.remove();
+      });
+
+      const collectionId = m.collectionId || m.id;
+      const pdfPath = m.pdfFile ? `${collectionId}/${m.pdfFile}` : collectionId;
       const pdfUrl = `https://archive.org/download/${pdfPath}`;
       const title = m.title + (m.issue ? ' – ' + m.issue : '');
       loadPdf(pdfUrl, title);
     } else {
-      // Hide PDF viewer for magazines
-      document.getElementById('pdf-viewer').style.display = 'none';
+      // Hide PDF viewer, remove any iframes, create new one
+      pdfViewer.style.display = 'none';
+      Array.from(viewerWrap.children).forEach(child => {
+        if (child.tagName === 'IFRAME') child.remove();
+      });
 
       const frame = document.createElement('iframe');
       frame.title = m.title + (m.issue ? ' – ' + m.issue : '') + ' (Internet Archive)';
       frame.setAttribute('allowfullscreen', '');
       frame.src = `https://archive.org/embed/${encodeURIComponent(m.id)}?ui=embed#mode/2up`;
-      viewerWrap.replaceChildren(frame);
+      viewerWrap.appendChild(frame);
     }
   }
 
@@ -764,13 +809,18 @@
   renderFilters();
   renderList();
 
-  // Open from a shared link (#IDENTIFIER) or pick a random magazine
+  // Open from a shared link (#IDENTIFIER), featured item, or pick a random magazine
   const hash = decodeURIComponent(location.hash.slice(1));
   if (hash) {
     select(hash, false);
   } else {
-    const randomId = MAGAZINES[Math.floor(Math.random() * MAGAZINES.length)].id;
-    select(randomId, false);
+    const featured = MAGAZINES.find(m => m.featured);
+    if (featured) {
+      select(featured.id, false);
+    } else {
+      const randomId = MAGAZINES[Math.floor(Math.random() * MAGAZINES.length)].id;
+      select(randomId, false);
+    }
   }
 </script>
 
