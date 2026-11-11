@@ -8,6 +8,10 @@ let currentPage = 1;
 let currentZoom = 1;
 let pdfTitle = '';
 
+// PDF cache for fast navigation (keep last 3 PDFs)
+const pdfCache = new Map();
+const MAX_CACHE_SIZE = 3;
+
 // Mobile rendering state
 let renderGen = 0;
 let mobileObserver = null;
@@ -272,19 +276,34 @@ document.getElementById('pdf-zoom-out')?.addEventListener('click', () => {
   renderPdfPage();
 });
 
+function getCachedPdf(url) {
+  return pdfCache.get(url);
+}
+
+function setCachedPdf(url, doc) {
+  if (pdfCache.size >= MAX_CACHE_SIZE) {
+    const firstKey = pdfCache.keys().next().value;
+    pdfCache.delete(firstKey);
+  }
+  pdfCache.set(url, doc);
+}
+
+function prefetchPdf(url) {
+  if (!url || pdfCache.has(url)) return;
+  pdfjsLib.getDocument(url).promise.then(doc => {
+    setCachedPdf(url, doc);
+  }).catch(() => {});
+}
+
 async function loadPdf(url, title) {
   try {
     // Show loading indicator
     const loading = document.getElementById('pdf-loading');
     if (loading) loading.style.display = 'block';
 
-    // Clean up previous PDF
+    // Clean up previous PDF's DOM only, don't destroy (keep in cache)
     const container = document.getElementById('pdf-container');
     teardownMobile(container);
-    if (currentPdfDoc) {
-      try { await currentPdfDoc.destroy(); } catch (e) {}
-      currentPdfDoc = null;
-    }
 
     // Small delay to ensure cleanup completes
     await new Promise(resolve => setTimeout(resolve, 10));
@@ -296,7 +315,13 @@ async function loadPdf(url, title) {
       });
     }
 
-    currentPdfDoc = await pdfjsLib.getDocument(url).promise;
+    const cached = getCachedPdf(url);
+    if (cached) {
+      currentPdfDoc = cached;
+    } else {
+      currentPdfDoc = await pdfjsLib.getDocument(url).promise;
+      setCachedPdf(url, currentPdfDoc);
+    }
     currentPage = 1;
     currentZoom = 1;
     pdfTitle = title;

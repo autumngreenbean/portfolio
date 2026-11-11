@@ -555,6 +555,16 @@
       b.setAttribute('aria-current', String(b.dataset.id === m.id)));
 
     if (pushHash) history.replaceState(null, '', '#' + encodeURIComponent(m.id));
+
+    if (m.type === 'pdf') {
+      const idx = MAGAZINES.indexOf(m);
+      if (idx > 0 && MAGAZINES[idx - 1].type === 'pdf') {
+        prefetchPdf(MAGAZINES[idx - 1].pdfUrl);
+      }
+      if (idx < MAGAZINES.length - 1 && MAGAZINES[idx + 1].type === 'pdf') {
+        prefetchPdf(MAGAZINES[idx + 1].pdfUrl);
+      }
+    }
   }
 
   function renderFilters() {
