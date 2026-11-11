@@ -15,29 +15,6 @@ const activeTasks = new Set();
 
 const isMobileView = () => window.innerWidth <= 768;
 
-async function renderPdfCanvas(canvasId, pageNum) {
-  if (!currentPdfDoc || pageNum > currentPdfDoc.numPages || pageNum < 1) return false;
-
-  const page = await currentPdfDoc.getPage(pageNum);
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return false;
-
-  const container = canvas.parentElement;
-  const availableHeight = container ? container.clientHeight - 40 : 800;
-  const viewport = page.getViewport({ scale: 1 });
-  const scaleToFitHeight = availableHeight / viewport.height;
-  const renderScale = scaleToFitHeight * currentZoom * 1.5;
-
-  const scaledViewport = page.getViewport({ scale: renderScale });
-  const ctx = canvas.getContext('2d');
-  canvas.width = scaledViewport.width;
-  canvas.height = scaledViewport.height;
-
-  const renderContext = { canvasContext: ctx, viewport: scaledViewport };
-  await page.render(renderContext).promise;
-  return true;
-}
-
 function teardownMobile(container) {
   renderGen++;
   if (mobileObserver) { mobileObserver.disconnect(); mobileObserver = null; }
@@ -104,6 +81,7 @@ async function renderMobileVerticalScroll() {
   try {
     container.style.overflow = 'auto';
     container.style.overflowAnchor = 'none';
+    container.style.justifyContent = 'flex-start';
     container.scrollTop = 0;
 
     const availableWidth = container.clientWidth - 40;
@@ -139,6 +117,11 @@ async function renderMobileVerticalScroll() {
 
     slots.forEach(s => mobileObserver.observe(s.el));
 
+    // Render first 3 pages immediately so they're ready on load
+    for (let i = 0; i < Math.min(3, slots.length); i++) {
+      renderMobilePage(slots[i], doc, gen);
+    }
+
     const pageInfo = document.getElementById('pdf-page-info');
     if (pageInfo) pageInfo.textContent = `${doc.numPages} pages`;
     const zoomLevel = document.getElementById('pdf-zoom-level');
@@ -153,6 +136,7 @@ async function renderDesktopSpread() {
 
   const container = document.getElementById('pdf-container');
   container.style.overflow = 'hidden';
+  container.style.justifyContent = 'center';
   const isMobile = isMobileView();
 
   // Update slider
@@ -313,12 +297,6 @@ async function loadPdf(url, title) {
 
     // Hide loading indicator when done
     if (loading) loading.style.display = 'none';
-
-    // Force scroll to top after render completes and layout settles
-    if (container) container.scrollTop = 0;
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 100);
   } catch (err) {
     console.error('PDF loading error:', err);
 
