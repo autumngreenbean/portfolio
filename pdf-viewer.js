@@ -6,6 +6,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs
 let currentPdfDoc = null;
 let currentPage = 1;
 let currentZoom = 1;
+let mobileTwoUp = false;
 let pdfTitle = '';
 
 // PDF cache for fast navigation (keep last 3 PDFs)
@@ -204,7 +205,6 @@ async function renderDesktopSpread() {
   if (!container) return;
   container.style.overflowX = 'auto';
   container.style.overflowY = 'hidden';
-  const isMobile = isMobileView();
 
   // Update slider
   const slider = document.getElementById('pdf-slider');
@@ -212,7 +212,9 @@ async function renderDesktopSpread() {
   slider.value = currentPage;
 
   // Clear container
-  container.innerHTML = '';
+  Array.from(container.children).forEach(child => {
+    if (child.id !== 'pdf-loading') child.remove();
+  });
 
   const spreadDiv = document.createElement('div');
   spreadDiv.style.display = 'flex';
@@ -224,9 +226,9 @@ async function renderDesktopSpread() {
   const canvas1 = document.createElement('canvas');
   const canvas2 = document.createElement('canvas');
 
-  canvas1.style.maxHeight = '80vh';
+  canvas1.style.maxHeight = isMobileView() ? 'none' : '80vh';
   canvas1.style.width = 'auto';
-  canvas2.style.maxHeight = '80vh';
+  canvas2.style.maxHeight = isMobileView() ? 'none' : '80vh';
   canvas2.style.width = 'auto';
   canvas2.style.display = 'none';
 
@@ -241,17 +243,31 @@ async function renderDesktopSpread() {
   } else {
     // Spreads: pages 2-3, 4-5, 6-7, etc.
     await renderPdfCanvasDesktop(canvas1, currentPage);
-    if (!isMobile) {
-      canvas2.style.display = 'block';
-      await renderPdfCanvasDesktop(canvas2, currentPage + 1);
-      const endPage = Math.min(currentPage + 1, currentPdfDoc.numPages);
-      document.getElementById('pdf-page-info').textContent = `Pages ${currentPage}-${endPage} of ${currentPdfDoc.numPages}`;
-    } else {
-      document.getElementById('pdf-page-info').textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
-    }
+    canvas2.style.display = 'block';
+    await renderPdfCanvasDesktop(canvas2, currentPage + 1);
+    const endPage = Math.min(currentPage + 1, currentPdfDoc.numPages);
+    document.getElementById('pdf-page-info').textContent = `Pages ${currentPage}-${endPage} of ${currentPdfDoc.numPages}`;
   }
 
   document.getElementById('pdf-zoom-level').textContent = Math.round(currentZoom * 100) + '%';
+
+  if (isMobileView()) fitAppToSpread(spreadDiv);
+}
+
+// Mobile two-page view: size the .app viewer row to the spread instead of filling all leftover height.
+function fitAppToSpread(spreadDiv) {
+  const app = document.querySelector('.app');
+  const container = document.getElementById('pdf-container');
+  const viewerWrap = document.getElementById('viewer-wrap');
+  if (!app || !container || !viewerWrap) return;
+  const chrome = viewerWrap.offsetHeight - container.offsetHeight;
+  const rowHeight = Math.ceil(spreadDiv.offsetHeight + chrome);
+  app.style.gridTemplateRows = `auto minmax(0, ${rowHeight}px) minmax(0, 1fr)`;
+}
+
+function resetAppRows() {
+  const app = document.querySelector('.app');
+  if (app) app.style.gridTemplateRows = '';
 }
 
 async function renderPdfCanvasDesktop(canvas, pageNum) {
@@ -263,8 +279,12 @@ async function renderPdfCanvasDesktop(canvas, pageNum) {
   // Display scale to fit in viewport - use container height, not window height
   const container = document.getElementById('pdf-container');
   const maxHeight = container ? container.clientHeight * 0.95 : window.innerHeight * 0.8;
-  const scaleToFitHeight = maxHeight / viewport.height;
-  const displayScale = scaleToFitHeight * currentZoom;
+  let scaleToFit = maxHeight / viewport.height;
+  if (isMobileView() && container) {
+    // Mobile: fit both pages to the width; the viewer row then grows/shrinks to the result
+    scaleToFit = (container.clientWidth * 0.98) / (viewport.width * 2);
+  }
+  const displayScale = scaleToFit * currentZoom;
 
   // Render at 2x resolution for quality
   const renderScale = displayScale * 2;
@@ -290,15 +310,28 @@ async function renderPdfPage() {
 
   const isMobile = isMobileView();
   const controls = document.getElementById('pdf-controls');
+  const toggle = document.getElementById('pdf-view-toggle');
+  if (toggle) {
+    toggle.style.display = isMobile ? 'inline-block' : 'none';
+    toggle.textContent = mobileTwoUp ? '1-page' : '2-page';
+  }
 
-  if (isMobile) {
+  if (isMobile && !mobileTwoUp) {
+    resetAppRows();
     if (controls) controls.style.display = 'none';
     await renderMobileVerticalScroll();
   } else {
+    teardownMobile(document.getElementById('pdf-container'));
+    if (!isMobile) resetAppRows();
     if (controls) controls.style.display = 'flex';
     await renderDesktopSpread();
   }
 }
+
+document.getElementById('pdf-view-toggle')?.addEventListener('click', () => {
+  mobileTwoUp = !mobileTwoUp;
+  renderPdfPage();
+});
 
 // Event Listeners
 document.getElementById('pdf-prev')?.addEventListener('click', () => {
