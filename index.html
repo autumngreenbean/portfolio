@@ -266,11 +266,11 @@
        phone's address bar). The viewer takes all the space left over,
        and the menu opens as an overlay so it never squeezes the viewer. */
   @media (max-width: 768px) {
-  body { zoom: 0.43; }
+  body { zoom: 0.37; }
 
  .app {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
   grid-template-rows: auto minmax(0, 1fr) 29%;  /* title | viewer | bottom column */
   height: 100%;                                 /* was 93% */
 }
@@ -342,7 +342,7 @@
   .note p { font-size: 100%; margin: 0 0 10px; }
   .note .webmaster { font-size: 100%; margin-bottom: 10px; }
   .note a { font-size: 100%; }
-  .note .note-columns { column-count: 1 !important; }
+  /* .note .note-columns { column-count: 1 !important; } */
 }
   </style>
 </head>
