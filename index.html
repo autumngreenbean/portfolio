@@ -190,7 +190,8 @@
     .viewer {
       flex: 1;
       min-height: 320px;
-      overflow: hidden;
+      overflow-x: auto;
+      overflow-y: hidden;
       background: #111;
     }
 
@@ -346,7 +347,7 @@
         </div>
 
         <!-- Viewer container -->
-        <div id="pdf-container" style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; background:#0a0a0a; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <div id="pdf-container" style="flex:1; min-height:0; overflow-x:auto; overflow-y:hidden; background:#0a0a0a; display:flex; flex-direction:column; align-items:center; justify-content:flex-start;">
           <div id="pdf-loading"></div>
           <!-- Pages will be rendered here -->
         </div>
@@ -398,6 +399,18 @@
   hideNote: true
 },
   {
+    id: "PC-Page-Guru-1994-04",
+    type: "pdf",
+    pdfUrl: "pdfs/PC_Page_Guru_1994_04_300DPI_Adobe_Acrobat_OCR.pdf",
+    category: "Computing",
+    tagline: "a lifestyle magazine for the computer generation",
+    title: "PC-Page Guru",
+    issue: "April 1994",
+    description: "computer-culture criticism, a mix of multimedia commentary with erotic and underground content.",
+    analysisNote: "pc-page-guru-1994-04.html",
+    featured: true
+  },
+  {
     id: "Saru-Getchu-Perfect-Guide-Book",
     // type: "pdf",
     // pdfUrl: "https://archive.org/details/Saru-Getchu-Perfect-Guide-Book/Saru%20Getchu%20Perfect%20Guide%20Book/page/n7/mode/2up",
@@ -408,6 +421,7 @@
     description: "The truly perfect guide book.",
     note: "Kitten's note: What more could you possibly want from a strategy guide?"
   },
+
   {
     id: "james-p-carse-finite-and-infinite-games",
     // type: "pdf",
@@ -463,7 +477,7 @@
   issue: "SNES",
   description: "Mario Paint on the Super Nintendo Entertainment System.",
   note: "Kitten's note: Meow. The perfect game for painting.",
-  featured: true
+  featured: false
 },
 
 {
@@ -600,10 +614,28 @@
         m.title + (m.issue ? ' – ' + m.issue : '');
       document.getElementById('note-desc').textContent = m.description || '';
       const wm = document.getElementById('note-webmaster');
-      wm.textContent = m.note || '';
-      wm.style.display = m.note ? '' : 'none';
-      document.getElementById('note-link').href =
-        'https://archive.org/details/' + encodeURIComponent(m.id);
+
+      if (m.analysisNote) {
+        // Load external HTML file for the note
+        fetch('notes/' + m.analysisNote)
+          .then(r => r.text())
+          .then(html => {
+            wm.innerHTML = html;
+            wm.style.display = '';
+          })
+          .catch(() => {
+            wm.textContent = m.note || '';
+            wm.style.display = m.note ? '' : 'none';
+          });
+      } else {
+        wm.textContent = m.note || '';
+        wm.style.display = m.note ? '' : 'none';
+      }
+
+      const linkEl = document.getElementById('note-link');
+      linkEl.textContent = 'View on Archive.org';
+      linkEl.href = 'https://archive.org/details/' + encodeURIComponent(m.id);
+      linkEl.onclick = null;
     }
 
     listEl.querySelectorAll('button').forEach(b =>
@@ -672,6 +704,46 @@
       li.appendChild(btn);
       listEl.appendChild(li);
     });
+  }
+
+  function jumpToPdfPage(pageNum) {
+    if (!currentPdfDoc || pageNum < 1 || pageNum > currentPdfDoc.numPages) return;
+    currentPage = pageNum;
+    renderPdfPage();
+  }
+
+  function openNotesWindow() {
+    const noteEl = document.getElementById('note-webmaster');
+    if (!noteEl) return;
+
+    const content = noteEl.innerHTML.replace(/<a[^>]*>.*?<\/a>/s, '');
+    const htmlContent = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><link rel="stylesheet" href="https://fonts.cdnfonts.com/css/w95fa"><style>
+* { box-sizing: border-box; }
+body { margin: 0; padding: 40px; background: #000; color: #e8e8e8; font-family: 'W95FA', monospace; font-size: 15px; line-height: 1.8; max-width: 900px; }
+p { margin: 0 0 14px 0; }
+ul { margin: 0 0 14px 0; padding-left: 20px; }
+li { margin-bottom: 10px; }
+details { cursor: pointer; }
+summary { user-select: none; font-weight: bold; color: #888; font-size: 12px; padding: 4px 0; cursor: pointer; }
+summary:hover { color: #a8a8a8; }
+strong { color: #f2f2f2; }
+div[style*="column-count"] { column-count: 3; column-gap: 20px; }
+</style></head><body>${content}<script>
+function jumpToPdfPageFromNotes(pageNum) {
+  if (window.opener && window.opener.jumpToPdfPageFromNotes) {
+    window.opener.jumpToPdfPageFromNotes(pageNum);
+  }
+}
+<\/script></body></html>`;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, 'notes', 'width=900,height=700,resizable=yes,scrollbars=yes');
+  }
+
+  // Helper for notes files to jump to PDF pages
+  window.jumpToPdfPageFromNotes = function(pageNum) {
+    jumpToPdfPage(pageNum);
   }
 
   searchEl.addEventListener('input', () => {

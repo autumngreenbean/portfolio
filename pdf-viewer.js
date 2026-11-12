@@ -136,8 +136,13 @@ async function renderMobileVerticalScroll() {
 
     slots.forEach(s => mobileObserver.observe(s.el));
 
-    for (let i = 0; i < Math.min(1, slots.length); i++) {
-      renderMobilePage(slots[i], doc, gen);
+    if (currentPage > 0 && currentPage <= slots.length) {
+      container.scrollTop = slots[currentPage - 1].el.offsetTop;
+    }
+
+    // Only pre-render page 1 if we're actually jumping to page 1
+    if (currentPage === 1) {
+      renderMobilePage(slots[0], doc, gen);
     }
 
     const pageInfo = document.getElementById('pdf-page-info');
@@ -154,8 +159,8 @@ async function renderDesktopSpread() {
 
   const container = document.getElementById('pdf-container');
   if (!container) return;
-  container.style.overflow = 'hidden';
-  container.style.justifyContent = 'center';
+  container.style.overflowX = 'auto';
+  container.style.overflowY = 'hidden';
   const isMobile = isMobileView();
 
   // Update slider
@@ -168,7 +173,7 @@ async function renderDesktopSpread() {
 
   const spreadDiv = document.createElement('div');
   spreadDiv.style.display = 'flex';
-  spreadDiv.style.gap = '20px';
+  spreadDiv.style.gap = '0px';
   spreadDiv.style.justifyContent = 'center';
   spreadDiv.style.alignItems = 'flex-start';
 
@@ -186,15 +191,21 @@ async function renderDesktopSpread() {
   spreadDiv.appendChild(canvas2);
   container.appendChild(spreadDiv);
 
-  // Render pages
-  await renderPdfCanvasDesktop(canvas1, currentPage);
-  if (!isMobile) {
-    canvas2.style.display = 'block';
-    await renderPdfCanvasDesktop(canvas2, currentPage + 1);
-    const endPage = Math.min(currentPage + 1, currentPdfDoc.numPages);
-    document.getElementById('pdf-page-info').textContent = `Pages ${currentPage}-${endPage} of ${currentPdfDoc.numPages}`;
+  // Cover page (page 1) displayed alone
+  if (currentPage === 1) {
+    await renderPdfCanvasDesktop(canvas1, 1);
+    document.getElementById('pdf-page-info').textContent = `Page 1 of ${currentPdfDoc.numPages}`;
   } else {
-    document.getElementById('pdf-page-info').textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
+    // Spreads: pages 2-3, 4-5, 6-7, etc.
+    await renderPdfCanvasDesktop(canvas1, currentPage);
+    if (!isMobile) {
+      canvas2.style.display = 'block';
+      await renderPdfCanvasDesktop(canvas2, currentPage + 1);
+      const endPage = Math.min(currentPage + 1, currentPdfDoc.numPages);
+      document.getElementById('pdf-page-info').textContent = `Pages ${currentPage}-${endPage} of ${currentPdfDoc.numPages}`;
+    } else {
+      document.getElementById('pdf-page-info').textContent = `Page ${currentPage} of ${currentPdfDoc.numPages}`;
+    }
   }
 
   document.getElementById('pdf-zoom-level').textContent = Math.round(currentZoom * 100) + '%';
@@ -206,8 +217,9 @@ async function renderPdfCanvasDesktop(canvas, pageNum) {
   const page = await currentPdfDoc.getPage(pageNum);
   const viewport = page.getViewport({ scale: 1 });
 
-  // Display scale to fit in viewport
-  const maxHeight = Math.min(window.innerHeight * 0.67, 700);
+  // Display scale to fit in viewport - use container height, not window height
+  const container = document.getElementById('pdf-container');
+  const maxHeight = container ? container.clientHeight * 0.95 : window.innerHeight * 0.8;
   const scaleToFitHeight = maxHeight / viewport.height;
   const displayScale = scaleToFitHeight * currentZoom;
 
@@ -247,17 +259,23 @@ async function renderPdfPage() {
 
 // Event Listeners
 document.getElementById('pdf-prev')?.addEventListener('click', () => {
-  const pageSize = 2;
   if (currentPage > 1) {
-    currentPage = Math.max(1, currentPage - pageSize);
+    if (currentPage === 2) {
+      currentPage = 1; // From page 2 (first spread), go to cover
+    } else {
+      currentPage = Math.max(2, currentPage - 2); // From spreads, go back 2 pages
+    }
     renderPdfPage();
   }
 });
 
 document.getElementById('pdf-next')?.addEventListener('click', () => {
-  const pageSize = 2;
   if (currentPage < currentPdfDoc.numPages) {
-    currentPage = Math.min(currentPdfDoc.numPages - 1, currentPage + pageSize);
+    if (currentPage === 1) {
+      currentPage = 2; // From cover, go to first spread
+    } else {
+      currentPage = Math.min(currentPdfDoc.numPages - 1, currentPage + 2); // From spreads, go forward 2 pages
+    }
     renderPdfPage();
   }
 });
