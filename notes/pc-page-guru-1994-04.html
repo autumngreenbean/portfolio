@@ -1,8 +1,29 @@
-<div style="position: relative;">
+  <style>
+.pcg .btn { display:inline-block; padding:3px 10px; border:1px solid #555; color:#e8e8e8; background:transparent; font:inherit; font-size:12px; line-height:1.4; text-decoration:none; cursor:pointer; }
+.pcg .btn:hover { background:#e8e8e8; color:#000; border-color:#e8e8e8; }
+.pcg .btn.quiet { color:#8a8a8a; border-color:#2e2e2e; }
+.pcg .btn.quiet:hover { color:#000; }
+.pcg.links { display:flex; flex-wrap:wrap; gap:6px; }
+.pcg .entry { margin:0 0 18px; padding:2px 0 2px 10px; border-left:2px solid rgb(99,200,255); }
+.pcg .entry-head { display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; color:rgb(99,200,255); }
+.pcg .pg { font-weight:bold; color:#000; background:rgb(99,200,255); padding:0 6px; }
+.pcg .tag { font-size:11px; color:#ff8a8a; border:1px solid #6a3030; padding:0 5px; }
+.pcg .topic { flex:1 1 12em; }
+.pcg summary { cursor:pointer; user-select:none; list-style:none; display:inline-block; color:#b5b5b5; font-size:12px; font-weight:bold; border-bottom:1px dotted #555; }
+.pcg summary::-webkit-details-marker { display:none; }
+.pcg summary::before { content:'\25B8  '; }
+.pcg details[open] > summary::before { content:'\25BE  '; }
+.pcg summary:hover { color:#fff; border-bottom-color:#fff; }
+</style>
+<div class="pcg links">
+<a class="btn" href="https://archive.org/details/PC-Page-Guru-1994-04/PC_Page_Guru_1994_04_Adobe_Acrobat_OCR/" target="_blank" rel="noopener">View on archive.org</a>
 
-  <a href="https://archive.org/details/PC-Page-Guru-1994-04/PC_Page_Guru_1994_04_Adobe_Acrobat_OCR/" target="_blank" rel="noopener">View on archive.org</a>
+  <a href="#" onclick="openNotesWindow(); return false;" class="btn quiet" title="Open in new window">⟳ open these notes in an external window for easier reading</a>
+</div>
 
-  <a href="#" onclick="openNotesWindow(); return false;" style="background: none; border: none; color: #8a8a8a; cursor: pointer; font-size: 12px; padding: 4px 8px; text-decoration: none; transition: color 0.2s;" title="Open in new window" onmouseover="this.style.color='#e8e8e8'" onmouseout="this.style.color='#8a8a8a'">⟳ open these notes in an external window for easier reading </a>
+
+<div class="pcg" style="position: relative;">
+
 <br> <br> 
   <p><strong>Kitten's note:</strong> A really interesting, slightly lewd, and obscured collection of critical commentary on multimedia and internet culture from 1994.</p>
 
@@ -10,13 +31,13 @@
   <p> # sections of interest:</p>
   <ul style="list-style: none; padding: 0;">
 
-    <li style="margin-bottom: 24px; color:rgb(99, 200, 255)">p. 42 . . . . .(nsfw) <i>criticisms of a lewd, lifeless CD-ROM . . . . . . . . . . . . .</i><a href="#" onclick="jumpToPdfPageFromNotes(42); return false;" style="color: #e8e8e8; text-decoration: underline; cursor: pointer;"> . . . [ jump to page 42 ]</a>
+    <li class="entry"><div class="entry-head"><span class="pg">p. 42</span><span class="tag">nsfw</span><span class="topic">criticisms of a lewd, lifeless CD-ROM</span><a href="#" class="btn" onclick="jumpToPdfPageFromNotes(42); return false;">jump to page 42 &rarr;</a></div>
 
       <details style="cursor: pointer; margin-top: 8px;">
-        <summary style="user-select: none; font-weight: bold; color: #888; font-size: 12px;">
+        <summary>
           direct translation
         </summary>
-        <div class="note-columns" style="padding-top: 12px; color: #e8e8e8; line-height: 1.6; font-size: 100%; column-count: 3; column-gap: 20px;">
+        <div class="note-columns" style="padding-top: 12px; color: #e8e8e8; line-height: 1.6; font-size: 14px; white-space: pre-line; column-count: 3; column-gap: 20px;">
           It's like a scene from a painting of hell.
 
           What does anyone think they're showing off by photographing the bound bodies of women?
@@ -50,9 +71,9 @@
       </details>
     </li>
 
-    <li style="margin-bottom: 24px; color:rgb(99, 200, 255)">p. 47 . . . . .<i>multimedia . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . </i><a href="#" onclick="jumpToPdfPageFromNotes(48); return false;" style="color: #e8e8e8; text-decoration: underline; cursor: pointer;"> . . . [ jump to page 47 ]</a>
+    <li class="entry"><div class="entry-head"><span class="pg">p. 47</span><span class="topic">multimedia</span><a href="#" class="btn" onclick="jumpToPdfPageFromNotes(48); return false;">jump to page 47 &rarr;</a></div>
      <details style="cursor: pointer; margin-top: 8px;">
-        <summary style="user-select: none; font-weight: bold; color: #888; font-size: 12px;">
+        <summary>
           translations and notes
         </summary>
         <div style="padding-top: 12px; color: #e8e8e8; line-height: 1.6; font-size: 14px;">
@@ -72,7 +93,7 @@ demonstrates how to make a title with Expanded Book, a Mac-only software used fo
 <br> <br>
 <strong>Section 1: ノリだけで突っ走っていいのか? ("Is it fine to just charge ahead on vibes alone?")</strong>
 <p style="margin-bottom: 24px;">"Is it fine to just charge ahead on vibes alone?"</p>
-<blockquote style="border-left: 3px solid #555; padding-left: 16px; margin-left: 0; margin-bottom: 16px; color: #999; font-family: PixelMplus, 'W95FA', monospace; font-size: 13px; line-height: 1.8;">
+<blockquote style="border-left: 3px solid #555; padding-left: 16px; margin-left: 0; margin-bottom: 16px; color: #b8b8b8; font-family: PixelMplus, 'W95FA', monospace; font-size: 13px; line-height: 1.8;">
 そもそも、マルチメディアなんかに手を出すのは、世界を広げたいからでしょう?
 </blockquote>
 
@@ -80,13 +101,13 @@ demonstrates how to make a title with Expanded Book, a Mac-only software used fo
 
 <strong>Section 4: マルチメディアは市場でなく技術である ("Multimedia is a technology, not a market")</strong>
 
-<blockquote style="border-left: 3px solid #555; padding-left: 16px; margin-left: 0; margin-bottom: 16px; color: #999; font-family: PixelMplus, 'W95FA', monospace; font-size: 13px; line-height: 1.8;">
+<blockquote style="border-left: 3px solid #555; padding-left: 16px; margin-left: 0; margin-bottom: 16px; color: #b8b8b8; font-family: PixelMplus, 'W95FA', monospace; font-size: 13px; line-height: 1.8;">
 マルチメディア「技術」をどう応用するかはユーザーの自由だ。メーカーやソフトハウスは素材を提供するだけ。その素材を、System 7やWindows 3.1やUNIXの上でどのように組み合わせて使うかは、ユーザーに任されている。
 </blockquote>
 
 <p style="margin-bottom: 24px;">"How to apply multimedia 'technology' is the user's freedom. Makers and software houses merely supply the materials. How those materials are combined and used on System 7, Windows 3.1, or UNIX is left to the user."</p>
 
-<blockquote style="border-left: 3px solid #555; padding-left: 16px; margin-left: 0; margin-bottom: 16px; color: #999; font-family: PixelMplus, 'W95FA', monospace; font-size: 13px; line-height: 1.8;">
+<blockquote style="border-left: 3px solid #555; padding-left: 16px; margin-left: 0; margin-bottom: 16px; color: #b8b8b8; font-family: PixelMplus, 'W95FA', monospace; font-size: 13px; line-height: 1.8;">
 さて皆さん、マルチメディアは、だいたいこんな感じの世界であります。マルチメディア・タイトルを作るというのもマルチメディアですが、マルチメディア＝マルチメディア・タイトルというワケではないワケです。この世界の中で、あなたはどのマルチメディアをやりますか?
 </blockquote>
 
@@ -95,12 +116,12 @@ demonstrates how to make a title with Expanded Book, a Mac-only software used fo
       </details>
     </li>
 
-    <li style="margin-bottom: 24px; color:rgb(99, 200, 255)">p. 79 . . . . .<i>habits . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . </i><a href="#" onclick="jumpToPdfPageFromNotes(80); return false;" style="color: #e8e8e8; text-decoration: underline; cursor: pointer;"> . . . [ jump to page 79 ]</a>
+    <li class="entry"><div class="entry-head"><span class="pg">p. 79</span><span class="topic">habits</span><a href="#" class="btn" onclick="jumpToPdfPageFromNotes(80); return false;">jump to page 79 &rarr;</a></div>
       <details style="cursor: pointer; margin-top: 8px;">
-        <summary style="user-select: none; font-weight: bold; color: #888; font-size: 12px;">
+        <summary>
           direct translation
         </summary>
-          <div style="padding-top: 12px; color: #e8e8e8; line-height: 1.6; font-size: 14px; ">
+          <div style="padding-top: 12px; color: #e8e8e8; line-height: 1.6; font-size: 14px; white-space: pre-line;">
                 Everyone has a habit or two they just can’t cure. Some people may seem to have no such habits at all, but really they just don’t show up around other people, and who knows what they do when they’re completely alone. Then again, nobody can point out habits like that, and the person may not even notice them.
 
                 Habits are a perfect way to understand a person. People say you should cure bad habits, but if curing one meant you could no longer tell who that person was, maybe there’s no need to be so insistent about it. For one thing, the person doesn’t feel the habit is bad. So even I never thought of curing mine.
@@ -111,17 +132,24 @@ demonstrates how to make a title with Expanded Book, a Mac-only software used fo
 
                 Suddenly I noticed a tall man in glasses and a black fedora walking right next to me. And this suspicious-looking man kept glancing at me.
 
-                <br> <br>
-                <a href="#" onclick="jumpToPdfPageFromNotes(82); return false;" style="color: #e8e8e8; text-decoration: underline; cursor: pointer;"> . . . [ jump to page 81 ]</a>
-                <br>
-
             </div>
 
-            <style>
+      </details>
+    </li>
+    <li class="entry"><div class="entry-head"><span class="pg">p. 80</span><span class="topic">habits</span><a href="#" class="btn" onclick="jumpToPdfPageFromNotes(82); return false;">jump to page 80 &rarr;</a></div>
+      <details style="cursor: pointer; margin-top: 8px;">
+        <summary>
+          direct translation
+        </summary>
+      <style>
               .page82 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start;
-                        max-width: 720px; color: #e8e8e8; font-size: 14px; line-height: 1.6; }
+                         color: #e8e8e8; font-size: 14px; line-height: 1.6; }
               .page82 .col { white-space: pre-line; }
               .page82 .right { padding-top: 9rem; }
+              @media (max-width: 768px) {
+                .page82 { grid-template-columns: 1fr; gap: 0; }
+                .page82 .right { padding-top: 0; }
+              }
             </style>
 
             <div class="page82">
@@ -161,11 +189,10 @@ demonstrates how to make a title with Expanded Book, a Mac-only software used fo
                 My fee per whistling session? I’ll leave that to your imagination.
               </div>
             </div>
+            
 
-        </details>
+      </details>
     </li>
-
-
   </ul>
 
 <i>... im still working through this great publication, more work to be done tomorrow . . . </i>

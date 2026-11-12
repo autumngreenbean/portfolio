@@ -7,6 +7,8 @@
   <style>
     * { box-sizing: border-box; }
 
+    :root { --blue: rgb(99, 200, 255); }
+
     body {
       margin: 0;
       padding: 60px 80px;
@@ -31,7 +33,7 @@
     .subtitle {
       color: #a8a8a8;
       font-size: 13px;
-      margin-bottom: 50px;
+      margin-bottom: 40px;
       font-weight: normal;
       letter-spacing: 0.01em;
     }
@@ -39,19 +41,17 @@
     h2 {
       font-size: 22px;
       font-weight: bold;
-      margin: 40px 0 20px -5px;
+      margin: 0 0 16px -5px;
       color: #f2f2f2;
-      border-bottom: none;
-      padding-bottom: 0;
       letter-spacing: -0.01em;
     }
 
     h3 {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
-      margin: 20px 0 10px 0;
-      color: #e8e8e8;
-      text-transform: uppercase;
+      margin: 0 0 10px 0;
+      color: var(--blue);
+      /* text-transform: uppercase; */
       letter-spacing: 0.05em;
     }
 
@@ -60,229 +60,195 @@
       color: #e8e8e8;
     }
 
-    ul, ol {
-      margin: 0 0 14px 0;
-      padding-left: 20px;
-    }
-
-    li {
-      margin-bottom: 6px;
-      color: #e8e8e8;
-    }
-
     a {
-      color: #e8e8e8;
+      color: var(--blue);
       text-decoration: underline;
-      font-weight: normal;
       transition: color 0.2s;
     }
 
-    a:hover {
-      color: #f2f2f2;
+    a:hover { color: #f2f2f2; }
+
+    strong { color: #f2f2f2; font-weight: bold; }
+
+    /* ---------- Magazine layout ---------- */
+    .band {
+      border-top: 1px solid #222;
+      padding-top: 28px;
+      margin-bottom: 44px;
     }
 
-    code {
-      background: transparent;
-      padding: 0;
-      border-radius: 0;
-      color: #e8e8e8;
-      font-family: monospace;
-      font-size: 13px;
-      border-bottom: 1px solid #555;
-    }
+    .band.first { border-top: 0; padding-top: 0; }
 
-    pre {
-      background: #0a0a0a;
-      border: 1px solid #222;
-      padding: 14px 16px;
-      border-radius: 0;
-      overflow-x: auto;
-      margin: 14px 0;
-      font-size: 12px;
-    }
-
-    pre code {
-      background: none;
-      padding: 0;
-      color: #888;
-      border: none;
-    }
-
-    .section {
-      margin-bottom: 50px;
+    .cols {
       display: grid;
-      grid-template-columns: 1fr 1fr;
       gap: 40px;
       align-items: start;
     }
 
-    .section:nth-child(odd) {
-      grid-template-columns: 1fr 1fr;
+    .cols.two { grid-template-columns: 1fr 1fr; }
+    .cols.three { grid-template-columns: 1fr 1fr 1fr; }
+    .cols.wide-right { grid-template-columns: 1fr 2fr; }
+
+    .lede {
+      font-size: 19px;
+      line-height: 1.7;
+      max-width: 62ch;
+      color: #f2f2f2;
     }
 
-    .section:nth-child(even) {
-      grid-template-columns: 1fr 1fr;
+    .stack { display: flex; flex-direction: column; gap: 14px; }
+
+    .checklist {
+      list-style: none;
+      margin: 0;
+      padding: 0;
     }
 
-    .section h2 {
-      grid-column: 1 / -1;
-      margin-bottom: 16px;
-    }
-
-    .section-content {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .section img {
-      grid-column: 1 / -1;
-      max-width: 100%;
-      height: auto;
-      margin: 0 0 20px 0;
-    }
-
-    strong {
+    .checklist li {
+      margin: 0 0 4px 0;
       color: #f2f2f2;
       font-weight: bold;
     }
 
+    .checklist li::before { content: '- '; color: #8a8a8a; font-weight: normal; }
+
+    figure { margin: 0; }
+
+    figure img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+      image-rendering: pixelated;
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    figcaption {
+      margin-top: 10px;
+      font-size: 11px;
+      line-height: 1.6;
+      color: #8a8a8a;
+      font-style: italic;
+    }
+
+    .aside { color: #a8a8a8; font-size: 13px; }
+
+    .indent { display: block; padding-left: 15px; }
+
+    .dots a { white-space: nowrap; }
+
+    .footer { color: #a8a8a8; font-size: 13px; }
+    .footer p { margin-bottom: 8px; }
+
     @media (max-width: 1024px) {
-      .section {
-        grid-template-columns: 1fr;
-        gap: 24px;
-      }
-      body {
-        padding: 40px 50px;
-      }
+      body { padding: 40px 50px; }
+      .cols.two, .cols.wide-right { grid-template-columns: 1fr; gap: 24px; }
+      .cols.three { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 768px) {
-      body {
-        padding: 30px 24px;
-        font-size: 14px;
-      }
-      h1 {
-        font-size: 36px;
-      }
-      h2 {
-        font-size: 18px;
-      }
-      .section {
-        gap: 16px;
-      }
+      body { padding: 30px 24px; font-size: 14px; }
+      h1 { font-size: 36px; }
+      h2 { font-size: 18px; }
+      .lede { font-size: 16px; }
+      .band { margin-bottom: 32px; padding-top: 20px; }
+      .cols, .cols.three { grid-template-columns: 1fr; gap: 20px; }
     }
-
   </style>
 </head>
 <body>
 
-<h1><span class="emoji"></span># hello peepol</h1>
-<p class="subtitle">welcome to the media archive of digitized things liked by autumn</p>
+<!-- masthead (full width) -->
+<div class="band first">
+  <h1># hello peepol</h1>
+  <p class="subtitle">welcome to the media archive of digitized things liked by autumn</p>
 
-<div class="section">
   <h2>## about</h2>
-  <p>
-    I like looking on <a href="https://archive.org" target="_blank" style = "color:rgb(99, 200, 255)">archive.org</a> and other media sites like 
-    <a href="https://www.spriters-resource.com/" target="_blank" style = "color:rgb(99, 200, 255)">spriter's resource</a> and <a href="https://www.modelersresource.com/" target="_blank" style = "color:rgb(99, 200, 255)">modeler's resource</a>. 
+  <p class="lede">
+    I like looking on <a href="https://archive.org" target="_blank">archive.org</a> and other media sites like
+    <a href="https://www.spriters-resource.com/" target="_blank">spriter's resource</a> and
+    <a href="https://www.modelersresource.com/" target="_blank">modeler's resource</a>.
     This site is a place for the things I find.
-
-     
   </p>
-  <p>
-    <br>
-    This collection currently has:
-  </p>
-
-  <p>
-  <strong>- strategy guides</strong>
-   <strong>- video game magazines</strong>
-      <strong>- video game booklets</strong>
-      <strong>- video game OST lyric booklets</strong>
-            <strong>- game theory analysis</strong>
-   <strong>- computing magazines</strong>
-   <strong>- anime & manga magazines</strong>
-  </p>
-  <br>
-   <br>
-
-  <span style="display:block; text-align:center;">
-<img src="./assets/LCD Handhelds - Tamagotchi On - Characters - Teenagers.png" alt="Tamagotchi On - Characters - Teenagers" style="max-width:100%; height:auto; image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: -webkit-optimize-contrast; object-position: center;">
-<br>
-     <i style="font-size:10px;"> I originally intended for this to be a game assets collection, but I found a trove of online media collectibles and wanted to start with a publication library first. <br> <br></i>
- 
-    </span>
-
-    <p>I will have to figure how to embed + display assets sometime soon. I will have to source and host them myself which will be a task. 
-</p>
 </div>
 
-
-<div class="section">
-  <h2>## !TODO</h2>
-  <p>
-    <i>...i will look at: </i><br>
-  </p>
+<!-- collection + figure (two columns) -->
+<div class="band">
+  <div class="cols two">
+    <div>
+      <h3>this collection currently has</h3>
+      <ul class="checklist">
+        <li>strategy guides</li>
+        <li>video game magazines</li>
+        <li>video game booklets</li>
+        <li>video game OST lyric booklets</li>
+        <li>game theory analysis</li>
+        <li>computing magazines</li>
+        <li>anime &amp; manga magazines</li>
+      </ul>
+    </div>
+    <figure>
+      <img src="./assets/LCD Handhelds - Tamagotchi On - Characters - Teenagers.png" alt="Tamagotchi On - Characters - Teenagers">
+      <figcaption>I originally intended for this to be a game assets collection, but I found a trove of online media collectibles and wanted to start with a publication library first.</figcaption>
+    </figure>
   </div>
-
-  <span style="display:block; padding-left:0; margin-left:-5%; position: relative;">
-    <a href="https://archive.org/details/PC-Page-Guru-1994-04/PC_Page_Guru_1994_04_300DPI_Adobe_Acrobat_OCR/mode/2up" target="_blank">PC-Page Guru 1994-04</a>....,
-    <a href="https://archive.org/details/micom-1980-02/" target="_blank">micom computing mag</a>, ....
-    <a href="https://archive.org/details/video-girl-ai_202205/VIDEO_GIRL_AI.ISO" target="_blank">video girl ai</a>....
-    <a href="https://archive.org/details/Tekken3PrimasOfficialStrategyGuide1998/TheAdventureCompanion1985.pdf" target="_blank">all the strategy guides</a>
-
-    </span>,
-    
-  </p>
-<br>
-  <p>
-    <i>...i will add:</i><br>
-        <span style="padding-left:15px;">
-    stationary collection  <br>
-      </span> 
-    <span style="padding-left:15px;">
-    icon collection  <br>
-    </span>
-      <span style="padding-left:15px;">
-    sprite collection with animator <br>
-    </span>
-  </p>
-<br>
-  <p>
-    <i>...i will make:</i><br>
-        <span style="padding-left:15px;">
-    my own strategy guide for _____?<br>
-        </span>
-  </p>
 </div>
 
-<div class="section">
-  <h2>## currently playing</h2>
-  <p>
-    mario super strikers, once upon a katamari, pokemon mystery dungeon explorers of time
-  </p>
+<!-- todo (full-width heading, three columns) -->
+<div class="band">
+  <h2>## !TODO</h2>
+  <div class="cols three">
+    <div class="stack">
+      <h3>...i will look at</h3>
+      <div class="dots">
+        <a href="https://archive.org/details/PC-Page-Guru-1994-04/PC_Page_Guru_1994_04_300DPI_Adobe_Acrobat_OCR/mode/2up" target="_blank">PC-Page Guru 1994-04</a><br>
+        <a href="https://archive.org/details/micom-1980-02/" target="_blank">micom computing mag</a><br>
+        <a href="https://archive.org/details/video-girl-ai_202205/VIDEO_GIRL_AI.ISO" target="_blank">video girl ai</a><br>
+        <a href="https://archive.org/details/Tekken3PrimasOfficialStrategyGuide1998/TheAdventureCompanion1985.pdf" target="_blank">all the strategy guides</a>
+      </div>
+    </div>
+    <div class="stack">
+      <h3>...i will add</h3>
+      <div>
+        <span class="indent">stationary collection</span>
+        <span class="indent">icon collection</span>
+        <span class="indent">sprite collection with animator</span>
+      </div>
+    </div>
+    <div class="stack">
+      <h3>...i will make</h3>
+      <div>
+        <span class="indent">my own strategy guide for _____?</span>
+      </div>
+    </div>
+  </div>
+  <p class="aside" style="margin-top: 20px;">I will have to figure how to embed + display assets sometime soon. I will have to source and host them myself which will be a task.</p>
 </div>
 
-<div class="section">
-  <h2>## favorites</h2>
-  <p>
-    risk of rain 2, final fantasy revenant wings, pokemon mystery dungeon, hades I, katamari damacy, factorio, terraria, plate up, skyrim, vampire survivors, Sims games for the GBA, MySims for the DS, and games by KAIROSOFT
-  </p>
+<!-- playing + favorites (two columns, unequal) -->
+<div class="band">
+  <div class="cols wide-right">
+    <div>
+      <h2>## currently playing</h2>
+      <p>mario super strikers, once upon a katamari, pokemon mystery dungeon explorers of time</p>
+    </div>
+    <div>
+      <h2>## favorites</h2>
+      <p>risk of rain 2, final fantasy revenant wings, pokemon mystery dungeon, hades I, katamari damacy, factorio, terraria, plate up, skyrim, vampire survivors, Sims games for the GBA, MySims for the DS, and games by KAIROSOFT</p>
+    </div>
+  </div>
 </div>
 
-<div class="section">
+<!-- attributes (full-width footer) -->
+<div class="band footer">
   <h2># Attributes</h2>
-  <p>
-    <strong>archive curated by:</strong> signalkitten (autumn) 
-  </p>
+  <p><strong>archive curated by:</strong> signalkitten (autumn)</p>
   <p>
     <strong>built with:</strong> HTML5, CSS3, JavaScript,
     <a href="https://mozilla.github.io/pdf.js/" target="_blank">PDF.js</a>,
     <a href="https://archive.org" target="_blank">Archive.org API</a>
   </p>
-
 </div>
 
 </body>

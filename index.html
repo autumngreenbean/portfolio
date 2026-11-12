@@ -177,6 +177,16 @@
     .list button[aria-current="true"] { background: var(--active); color: var(--accent); }
 
     .list .name { display: block; }
+    .list .tag-analyzed {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 0 5px;
+      font-size: 11px;
+      line-height: 1.5;
+      vertical-align: middle;
+      color: rgb(99, 200, 255);
+      border: 1px solid rgb(99, 200, 255);
+    }
     .list .sub { display: block; color: var(--muted); font-size: 14px; }
 
     /* ---------- Main ---------- */
@@ -740,6 +750,12 @@
       btn.innerHTML = '<span class="name"></span><span class="sub"></span>';
       // Line 1: tagline. Line 2: magazine title.
       btn.querySelector('.name').textContent = m.tagline || m.title;
+      if (m.analysisNote) {
+        const tag = document.createElement('span');
+        tag.className = 'tag-analyzed';
+        tag.textContent = 'analysis';
+        btn.querySelector('.name').appendChild(tag);
+      }
       btn.querySelector('.sub').textContent = m.tagline ? m.title : '';
       btn.setAttribute('aria-current', String(m.id === currentId));
       btn.addEventListener('click', () => select(m.id));

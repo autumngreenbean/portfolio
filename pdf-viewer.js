@@ -206,6 +206,9 @@ async function renderDesktopSpread() {
   container.style.overflowX = 'auto';
   container.style.overflowY = 'hidden';
 
+  // Spreads are (1), (2,3), (4,5)...: snap to the left page of the pair containing currentPage
+  if (currentPage > 1 && currentPage % 2 === 1) currentPage -= 1;
+
   // Update slider
   const slider = document.getElementById('pdf-slider');
   slider.max = currentPdfDoc.numPages;
