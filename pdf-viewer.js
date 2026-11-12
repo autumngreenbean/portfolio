@@ -83,6 +83,43 @@ async function renderMobilePage(slot, doc, gen) {
   }
 }
 
+const pageSizeCache = new WeakMap();
+
+async function getPageSizes(doc, gen) {
+  if (pageSizeCache.has(doc)) return pageSizeCache.get(doc);
+  const sizes = new Array(doc.numPages);
+  const CHUNK = 40;
+  for (let start = 1; start <= doc.numPages; start += CHUNK) {
+    const end = Math.min(start + CHUNK - 1, doc.numPages);
+    const nums = [];
+    for (let p = start; p <= end; p++) nums.push(p);
+    const pages = await Promise.all(nums.map(p => doc.getPage(p)));
+    pages.forEach((pg, i) => {
+      const v = pg.getViewport({ scale: 1 });
+      sizes[nums[i] - 1] = { width: v.width, height: v.height };
+    });
+    if (gen !== renderGen) return sizes.map(s => s || sizes[0]);
+  }
+  pageSizeCache.set(doc, sizes);
+  return sizes;
+}
+
+// Moves container's scroll so el's top meets the container's top, using measured rects only (robust to CSS zoom).
+function alignToElement(container, el) {
+  let k = 1;
+  for (let i = 0; i < 8; i++) {
+    const delta = el.getBoundingClientRect().top - container.getBoundingClientRect().top;
+    if (Math.abs(delta) < 1) break;
+    const rectBefore = el.getBoundingClientRect().top;
+    const stBefore = container.scrollTop;
+    container.scrollTop = stBefore + delta / k;
+    const applied = container.scrollTop - stBefore;
+    if (!applied) break;
+    const moved = rectBefore - el.getBoundingClientRect().top;
+    if (moved) k = moved / applied;
+  }
+}
+
 async function renderMobileVerticalScroll() {
   if (!currentPdfDoc) return;
   const container = document.getElementById('pdf-container');
@@ -108,13 +145,19 @@ async function renderMobileVerticalScroll() {
     const firstPages = await Promise.all(pagePromises);
     if (gen !== renderGen) return;
 
+    const refBase = firstPages[0].getViewport({ scale: 1 });
+
+    // When jumping, size every slot to its true page size up front so nothing resizes (and shifts layout) after we scroll.
+    const sizes = currentPage > 1 ? await getPageSizes(doc, gen) : null;
+    if (gen !== renderGen) return;
+
     for (let p = 1; p <= doc.numPages; p++) {
-      const page = p <= firstPages.length ? firstPages[p - 1] : null;
-      const cssScale = page ? (availableWidth / page.getViewport({ scale: 1 }).width) * currentZoom : 1;
+      const base = sizes ? sizes[p - 1] : refBase;
+      const cssScale = (availableWidth / base.width) * currentZoom;
 
       const el = document.createElement('div');
-      el.style.width = page ? page.getViewport({ scale: 1 }).width * cssScale + 'px' : availableWidth + 'px';
-      el.style.height = page ? page.getViewport({ scale: 1 }).height * cssScale + 'px' : '400px';
+      el.style.width = base.width * cssScale + 'px';
+      el.style.height = base.height * cssScale + 'px';
       el.style.margin = '0 auto 20px';
       el.style.flexShrink = '0';
       el.style.border = '1px solid #333';
@@ -136,8 +179,8 @@ async function renderMobileVerticalScroll() {
 
     slots.forEach(s => mobileObserver.observe(s.el));
 
-    if (currentPage > 0 && currentPage <= slots.length) {
-      container.scrollTop = slots[currentPage - 1].el.offsetTop;
+    if (currentPage > 1 && currentPage <= slots.length) {
+      alignToElement(container, slots[currentPage - 1].el);
     }
 
     // Only pre-render page 1 if we're actually jumping to page 1
