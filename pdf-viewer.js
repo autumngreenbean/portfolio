@@ -359,6 +359,25 @@ document.getElementById('pdf-next')?.addEventListener('click', () => {
   }
 });
 
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+  if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+  if (!currentPdfDoc) return;
+
+  const viewer = document.getElementById('pdf-viewer');
+  if (!viewer || viewer.style.display === 'none' || viewer.offsetParent === null) return;
+
+  // Mobile single-page scroll has no spread to step through
+  if (isMobileView() && !mobileTwoUp) return;
+
+  // Don't hijack arrows while typing or using form controls (search box, slider)
+  const t = e.target;
+  if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+
+  e.preventDefault();
+  document.getElementById(e.key === 'ArrowLeft' ? 'pdf-prev' : 'pdf-next')?.click();
+});
+
 document.getElementById('pdf-slider')?.addEventListener('input', (e) => {
   currentPage = Math.max(1, parseInt(e.target.value));
   renderPdfPage();
