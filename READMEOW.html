@@ -7,11 +7,15 @@
   <style>
     * { box-sizing: border-box; }
 
-    :root { --blue: rgb(99, 200, 255); }
+    :root {
+      --blue: rgb(99, 200, 255);
+      --rail: 150px;   /* left label column, shared by every band */
+      --gap: 40px;
+    }
 
     body {
       margin: 0;
-      padding: 60px 80px;
+      padding: 40px 80px 60px;
       background: #000;
       color: #e8e8e8;
       font-family: 'W95FA', monospace;
@@ -19,6 +23,7 @@
       line-height: 1.8;
       max-width: 1400px;
       margin: 0 auto;
+      counter-reset: section;
     }
 
     h1 {
@@ -33,7 +38,7 @@
     .subtitle {
       color: #a8a8a8;
       font-size: 13px;
-      margin-bottom: 40px;
+      margin: 0;
       font-weight: normal;
       letter-spacing: 0.01em;
     }
@@ -70,47 +75,128 @@
 
     strong { color: #f2f2f2; font-weight: bold; }
 
-    /* ---------- Magazine layout ---------- */
+    /* ---------- Running head (thin strip across the top) ---------- */
+    .runhead {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f2f2f2;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: #8a8a8a;
+    }
+
+    .runhead strong { letter-spacing: 0.12em; }
+
+    /* ---------- Editorial band: narrow label rail + wide body ---------- */
     .band {
+      display: grid;
+      grid-template-columns: var(--rail) 1fr;
+      column-gap: var(--gap);
       border-top: 1px solid #222;
       padding-top: 28px;
-      margin-bottom: 44px;
+      margin-bottom: 56px;
+      counter-increment: section;
     }
 
-    .band.first { border-top: 0; padding-top: 0; }
-
-    .cols {
-      display: grid;
-      gap: 40px;
-      align-items: start;
+    .band.first {
+      border-top: 0;
+      padding-top: 56px;
+      margin-bottom: 72px;
     }
 
-    .cols.two { grid-template-columns: 1fr 1fr; }
-    .cols.three { grid-template-columns: 1fr 1fr 1fr; }
-    .cols.wide-right { grid-template-columns: 1fr 2fr; }
+    /* rail: big section number + vertical label, magazine side-bar style */
+    .rail {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      color: #8a8a8a;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+    }
+
+    .rail::before {
+      content: counter(section, decimal-leading-zero);
+      font-size: 52px;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: #f2f2f2;
+    }
+
+    .rail .vert {
+      writing-mode: vertical-rl;
+      margin-left: 6px;
+    }
+
+    .band.first .rail::before { content: none; }
+
+    .body { min-width: 0; }
+
+    /* ---------- Masthead ---------- */
+    .masthead { display: grid; row-gap: 56px; }
 
     .lede {
-      font-size: 19px;
+      font-size: 14px;
       line-height: 1.7;
       max-width: 62ch;
       color: #f2f2f2;
     }
 
+    /* about: heading in the narrow column, lede pushed right like a print standfirst */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      column-gap: var(--gap);
+      align-items: start;
+      border-top: 1px solid #222;
+      padding-top: 20px;
+    }
+
+    .about h2 { margin-bottom: 0; }
+
+    /* ---------- Contents table ---------- */
+    .cols {
+      display: grid;
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    .cols.contents { grid-template-columns: 5fr 7fr; }
+    .cols.three { grid-template-columns: 1fr 1fr 1fr; }
+    .cols.wide-right { grid-template-columns: 1fr 2fr; }
+
     .stack { display: flex; flex-direction: column; gap: 14px; }
 
     .checklist {
+      font-size: 14px;
       list-style: none;
       margin: 0;
       padding: 0;
+      counter-reset: item;
+      border-top: 1px solid #f2f2f2;
     }
 
     .checklist li {
-      margin: 0 0 4px 0;
+      display: flex;
+      gap: 16px;
+      margin: 0;
+      padding: 6px 0;
+      border-bottom: 1px solid #222;
       color: #f2f2f2;
       font-weight: bold;
+      counter-increment: item;
     }
 
-    .checklist li::before { content: '- '; color: #8a8a8a; font-weight: normal; }
+    .checklist li::before {
+      content: counter(item, decimal-leading-zero);
+      min-width: 2ch;
+      color: #8a8a8a;
+      font-weight: normal;
+      font-size: 11px;
+      line-height: 2.2;
+      letter-spacing: 0.08em;
+    }
 
     figure { margin: 0; }
 
@@ -124,131 +210,232 @@
       image-rendering: -webkit-optimize-contrast;
     }
 
+    /* caption sits in a narrow column beside the image */
+    figure.sidecap {
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      column-gap: 18px;
+      align-items: end;
+    }
+
     figcaption {
-      margin-top: 10px;
+      margin-top: 0;
       font-size: 11px;
       line-height: 1.6;
       color: #8a8a8a;
       font-style: italic;
+      border-left: 1px solid #222;
+      padding-left: 12px;
     }
 
     .aside { color: #a8a8a8; font-size: 13px; }
 
     .indent { display: block; padding-left: 15px; }
 
+    .dots { display: flex; flex-direction: column; }
     .dots a { white-space: nowrap; }
 
+    /* column heads get a hairline above, like a print column rule */
+    .cols.three > .stack {
+      border-top: 1px solid #222;
+      padding-top: 14px;
+    }
+
+    /* ---------- Favorites run as a slash-separated line ---------- */
+    .slashes { margin: 0; padding: 0; list-style: none; }
+    .slashes li { display: inline; color: #e8e8e8; }
+    .slashes li:not(:last-child)::after { content: ' / '; color: #8a8a8a; }
+
+    /* ---------- Attributes as ruled rows ---------- */
     .footer { color: #a8a8a8; font-size: 13px; }
-    .footer p { margin-bottom: 8px; }
+
+    .footer dl { margin: 0; border-top: 1px solid #f2f2f2; }
+
+    .footer .row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: var(--gap);
+      padding: 8px 0;
+      border-bottom: 1px solid #222;
+    }
+
+    .footer dt { color: #f2f2f2; font-weight: bold; }
+    .footer dd { margin: 0; }
 
     @media (max-width: 1024px) {
-      body { padding: 40px 50px; }
-      .cols.two, .cols.wide-right { grid-template-columns: 1fr; gap: 24px; }
+      body { padding: 30px 50px 50px; }
+      :root { --rail: 110px; --gap: 28px; }
+      .rail::before { font-size: 40px; }
+      .cols.contents, .cols.wide-right { grid-template-columns: 1fr; gap: 24px; }
       .cols.three { grid-template-columns: 1fr 1fr; }
+      .about { grid-template-columns: 1fr; row-gap: 12px; }
     }
 
     @media (max-width: 768px) {
-      body { padding: 30px 24px; font-size: 14px; }
+      body { padding: 24px 24px 40px; font-size: 14px; }
       h1 { font-size: 36px; }
       h2 { font-size: 18px; }
-      .lede { font-size: 16px; }
-      .band { margin-bottom: 32px; padding-top: 20px; }
+      .lede { font-size: 14px; }
+
+      /* rail collapses into a single label line above each section */
+      .band { grid-template-columns: 1fr; margin-bottom: 36px; padding-top: 16px; }
+      .band.first { padding-top: 32px; margin-bottom: 44px; }
+      .rail { flex-direction: row; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+      .rail::before { font-size: 24px; }
+      .rail .vert { writing-mode: horizontal-tb; margin-left: 0; }
+
       .cols, .cols.three { grid-template-columns: 1fr; gap: 20px; }
+      figure.sidecap { grid-template-columns: 1fr; row-gap: 10px; }
+      figcaption { border-left: 0; padding-left: 0; }
+      .footer .row { grid-template-columns: 1fr; gap: 2px; }
     }
   </style>
 </head>
 <body>
 
+<!-- running head -->
+<div class="runhead">
+  <span><strong>READMEOW</strong></span>
+  <span>Kitten's Catalog Archive</span>
+</div>
+
 <!-- masthead (full width) -->
 <div class="band first">
-  <h1># hello peepol</h1>
-  <p class="subtitle">welcome to the media archive of digitized things liked by autumn. last updated 11-23-26: improved pdf viewer zoom nav, added castlevania and cookies & cream</p>
-
-  <h2>## about</h2>
-  <p class="lede">
-    I like looking on <a href="https://archive.org" target="_blank">archive.org</a> and other media sites like
-    <a href="https://www.spriters-resource.com/" target="_blank">spriter's resource</a> and
-    <a href="https://www.modelersresource.com/" target="_blank">modeler's resource</a>.
-    This site is a place for the things I find.
-  </p>
-</div>
-
-<!-- collection + figure (two columns) -->
-<div class="band">
-  <div class="cols two">
+  <div class="rail"><span class="vert">READMEOW</span></div>
+  <div class="body masthead">
     <div>
-      <h3>this collection currently has</h3>
-      <ul class="checklist">
-        <li>strategy guides</li>
-        <li>video game magazines</li>
-        <li>video game booklets</li>
-        <li>video game OST lyric booklets</li>
-        <li>game theory analysis</li>
-        <li>computing magazines</li>
-        <li>anime &amp; manga magazines</li>
-      </ul>
+      <h1># hello peepol</h1>
+      <p class="subtitle">welcome to the media archive of digitized things liked by autumn. <br>
+        <i style = "color:rgb(99, 200, 255)">last updated 11-23-26: improved pdf viewer zoom nav, added castlevania and cookies & cream</i></p>
     </div>
-    <figure>
-      <img src="./assets/LCD Handhelds - Tamagotchi On - Characters - Teenagers.png" alt="Tamagotchi On - Characters - Teenagers">
-      <figcaption>I originally intended for this to be a game assets collection, but I found a trove of online media collectibles and wanted to start with a publication library first.</figcaption>
-    </figure>
+
+    <div class="about">
+      <h2>## about</h2>
+      <p class="lede">
+        I like looking on <a href="https://archive.org" target="_blank">archive.org</a> and other media sites like
+        <a href="https://www.spriters-resource.com/" target="_blank">spriter's resource</a> and
+        <a href="https://www.modelersresource.com/" target="_blank">modeler's resource</a>.
+        This site is a place for the things I find.
+      </p>
+    </div>
   </div>
 </div>
 
-<!-- todo (full-width heading, three columns) -->
+<!-- collection (contents table) + figure -->
 <div class="band">
-  <h2>## !TODO</h2>
-  <div class="cols three">
-    <div class="stack">
-      <h3>...i will look at</h3>
-      <div class="dots">
-        <a href="https://archive.org/details/PC-Page-Guru-1994-04/PC_Page_Guru_1994_04_300DPI_Adobe_Acrobat_OCR/mode/2up" target="_blank">PC-Page Guru 1994-04</a><br>
-        <a href="https://archive.org/details/micom-1980-02/" target="_blank">micom computing mag</a><br>
-        <a href="https://archive.org/details/video-girl-ai_202205/VIDEO_GIRL_AI.ISO" target="_blank">video girl ai</a><br>
-        <a href="https://archive.org/details/Tekken3PrimasOfficialStrategyGuide1998/TheAdventureCompanion1985.pdf" target="_blank">all the strategy guides</a>
-      </div>
-    </div>
-    <div class="stack">
-      <h3>...i will add</h3>
+  <div class="rail"><span class="vert">collection</span></div>
+  <div class="body">
+    <div class="cols contents">
       <div>
-        <span class="indent">stationary collection</span>
-        <span class="indent">icon collection</span>
-        <span class="indent">sprite collection with animator</span>
+        <h3>this collection currently has</h3>
+        <ul class="checklist">
+          <li>strategy guides</li>
+          <li>video game magazines</li>
+          <li>video game booklets</li>
+          <li>video game OST lyric booklets</li>
+          <li>game theory analysis</li>
+          <li>computing magazines</li>
+          <li>anime &amp; manga magazines</li>
+        </ul>
       </div>
-    </div>
-    <div class="stack">
-      <h3>...i will make</h3>
-      <div>
-        <span class="indent">my own strategy guide for _____?</span>
-      </div>
+      <figure class="sidecap">
+        <img src="./assets/LCD Handhelds - Tamagotchi On - Characters - Teenagers.png" alt="Tamagotchi On - Characters - Teenagers">
+        <figcaption>I originally intended for this to be a game assets collection, but I found a trove of online media collectibles and wanted to start with a publication library first.</figcaption>
+      </figure>
     </div>
   </div>
-  <p class="aside" style="margin-top: 20px;">I will have to figure how to embed + display assets sometime soon. I will have to source and host them myself which will be a task.</p>
 </div>
 
-<!-- playing + favorites (two columns, unequal) -->
+<!-- todo (three columns) -->
 <div class="band">
-  <div class="cols wide-right">
-    <div>
-      <h2>## currently playing</h2>
-      <p>mario super strikers, once upon a katamari, pokemon mystery dungeon explorers of time</p>
+  <div class="rail"><span class="vert">!TODO</span></div>
+  <div class="body">
+    <h2>## !TODO</h2>
+    <div class="cols three">
+      <div class="stack">
+        <h3>...i will look at</h3>
+        <div class="dots">
+          <a href="https://teenage.engineering/store/bc-1" target="_blank">making a BC-1 clone</a>
+          <a href="https://archive.org/details/SonyPlaystation2Manuals_201812/Castlevania%20-%20Lament%20of%20Innocence%20(USA)%20(En,Ja).pdf" target="_blank">another game manual collection</a>
+          <a href="https://www.spriters-resource.com/game_boy_advance/doraemondokodemowalker/asset/637536/" target="_blank">sprites from spriter's resource</a>
+          <!-- <a href="https://archive.org/details/PC-Page-Guru-1994-04/PC_Page_Guru_1994_04_300DPI_Adobe_Acrobat_OCR/mode/2up" target="_blank">PC-Page Guru 1994-04</a><br>
+          <a href="https://archive.org/details/micom-1980-02/" target="_blank">micom computing mag</a><br>
+          <a href="https://archive.org/details/video-girl-ai_202205/VIDEO_GIRL_AI.ISO" target="_blank">video girl ai</a><br>
+          <a href="https://archive.org/details/Tekken3PrimasOfficialStrategyGuide1998/TheAdventureCompanion1985.pdf" target="_blank">all the strategy guides</a> -->
+        </div>
+      </div>
+      <div class="stack">
+        <h3>...i will add</h3>
+        <div>
+          <span class="indent">stationary collection</span>
+          <span class="indent">icon collection</span>
+          <span class="indent">sprite collection with animator</span>
+        </div>
+      </div>
+      <div class="stack">
+        <h3>...i will make</h3>
+        <div>
+          <span class="indent">my own strategy guide for _____?</span>
+          <span class="indent">a cd player</span>
+          <span class="indent"><a href="https://github.com/autumngreenbean/matrix" target="_blank">a matrix-based instrument</a></span>
+        </div>
+      </div>
     </div>
-    <div>
-      <h2>## favorites</h2>
-      <p>risk of rain 2, final fantasy revenant wings, pokemon mystery dungeon, hades I, katamari damacy, factorio, terraria, plate up, skyrim, vampire survivors, Sims games for the GBA, MySims for the DS, and games by KAIROSOFT</p>
+    <p class="aside" style="margin-top: 20px;">I will have to figure how to embed + display assets sometime soon. I will have to source and host them myself which will be a task.</p>
+  </div>
+</div>
+
+<!-- playing + favorites -->
+<div class="band">
+  <div class="rail"><span class="vert">playing</span></div>
+  <div class="body">
+    <div class="cols wide-right">
+      <div>
+        <h2>## currently playing</h2>
+        <p>mario super strikers, once upon a katamari, pokemon mystery dungeon explorers of time</p>
+      </div>
+      <div>
+        <h2>## favorites</h2>
+        <ul class="slashes">
+          <li>risk of rain 2</li>
+          <li>final fantasy revenant wings</li>
+          <li>pokemon mystery dungeon</li>
+          <li>hades I</li>
+          <li>katamari damacy</li>
+          <li>factorio</li>
+          <li>terraria</li>
+          <li>plate up</li>
+          <li>skyrim</li>
+          <li>vampire survivors</li>
+          <li>Sims games for the GBA</li>
+          <li>MySims for the DS</li>
+          <li>and games by KAIROSOFT</li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- attributes (full-width footer) -->
+<!-- attributes (colophon) -->
 <div class="band footer">
-  <h2># Attributes</h2>
-  <p><strong>archive curated by:</strong> signalkitten (autumn)</p>
-  <p>
-    <strong>built with:</strong> HTML5, CSS3, JavaScript,
-    <a href="https://mozilla.github.io/pdf.js/" target="_blank">PDF.js</a>,
-    <a href="https://archive.org" target="_blank">Archive.org API</a>
-  </p>
+  <div class="rail"><span class="vert">colophon</span></div>
+  <div class="body">
+    <h2># Attributes</h2>
+    <dl>
+      <div class="row">
+        <dt>archive curated by:</dt>
+        <dd>signalkitten (autumn)</dd>
+      </div>
+      <div class="row">
+        <dt>built with:</dt>
+        <dd>
+          HTML5, CSS3, JavaScript,
+          <a href="https://mozilla.github.io/pdf.js/" target="_blank">PDF.js</a>,
+          <a href="https://archive.org" target="_blank">Archive.org API</a>
+        </dd>
+      </div>
+    </dl>
+  </div>
 </div>
 
 </body>
