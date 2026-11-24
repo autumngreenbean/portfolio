@@ -203,8 +203,8 @@ async function renderDesktopSpread() {
 
   const container = document.getElementById('pdf-container');
   if (!container) return;
-  container.style.overflowX = 'auto';
-  container.style.overflowY = 'hidden';
+  container.style.overflow = 'auto';
+  container.style.alignItems = 'flex-start';
 
   // Spreads are (1), (2,3), (4,5)...: snap to the left page of the pair containing currentPage
   if (currentPage > 1 && currentPage % 2 === 1) currentPage -= 1;
@@ -224,15 +224,13 @@ async function renderDesktopSpread() {
   spreadDiv.style.gap = '0px';
   spreadDiv.style.justifyContent = 'center';
   spreadDiv.style.alignItems = 'flex-start';
+  spreadDiv.style.margin = '0 auto';
+  spreadDiv.style.flexShrink = '0';
 
   // Create canvases for two-page spread
   const canvas1 = document.createElement('canvas');
   const canvas2 = document.createElement('canvas');
 
-  canvas1.style.maxHeight = isMobileView() ? 'none' : '80vh';
-  canvas1.style.width = 'auto';
-  canvas2.style.maxHeight = isMobileView() ? 'none' : '80vh';
-  canvas2.style.width = 'auto';
   canvas2.style.display = 'none';
 
   spreadDiv.appendChild(canvas1);
