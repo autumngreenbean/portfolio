@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+<!--
+
+     /\_/\
+    ( o.o )   meow! you must luvvv me
+     > ^ <
+
+-->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -186,6 +193,16 @@
       vertical-align: middle;
       color: rgb(99, 200, 255);
       border: 1px solid rgb(99, 200, 255);
+    }
+    .list .tag-new {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 0 5px;
+      font-size: 11px;
+      line-height: 1.5;
+      vertical-align: middle;
+      color: rgb(255, 214, 102);
+      border: 1px solid rgb(255, 214, 102);
     }
     .list .sub { display: block; color: var(--muted); font-size: 14px; }
 
@@ -429,6 +446,7 @@
      issue       = issue label shown above the description
      description = text shown under the viewer
      note        = your webmaster's note (optional)
+     isNew       = true to show a "new" tag in the menu (optional)
      ------------------------------------------------------------ */
   const MAGAZINES = [
 {
@@ -439,6 +457,20 @@
   title: "readmeow",
   hideNote: true
 },
+
+  {
+    // https://archive.org/details/CastlevaniaLamentOfInnocenceManual/page/n7/mode/2up
+    id: "CastlevaniaLamentOfInnocenceManual", 
+    // type: "pdf",
+    category: "Video Games",
+    tagline: "vampires ooo scary!!",
+    title: "Castlevania: Lament of Innocence",
+    issue: "2003",
+    description: "",
+    analysisNote: "castlevania-lament-of-innocence-manual.html",
+    featured: true,
+    isNew: true
+  },
   {
     id: "PC-Page-Guru-1994-04",
     type: "pdf",
@@ -536,44 +568,44 @@
   note: "Kitten's note: I like being a monkey in a ball.",
   featured: false
 },
-  {
-    id: "james-p-carse-finite-and-infinite-games",
-    // type: "pdf",
-    // pdfUrl: "https://archive.org/details/james-p-carse-finite-and-infinite-games/page/11/mode/2up",
-    category: "Analysis",
-    tagline: "Finite and Infinite Games",
-    title: "James P. Carse",
-    issue: "1986",
-    description: "Finite and Infinite Games by James P. Carse.",
-    note: "Kitten's note: The nature of games. A bit silly, but someone had to write about it. The semantics/language is broad enough to make you think about things other than games too, which is nice."
-  },
-    {
-      id: "TokyoPop01AugSep1999",
-      category: "Anime",
-      tagline: "Exclusive Manga",
-      title: "TOKYOPOP",
-      issue: "Aug/Sep 1999",
-      description: "GUNDAM, Knight Rayearth, Parasyte",
-      note: "Kitten's note: I haven't read this yet. I'll put notes here later."
-    },
-    {
-      id: "TheNet01Jun1995",
-      category: "Computing",
-      tagline: "Your CyberSpace Companion",
-      title: "The Net",
-      issue: "June 1995",
-      description: "All about interacting with the Internet.",
-      note: "Kitten's note: I haven't read this yet. I'll put notes here later."
-    },
-    {
-      id: "TODAYV02N06",
-      category: "Computing",
-      tagline: "The Videotex/Computer Magazine",
-      title: "Today",
-      issue: "Vol. 2, No. 6",
-      description: "An exploration in modern computing devices to optimize your everyday life. Computers, devices, software, and games.",
-      note: "Kitten's note: I haven't read this yet. I'll put notes here later."
-    },
+  // {
+  //   id: "james-p-carse-finite-and-infinite-games",
+  //   // type: "pdf",
+  //   // pdfUrl: "https://archive.org/details/james-p-carse-finite-and-infinite-games/page/11/mode/2up",
+  //   category: "Analysis",
+  //   tagline: "Finite and Infinite Games",
+  //   title: "James P. Carse",
+  //   issue: "1986",
+  //   description: "Finite and Infinite Games by James P. Carse.",
+  //   note: "Kitten's note: The nature of games. A bit silly, but someone had to write about it. The semantics/language is broad enough to make you think about things other than games too, which is nice."
+  // },
+  //   {
+  //     id: "TokyoPop01AugSep1999",
+  //     category: "Anime",
+  //     tagline: "Exclusive Manga",
+  //     title: "TOKYOPOP",
+  //     issue: "Aug/Sep 1999",
+  //     description: "GUNDAM, Knight Rayearth, Parasyte",
+  //     note: "Kitten's note: I haven't read this yet. I'll put notes here later."
+  //   },
+  //   {
+  //     id: "TheNet01Jun1995",
+  //     category: "Computing",
+  //     tagline: "Your CyberSpace Companion",
+  //     title: "The Net",
+  //     issue: "June 1995",
+  //     description: "All about interacting with the Internet.",
+  //     note: "Kitten's note: I haven't read this yet. I'll put notes here later."
+  //   },
+  //   {
+  //     id: "TODAYV02N06",
+  //     category: "Computing",
+  //     tagline: "The Videotex/Computer Magazine",
+  //     title: "Today",
+  //     issue: "Vol. 2, No. 6",
+  //     description: "An exploration in modern computing devices to optimize your everyday life. Computers, devices, software, and games.",
+  //     note: "Kitten's note: I haven't read this yet. I'll put notes here later."
+  //   },
   ];
 
   const sidebarEl = document.getElementById('sidebar');
@@ -754,6 +786,12 @@
         const tag = document.createElement('span');
         tag.className = 'tag-analyzed';
         tag.textContent = 'analysis';
+        btn.querySelector('.name').appendChild(tag);
+      }
+      if (m.isNew) {
+        const tag = document.createElement('span');
+        tag.className = 'tag-new';
+        tag.textContent = 'new';
         btn.querySelector('.name').appendChild(tag);
       }
       btn.querySelector('.sub').textContent = m.tagline ? m.title : '';
