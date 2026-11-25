@@ -1,8 +1,8 @@
 {
-  "title": "# hello peepol",
-  "intro": "welcome to the media archive of digitized things liked by autumn.",
-  "updated": "last updated 11-23-26: improved pdf viewer zoom nav, added castlevania and cookies & cream",
-  "about": "I like looking on [archive.org](https://archive.org) and other media sites like [spriter's resource](https://www.spriters-resource.com/) and [modeler's resource](https://www.modelersresource.com/). This site is a place for the things I find.",
+  "title": "# i has fish?",
+  "intro": "active media archive by autumn.",
+  "updated": "last updated 11-25-26: added castlevania & todo new things to look at",
+  "about": "this site is inspired by [archive.org](https://archive.org) and other media sites like [spriter's resource](https://www.spriters-resource.com/) and [modeler's resource](https://www.modelersresource.com/). This site is a place for the things I find.",
   "todo": {
     "look": [
       "[Vimm's Manual Collection](https://vimm.net/?p=manual)",
@@ -22,18 +22,15 @@
       "a cd player",
       "[a matrix-based instrument](https://github.com/autumngreenbean/matrix)"
     ],
-    "aside": "I will have to figure how to embed + display assets sometime soon. I will have to source and host them myself which will be a task."
+    "aside": ""
   },
   "collection": {
     "heading": "this collection currently has",
     "items": [
       "strategy guides",
-      "video game magazines",
-      "video game booklets",
-      "video game OST lyric booklets",
-      "game theory analysis",
-      "computing magazines",
-      "anime & manga magazines"
+      "video game culture magazines",
+      "video game manuals & guides",
+      "a publication on early internet media culture"
     ],
     "image": {
       "src": "./assets/LCD Handhelds - Tamagotchi On - Characters - Teenagers.png",
@@ -46,8 +43,8 @@
     "risk of rain 2",
     "final fantasy revenant wings",
     "pokemon mystery dungeon",
-    "hades I",
-    "katamari damacy",
+    "hades i",
+    "katamari",
     "factorio",
     "terraria",
     "plate up",
@@ -58,7 +55,13 @@
     "and games by KAIROSOFT"
   ],
   "attributes": [
-    { "label": "archive curated by:", "value": "signalkitten (autumn)" },
-    { "label": "built with:", "value": "HTML5, CSS3, JavaScript, [PDF.js](https://mozilla.github.io/pdf.js/), [Archive.org API](https://archive.org)" }
+    {
+      "label": "archive curated by:",
+      "value": "signalkitten (autumn)"
+    },
+    {
+      "label": "built with:",
+      "value": "HTML5, CSS3, JavaScript, [PDF.js](https://mozilla.github.io/pdf.js/), [Archive.org API](https://archive.org)"
+    }
   ]
 }
