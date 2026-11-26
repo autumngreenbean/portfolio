@@ -458,6 +458,19 @@
   hideNote: true
 },
 
+{
+    // https://archive.org/details/baroquemanualscanjpsegasaturn/mode/2up
+    id: "baroquemanualscanjpsegasaturn",
+    category: "Video Games",
+    tagline: "Currently Playing...",
+    title: "Baroque (Sega Saturn)",
+    issue: "1998",
+    description: "",
+    analysisNote: "baroque.html",
+    featured: true,
+    isNew: true
+  },
+
   {
     // https://archive.org/details/CastlevaniaLamentOfInnocenceManual/page/n7/mode/2up
     id: "CastlevaniaLamentOfInnocenceManual", 
@@ -490,7 +503,7 @@
     id: "PC-Page-Guru-1994-04",
     type: "pdf",
     pdfUrl: "pdfs/PC_Page_Guru_1994_04_300DPI_Adobe_Acrobat_OCR.pdf",
-    category: "Computing",
+    category: "Media Culture",
     tagline: "a lifestyle magazine for the computer generation",
     title: "PC-Page Guru",
     issue: "April 1994",
@@ -800,7 +813,7 @@
       if (m.analysisNote) {
         const tag = document.createElement('span');
         tag.className = 'tag-analyzed';
-        tag.textContent = 'analysis';
+        tag.textContent = 'notes';
         btn.querySelector('.name').appendChild(tag);
       }
       if (m.isNew) {

@@ -3,12 +3,12 @@
  *
  * Setup (one time):
  *   1. In the spreadsheet: Extensions > Apps Script, paste this file as Code.gs.
- *   2. Reload the spreadsheet. A "READMEOW" menu appears.
+ *   2. In the editor, select installTrigger in the function dropdown and Run it once
+ *      (authorize when asked). This installs auto-publish and the "READMEOW" menu.
  *   3. READMEOW > Reset sheet to current site data   (creates and fills the tabs)
  *   4. READMEOW > Set GitHub token                   (fine-grained PAT, this repo only,
  *                                                     "Contents: Read and write")
- *   5. READMEOW > Install auto-publish trigger       (authorize when asked)
- *   6. READMEOW > Publish now                        (optional, to test)
+ *   5. READMEOW > Publish now                        (optional, to test)
  *
  * After that, any edit is committed to GitHub about a minute after you stop editing.
  * Links inside cells are written as [text](https://url).
@@ -29,6 +29,7 @@ const INITIAL_DATA = {
   about: "I like looking on [archive.org](https://archive.org) and other media sites like [spriter's resource](https://www.spriters-resource.com/) and [modeler's resource](https://www.modelersresource.com/). This site is a place for the things I find.",
   todo: {
     look: [
+      "[Vimm's Manual Collection](https://vimm.net/?p=manual)",
       '[Baroque PS1 Walkthrough Site](https://nervetower.neocities.org/main)',
       '[this console database](https://www.rfgeneration.com/cgi-bin/search.pl)',
       '[making a BC-1 clone](https://teenage.engineering/store/bc-1)',
@@ -284,16 +285,20 @@ function deleteTriggers_(handler) {
 }
 
 function installTrigger() {
+  const ss = SpreadsheetApp.getActive();
   deleteTriggers_('handleChange');
-  ScriptApp.newTrigger('handleChange').forSpreadsheet(SpreadsheetApp.getActive()).onChange().create();
-  SpreadsheetApp.getActive().toast('Auto-publish installed.', 'READMEOW');
+  deleteTriggers_('buildMenu');
+  ScriptApp.newTrigger('handleChange').forSpreadsheet(ss).onChange().create();
+  ScriptApp.newTrigger('buildMenu').forSpreadsheet(ss).onOpen().create();
+  buildMenu();
+  ss.toast('Auto-publish and menu installed.', 'READMEOW');
 }
 
 /* ------------------------------------------------------------------ */
 /* Menu                                                                */
 /* ------------------------------------------------------------------ */
 
-function onOpen() {
+function buildMenu() {
   SpreadsheetApp.getUi().createMenu('READMEOW')
     .addItem('Publish now', 'menuPublish')
     .addItem('Last publish status', 'menuStatus')
