@@ -745,9 +745,8 @@
       }
 
       const linkEl = document.getElementById('note-link');
-      linkEl.textContent = 'View on Archive.org';
+      linkEl.style.display = m.analysisNote ? 'none' : '';
       linkEl.href = 'https://archive.org/details/' + encodeURIComponent(m.id);
-      linkEl.onclick = null;
     }
 
     listEl.querySelectorAll('button').forEach(b =>
