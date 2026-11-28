@@ -1,7 +1,7 @@
 {
   "title": "# i has fish?",
   "intro": "active media archive by autumn.",
-  "updated": "last updated 11-25-26: added castlevania & todo new things to look at",
+  "updated": "last updated 11-28-26: added Kuru Kuru Kurin in currently playing. Need to add entry and automate adding entries from google sheets.",
   "about": "this site is inspired by [archive.org](https://archive.org) and other media sites like [spriter's resource](https://www.spriters-resource.com/) and [modeler's resource](https://www.modelersresource.com/). This site is a place for the things I find.",
   "todo": {
     "look": [
@@ -38,7 +38,7 @@
       "caption": "I originally intended for this to be a game assets collection, but I found a trove of online media collectibles and wanted to start with a publication library first."
     }
   },
-  "playing": "once upon a katamari***, super monkey ball, SNES collection on nintendo switch, pokemon mystery dungeon explorers of time",
+  "playing": "once upon a katamari*** (Switch 2) Baroque*(Sega Saturn), Kuru Kuru Kurin**(GBA), pokemon mystery dungeon explorers of time (3DS)",
   "favorites": [
     "risk of rain 2",
     "final fantasy revenant wings",
